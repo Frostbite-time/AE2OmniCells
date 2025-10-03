@@ -121,6 +121,7 @@ obfuscation {
 
 dependencies {
 
+    compileOnly "org.jetbrains:annotations:26.0.2"
     modCompileOnly "maven.modrinth:ae2:${ae2_version}"
     modLocalRuntime "maven.modrinth:ae2:${ae2_version}"
     modLocalRuntime "maven.modrinth:guideme:20.1.11"
