@@ -45,7 +45,7 @@ import java.util.Optional;
  * 用于承载物品到存储系统的桥接物品
  * @author Frostbite
  */
-public abstract class AEUniversalCellItem extends Item implements IAEUniversalCell, ICellWorkbenchItem
+public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICellWorkbenchItem
 {
     private final ItemLike coreItem;
     private final ItemLike housingItem;

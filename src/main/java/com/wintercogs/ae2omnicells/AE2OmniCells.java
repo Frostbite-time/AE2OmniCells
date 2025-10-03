@@ -1,6 +1,9 @@
 package com.wintercogs.ae2omnicells;
 
 import com.mojang.logging.LogUtils;
+import com.wintercogs.ae2omnicells.common.init.OCCreativeModeTabs;
+import com.wintercogs.ae2omnicells.common.init.OCItems;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -27,6 +30,9 @@ public class AE2OmniCells
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        OCItems.register(modEventBus);
+        OCCreativeModeTabs.register(modEventBus);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
@@ -48,5 +54,10 @@ public class AE2OmniCells
         {
             LOGGER.info("AE2OmniCells - Client started");
         }
+    }
+
+    public static ResourceLocation makeId(String path)
+    {
+        return new ResourceLocation(AE2OmniCells.MODID, path);
     }
 }
