@@ -1,8 +1,10 @@
 package com.wintercogs.ae2omnicells.common.init;
 
+import appeng.core.definitions.AEItems;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.items.AEUniversalCellItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -69,11 +71,6 @@ public class OCItems
     public static final RegistryObject<Item> QUANTUM_OMNI_CELL_HOUSING = registerItem("quantum_omni_cell_housing", () -> new Item(new Item.Properties()));
 
     // 全能存储组件
-    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_1K   = registerComponent("omni_cell_component_1k");
-    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_4K   = registerComponent("omni_cell_component_4k");
-    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_16K  = registerComponent("omni_cell_component_16k");
-    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_64K  = registerComponent("omni_cell_component_64k");
-    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_256K = registerComponent("omni_cell_component_256k");
     public static final RegistryObject<Item> OMNI_CELL_COMPONENT_1M   = registerComponent("omni_cell_component_1m");
     public static final RegistryObject<Item> OMNI_CELL_COMPONENT_4M   = registerComponent("omni_cell_component_4m");
     public static final RegistryObject<Item> OMNI_CELL_COMPONENT_16M  = registerComponent("omni_cell_component_16m");
@@ -81,16 +78,16 @@ public class OCItems
     public static final RegistryObject<Item> OMNI_CELL_COMPONENT_256M = registerComponent("omni_cell_component_256m");
 
     // 全能存储元件
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_1K    = registerCell("omni_cell_1k",    OMNI_CELL_COMPONENT_1K,   1, 63, 1);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_4K    = registerCell("omni_cell_4k",    OMNI_CELL_COMPONENT_4K,   2, 63, 4);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_16K   = registerCell("omni_cell_16k",   OMNI_CELL_COMPONENT_16K,  3, 63, 16);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_64K   = registerCell("omni_cell_64k",   OMNI_CELL_COMPONENT_64K,  4, 63, 64);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_256K  = registerCell("omni_cell_256k",  OMNI_CELL_COMPONENT_256K, 5, 63, 256);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_1M    = registerCell("omni_cell_1m",    OMNI_CELL_COMPONENT_1M,   6, 63, 1024);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_4M    = registerCell("omni_cell_4m",    OMNI_CELL_COMPONENT_4M,   7, 63, 4096);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_16M   = registerCell("omni_cell_16m",   OMNI_CELL_COMPONENT_16M,  8, 63, 16384);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_64M   = registerCell("omni_cell_64m",   OMNI_CELL_COMPONENT_64M,  9, 63, 65536);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_256M  = registerCell("omni_cell_256m",  OMNI_CELL_COMPONENT_256M, 10, 63, 262144);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_1K = registerCell("omni_cell_1k", AEItems.CELL_COMPONENT_1K,   1, 63, 1);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_4K = registerCell("omni_cell_4k", AEItems.CELL_COMPONENT_4K,   2, 63, 4);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_16K = registerCell("omni_cell_16k", AEItems.CELL_COMPONENT_16K,  3, 63, 16);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_64K = registerCell("omni_cell_64k", AEItems.CELL_COMPONENT_64K,  4, 63, 64);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_256K = registerCell("omni_cell_256k", AEItems.CELL_COMPONENT_256K, 5, 63, 256);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_1M = registerCell("omni_cell_1m", OMNI_CELL_COMPONENT_1M,   6, 63, 1024);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_4M = registerCell("omni_cell_4m", OMNI_CELL_COMPONENT_4M,   7, 63, 4096);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_16M = registerCell("omni_cell_16m", OMNI_CELL_COMPONENT_16M,  8, 63, 16384);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_64M = registerCell("omni_cell_64m", OMNI_CELL_COMPONENT_64M,  9, 63, 65536);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_256M = registerCell("omni_cell_256m", OMNI_CELL_COMPONENT_256M, 10, 63, 262144);
 
     // 复杂存储组件
     public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_1K   = registerComplexComponent("complex_omni_cell_component_1k");
@@ -199,6 +196,16 @@ public class OCItems
         RegistryObject<AEUniversalCellItem> obj = registerItem(name,
                 () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1),
                         component.get(), OMNI_CELL_HOUSING.get(),
+                        idlePower, types, kilobytes));
+        CELLS.add(obj);
+        return obj;
+    }
+    private static RegistryObject<AEUniversalCellItem> registerCell(
+            String name, ItemLike component, int idlePower, int types, int kilobytes)
+    {
+        RegistryObject<AEUniversalCellItem> obj = registerItem(name,
+                () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1),
+                        component.asItem(), OMNI_CELL_HOUSING.get(),
                         idlePower, types, kilobytes));
         CELLS.add(obj);
         return obj;

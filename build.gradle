@@ -126,6 +126,10 @@ dependencies {
     modLocalRuntime "maven.modrinth:ae2:${ae2_version}"
     modLocalRuntime "maven.modrinth:guideme:20.1.11"
 
+    // mega元件
+    modCompileOnly "maven.modrinth:mega:forge-2.4.6"
+    modLocalRuntime "maven.modrinth:mega:forge-2.4.6"
+
     modLocalRuntime "maven.modrinth:jei:zzpNSbJZ"
     // If you wish to declare dependencies against mods, make sure to use the 'mod*' configurations so that they're remapped.
 	// See https://github.com/neoforged/ModDevGradle/blob/main/LEGACY.md#remapping-mod-dependencies for more information.
