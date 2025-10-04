@@ -20,7 +20,7 @@ public class OCCreativeModeTabs
     public static final Supplier<CreativeModeTab> AE2_OMNI_CELLS_CREATIVE_TAB = CREATIVE_MODE_TAB.register(
             "ae2_omni_cells_creative_tab",
             ()->CreativeModeTab.builder()
-                    .icon(() -> new ItemStack(OCItems.COMPLEX_OMNI_CELL_COMPONENT_256M.get()))
+                    .icon(() -> new ItemStack(OCItems.QUANTUM_OMNI_CELL_256M.get()))
                     .title(Component.translatable("creativetab.ae2omnicells.items"))
                     .displayItems((itemDisplayParameters, output) -> {
                         for(RegistryObject<? extends Item> registryItems : OCItems.getAllItems())

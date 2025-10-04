@@ -1,6 +1,7 @@
 package com.wintercogs.ae2omnicells;
 
 import com.mojang.logging.LogUtils;
+import com.wintercogs.ae2omnicells.client.me.AE2ClientPlugin;
 import com.wintercogs.ae2omnicells.common.init.OCCreativeModeTabs;
 import com.wintercogs.ae2omnicells.common.init.OCItems;
 import com.wintercogs.ae2omnicells.common.me.AEPlugin;
@@ -16,6 +17,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
 
 @Mod(AE2OmniCells.MODID)
@@ -34,11 +36,21 @@ public class AE2OmniCells
 
         OCItems.register(modEventBus);
         OCCreativeModeTabs.register(modEventBus);
+
+        if(FMLEnvironment.dist == Dist.CLIENT)
+        {
+            AE2OmniCellsClient.clientInit();
+            AE2OmniCellsClient.clientRegister(modEventBus, MinecraftForge.EVENT_BUS);
+        }
+
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         AEPlugin.register();
+
+        if(FMLEnvironment.dist == Dist.CLIENT)
+            AE2OmniCellsClient.clientCommonSetup();
     }
 
     @SubscribeEvent
