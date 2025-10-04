@@ -1,7 +1,6 @@
 package com.wintercogs.ae2omnicells;
 
 import com.mojang.logging.LogUtils;
-import com.wintercogs.ae2omnicells.client.me.AE2ClientPlugin;
 import com.wintercogs.ae2omnicells.common.init.OCCreativeModeTabs;
 import com.wintercogs.ae2omnicells.common.init.OCItems;
 import com.wintercogs.ae2omnicells.common.me.AEPlugin;
