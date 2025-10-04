@@ -2,25 +2,26 @@ package com.wintercogs.ae2omnicells.common.items;
 
 import appeng.api.config.FuzzyMode;
 import appeng.api.stacks.GenericStack;
-import appeng.api.stacks.KeyCounter;
 import appeng.api.storage.StorageCells;
 import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.ICellWorkbenchItem;
-import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.cells.StorageCell;
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.UpgradeInventories;
 import appeng.core.AEConfig;
+import appeng.core.AELog;
 import appeng.core.localization.PlayerMessages;
 import appeng.items.contents.CellConfig;
 import appeng.items.storage.StorageCellTooltipComponent;
 import appeng.util.ConfigInventory;
-import appeng.util.InteractionUtil;
 import appeng.util.Platform;
+import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.me.IAEUniversalCell;
 import com.wintercogs.ae2omnicells.common.me.localization.AEUniversalTooltips;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -31,15 +32,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * 用于承载物品到存储系统的桥接物品
@@ -119,9 +120,7 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
         }
 
         // 显示进度条：true（进度由组件内部根据存储状态/配色绘制）
-        return Optional.of(new StorageCellTooltipComponent(
-                upgrades, content, hasMore, true
-        ));
+        return Optional.of(new StorageCellTooltipComponent(upgrades, content, hasMore, true));
     }
 
     @Override
@@ -192,33 +191,53 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
                 : InteractionResult.PASS;
     }
 
+    public ResourceLocation getRecipeId()
+    {
+        return AE2OmniCells.makeId("cells/shapeless/" +
+                Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(this)).getPath());
+    }
+
     private boolean disassembleDrive(ItemStack stack, Level level, Player player)
     {
-        if (InteractionUtil.isInAlternateUseMode(player)) {
-            if (level.isClientSide()) {
-                return false;
-            }
+        Recipe<?> recipe = level.getRecipeManager().byKey(this.getRecipeId()).orElse(null);
+        if (recipe instanceof CraftingRecipe)
+        {
+            CraftingRecipe craftingRecipe = (CraftingRecipe)recipe;
+            if (level.isClientSide()) return true;
 
             Inventory playerInventory = player.getInventory();
-            StorageCell inv = StorageCells.getCellInventory(stack, (ISaveProvider)null);
-            if (inv != null && playerInventory.getSelected() == stack) {
-                KeyCounter list = inv.getAvailableStacks();
-                if (list.isEmpty()) {
-                    playerInventory.setItem(playerInventory.selected, ItemStack.EMPTY);
-                    playerInventory.placeItemBackInInventory(new ItemStack(this.coreItem));
+            if (playerInventory.getSelected() != stack) return false;
 
-                    for(ItemStack upgrade : this.getUpgrades(stack)) {
-                        playerInventory.placeItemBackInInventory(upgrade);
-                    }
+            StorageCell inv = StorageCells.getCellInventory(stack, null);
+            if (inv == null) return false;
 
-                    playerInventory.placeItemBackInInventory(new ItemStack(this.housingItem));
-                    return true;
+            if (inv.getAvailableStacks().isEmpty())
+            {
+                playerInventory.setItem(playerInventory.selected, ItemStack.EMPTY);
+
+                for(Ingredient ingredient : craftingRecipe.getIngredients())
+                {
+                    ItemStack ingredientStack = ingredient.getItems()[0].copy();
+                    playerInventory.placeItemBackInInventory(ingredientStack);
                 }
 
+                for(ItemStack upgrade : this.getUpgrades(stack))
+                {
+                    playerInventory.placeItemBackInInventory(upgrade);
+                }
+            }
+            else
+            {
                 player.displayClientMessage(PlayerMessages.OnlyEmptyCellsCanBeDisassembled.text(), true);
             }
-        }
 
-        return false;
+            return true;
+
+        }
+        else
+        {
+            AELog.debug("Cannot disassemble portable cell because it's crafting recipe doesn't exist: %s", new Object[]{this.getRecipeId()});
+            return false;
+        }
     }
 }

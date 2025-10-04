@@ -3,7 +3,6 @@ package com.wintercogs.ae2omnicells.common.me;
 import appeng.api.storage.cells.ICellHandler;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.cells.StorageCell;
-import com.wintercogs.ae2omnicells.common.items.AEUniversalCellItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +21,7 @@ public class AEUniversalCellHandler implements ICellHandler
     public boolean isCell(ItemStack itemStack)
     {
         // 只允许堆叠为1的创建为元件，以防止极端情况下可能存在的刷物品bug
-        return itemStack.getItem() instanceof AEUniversalCellItem && itemStack.getCount() == 1;
+        return itemStack.getItem() instanceof IAEUniversalCell && itemStack.getCount() == 1;
     }
 
     @Override
@@ -30,7 +29,7 @@ public class AEUniversalCellHandler implements ICellHandler
     {
         // 我们无视ISaveProvider，因为这种元件仅由SavedData统一保存
         if(ServerLifecycleHooks.getCurrentServer() == null) return null;
-        if(!(itemStack.getItem() instanceof AEUniversalCellItem cellItem)) return null;
+        if(!(itemStack.getItem() instanceof IAEUniversalCell cellItem)) return null;
         if(itemStack.getCount() != 1) return null;
 
         AEUniversalCellData cellData = AEUniversalCellData.computeIfAbsentCellDataForItemStack(itemStack);

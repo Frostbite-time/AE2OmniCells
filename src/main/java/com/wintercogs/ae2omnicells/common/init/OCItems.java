@@ -2,6 +2,7 @@ package com.wintercogs.ae2omnicells.common.init;
 
 import appeng.core.definitions.AEItems;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
+import com.wintercogs.ae2omnicells.common.items.AEPortableUniversalCellItem;
 import com.wintercogs.ae2omnicells.common.items.AEUniversalCellItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
@@ -20,176 +21,186 @@ public class OCItems
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, AE2OmniCells.MODID);
 
-    /** 全部注册过的物品（便于 datagen/创造模式菜单） */
+    // ---- 四套列表 ----
+    /** 全部注册过的物品 */
     private static final List<RegistryObject<? extends Item>> ALL = new ArrayList<>();
-    /** 普通：仅组件 */
-    private static final List<RegistryObject<Item>> COMPONENTS = new ArrayList<>();
-    /** 普通：仅单元 */
+    /** 元件（= 非便携存储元件：普通/复杂/量子 的所有存储盘） */
     private static final List<RegistryObject<AEUniversalCellItem>> CELLS = new ArrayList<>();
+    /** 便携元件（= 便携通用盘：普通/复杂/量子 的所有便携盘） */
+    private static final List<RegistryObject<AEPortableUniversalCellItem>> PORTABLE_CELLS = new ArrayList<>();
+    /** 其他物品（= 元件外壳、各类组件、锭/处理器/压印模板等杂项） */
+    private static final List<RegistryObject<Item>> OTHERS = new ArrayList<>();
 
-    /** 复杂：仅组件 */
-    private static final List<RegistryObject<Item>> COMPLEX_COMPONENTS = new ArrayList<>();
-    /** 复杂：仅单元 */
-    private static final List<RegistryObject<AEUniversalCellItem>> COMPLEX_CELLS = new ArrayList<>();
+    // ---- 杂项 / 其他物品 ----
+    public static final RegistryObject<Item> ENDER_INGOT = registerOtherItem("ender_ingot", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> CHARGED_ENDER_INGOT = registerOtherItem("charged_ender_ingot", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> COMPLEX_LINK_PRINT_PRESS = registerOtherItem("complex_link_print_press", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> MULTIDIMENSIONAL_EXPANSION_PRINT_PRESS = registerOtherItem("multidimensional_expansion_print_press", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> COMPLEX_LINK_CIRCUIT_PRINT = registerOtherItem("complex_link_circuit_print", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> MULTIDIMENSIONAL_EXPANSION_CIRCUIT_PRINT = registerOtherItem("multidimensional_expansion_circuit_print", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> COMPLEX_LINK_PROCESSOR = registerOtherItem("complex_link_processor", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> MULTIDIMENSIONAL_EXPANSION_PROCESSOR = registerOtherItem("multidimensional_expansion_processor", () -> new Item(new Item.Properties()));
 
-    /** 量子：仅组件 */
-    private static final List<RegistryObject<Item>> QUANTUM_COMPONENTS = new ArrayList<>();
-    /** 量子：仅单元 */
-    private static final List<RegistryObject<AEUniversalCellItem>> QUANTUM_CELLS = new ArrayList<>();
+    // 外壳
+    public static final RegistryObject<Item> OMNI_CELL_HOUSING = registerOtherItem("omni_cell_housing", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_HOUSING = registerOtherItem("complex_omni_cell_housing", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_HOUSING = registerOtherItem("quantum_omni_cell_housing", () -> new Item(new Item.Properties()));
 
-    // 末影钢锭
-    public static final RegistryObject<Item> ENDER_INGOT = registerItem("ender_ingot", () -> new Item(new Item.Properties()));
-
-    // 充能末影钢锭
-    public static final RegistryObject<Item> CHARGED_ENDER_INGOT = registerItem("charged_ender_ingot", () -> new Item(new Item.Properties()));
-
-    // 复杂链路压印模板
-    public static final RegistryObject<Item> COMPLEX_LINK_PRINT_PRESS = registerItem("complex_link_print_press", () -> new Item(new Item.Properties()));
-
-    // 多维展开压印模板
-    public static final RegistryObject<Item> MULTIDIMENSIONAL_EXPANSION_PRINT_PRESS = registerItem("multidimensional_expansion_print_press", () -> new Item(new Item.Properties()));
-
-    // 复杂链路电路板
-    public static final RegistryObject<Item> COMPLEX_LINK_CIRCUIT_PRINT = registerItem("complex_link_circuit_print", () -> new Item(new Item.Properties()));
-
-    // 多维展开电路板
-    public static final RegistryObject<Item> MULTIDIMENSIONAL_EXPANSION_CIRCUIT_PRINT = registerItem("multidimensional_expansion_circuit_print", () -> new Item(new Item.Properties()));
-
-    // 复杂链路处理器
-    public static final RegistryObject<Item> COMPLEX_LINK_PROCESSOR = registerItem("complex_link_processor", () -> new Item(new Item.Properties()));
-
-    // 多维展开处理器
-    public static final RegistryObject<Item> MULTIDIMENSIONAL_EXPANSION_PROCESSOR = registerItem("multidimensional_expansion_processor", () -> new Item(new Item.Properties()));
-
-    // 全能元件外壳
-    public static final RegistryObject<Item> OMNI_CELL_HOUSING = registerItem("omni_cell_housing", () -> new Item(new Item.Properties()));
-
-    // 复杂全能元件外壳
-    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_HOUSING = registerItem("complex_omni_cell_housing", () -> new Item(new Item.Properties()));
-
-    // 量子元件外壳
-    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_HOUSING = registerItem("quantum_omni_cell_housing", () -> new Item(new Item.Properties()));
-
-    // 全能存储组件
-    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_1M   = registerComponent("omni_cell_component_1m");
-    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_4M   = registerComponent("omni_cell_component_4m");
-    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_16M  = registerComponent("omni_cell_component_16m");
-    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_64M  = registerComponent("omni_cell_component_64m");
+    // ---- 全能存储组件（其他物品归类） ----
+    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_1M = registerComponent("omni_cell_component_1m");
+    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_4M = registerComponent("omni_cell_component_4m");
+    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_16M = registerComponent("omni_cell_component_16m");
+    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_64M = registerComponent("omni_cell_component_64m");
     public static final RegistryObject<Item> OMNI_CELL_COMPONENT_256M = registerComponent("omni_cell_component_256m");
 
-    // 全能存储元件
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_1K = registerCell("omni_cell_1k", AEItems.CELL_COMPONENT_1K,   1, 63, 1);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_4K = registerCell("omni_cell_4k", AEItems.CELL_COMPONENT_4K,   2, 63, 4);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_16K = registerCell("omni_cell_16k", AEItems.CELL_COMPONENT_16K,  3, 63, 16);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_64K = registerCell("omni_cell_64k", AEItems.CELL_COMPONENT_64K,  4, 63, 64);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_256K = registerCell("omni_cell_256k", AEItems.CELL_COMPONENT_256K, 5, 63, 256);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_1M = registerCell("omni_cell_1m", OMNI_CELL_COMPONENT_1M,   6, 63, 1024);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_4M = registerCell("omni_cell_4m", OMNI_CELL_COMPONENT_4M,   7, 63, 4096);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_16M = registerCell("omni_cell_16m", OMNI_CELL_COMPONENT_16M,  8, 63, 16384);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_64M = registerCell("omni_cell_64m", OMNI_CELL_COMPONENT_64M,  9, 63, 65536);
-    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_256M = registerCell("omni_cell_256m", OMNI_CELL_COMPONENT_256M, 10, 63, 262144);
+    // ---- 非便携：全能存储元件（= 元件） ----
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_1K = registerCell("omni_cell_1k",    AEItems.CELL_COMPONENT_1K,   1,  63,     1);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_4K = registerCell("omni_cell_4k",    AEItems.CELL_COMPONENT_4K,   2,  63,     4);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_16K = registerCell("omni_cell_16k",   AEItems.CELL_COMPONENT_16K,  3,  63,    16);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_64K = registerCell("omni_cell_64k",   AEItems.CELL_COMPONENT_64K,  4,  63,    64);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_256K = registerCell("omni_cell_256k",  AEItems.CELL_COMPONENT_256K, 5,  63,   256);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_1M = registerCell("omni_cell_1m",    OMNI_CELL_COMPONENT_1M,      6,  63,  1024);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_4M = registerCell("omni_cell_4m",    OMNI_CELL_COMPONENT_4M,      7,  63,  4096);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_16M = registerCell("omni_cell_16m",   OMNI_CELL_COMPONENT_16M,     8,  63, 16384);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_64M = registerCell("omni_cell_64m",   OMNI_CELL_COMPONENT_64M,     9,  63, 65536);
+    public static final RegistryObject<AEUniversalCellItem> OMNI_CELL_256M = registerCell("omni_cell_256m",  OMNI_CELL_COMPONENT_256M,   10,  63,262144);
 
-    // 复杂存储组件
-    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_1K   = registerComplexComponent("complex_omni_cell_component_1k");
-    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_4K   = registerComplexComponent("complex_omni_cell_component_4k");
-    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_16K  = registerComplexComponent("complex_omni_cell_component_16k");
-    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_64K  = registerComplexComponent("complex_omni_cell_component_64k");
-    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_256K = registerComplexComponent("complex_omni_cell_component_256k");
-    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_1M   = registerComplexComponent("complex_omni_cell_component_1m");
-    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_4M   = registerComplexComponent("complex_omni_cell_component_4m");
-    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_16M  = registerComplexComponent("complex_omni_cell_component_16m");
-    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_64M  = registerComplexComponent("complex_omni_cell_component_64m");
-    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_256M = registerComplexComponent("complex_omni_cell_component_256m");
+    // ---- 复杂：组件（其他物品归类） ----
+    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_1K = registerComponent("complex_omni_cell_component_1k");
+    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_4K = registerComponent("complex_omni_cell_component_4k");
+    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_16K = registerComponent("complex_omni_cell_component_16k");
+    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_64K = registerComponent("complex_omni_cell_component_64k");
+    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_256K = registerComponent("complex_omni_cell_component_256k");
+    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_1M = registerComponent("complex_omni_cell_component_1m");
+    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_4M = registerComponent("complex_omni_cell_component_4m");
+    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_16M = registerComponent("complex_omni_cell_component_16m");
+    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_64M = registerComponent("complex_omni_cell_component_64m");
+    public static final RegistryObject<Item> COMPLEX_OMNI_CELL_COMPONENT_256M = registerComponent("complex_omni_cell_component_256m");
 
-    // 复杂存储元件
-    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_1K    = registerComplexCell("complex_omni_cell_1k",    COMPLEX_OMNI_CELL_COMPONENT_1K,    2,    12,     1);
-    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_4K    = registerComplexCell("complex_omni_cell_4k",    COMPLEX_OMNI_CELL_COMPONENT_4K,    4,    25,     4);
-    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_16K   = registerComplexCell("complex_omni_cell_16k",   COMPLEX_OMNI_CELL_COMPONENT_16K,   8,    50,    16);
-    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_64K   = registerComplexCell("complex_omni_cell_64k",   COMPLEX_OMNI_CELL_COMPONENT_64K,  16,   100,    64);
-    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_256K  = registerComplexCell("complex_omni_cell_256k",  COMPLEX_OMNI_CELL_COMPONENT_256K, 32,   200,   256);
-    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_1M    = registerComplexCell("complex_omni_cell_1m",    COMPLEX_OMNI_CELL_COMPONENT_1M,   64,   400,  1024);
-    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_4M    = registerComplexCell("complex_omni_cell_4m",    COMPLEX_OMNI_CELL_COMPONENT_4M,  128,   800,  4096);
-    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_16M   = registerComplexCell("complex_omni_cell_16m",   COMPLEX_OMNI_CELL_COMPONENT_16M, 256,  1600, 16384);
-    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_64M   = registerComplexCell("complex_omni_cell_64m",   COMPLEX_OMNI_CELL_COMPONENT_64M, 512,  3200, 65536);
-    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_256M  = registerComplexCell("complex_omni_cell_256m",  COMPLEX_OMNI_CELL_COMPONENT_256M,1024,  6400,262144);
+    // ---- 非便携：复杂存储元件（= 元件） ----
+    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_1K = registerComplexCell("complex_omni_cell_1k",    COMPLEX_OMNI_CELL_COMPONENT_1K,    2,    12,     1);
+    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_4K = registerComplexCell("complex_omni_cell_4k",    COMPLEX_OMNI_CELL_COMPONENT_4K,    4,    25,     4);
+    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_16K = registerComplexCell("complex_omni_cell_16k",   COMPLEX_OMNI_CELL_COMPONENT_16K,   8,    50,    16);
+    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_64K = registerComplexCell("complex_omni_cell_64k",   COMPLEX_OMNI_CELL_COMPONENT_64K,  16,   100,    64);
+    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_256K = registerComplexCell("complex_omni_cell_256k",  COMPLEX_OMNI_CELL_COMPONENT_256K, 32,   200,   256);
+    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_1M = registerComplexCell("complex_omni_cell_1m",    COMPLEX_OMNI_CELL_COMPONENT_1M,   64,   400,  1024);
+    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_4M = registerComplexCell("complex_omni_cell_4m",    COMPLEX_OMNI_CELL_COMPONENT_4M,  128,   800,  4096);
+    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_16M = registerComplexCell("complex_omni_cell_16m",   COMPLEX_OMNI_CELL_COMPONENT_16M, 256,  1600, 16384);
+    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_64M = registerComplexCell("complex_omni_cell_64m",   COMPLEX_OMNI_CELL_COMPONENT_64M, 512,  3200, 65536);
+    public static final RegistryObject<AEUniversalCellItem> COMPLEX_OMNI_CELL_256M = registerComplexCell("complex_omni_cell_256m",  COMPLEX_OMNI_CELL_COMPONENT_256M,1024,  6400,262144);
 
-    // 量子存储组件
-    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_1K   = registerQuantumComponent("quantum_omni_cell_component_1k");
-    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_4K   = registerQuantumComponent("quantum_omni_cell_component_4k");
-    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_16K  = registerQuantumComponent("quantum_omni_cell_component_16k");
-    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_64K  = registerQuantumComponent("quantum_omni_cell_component_64k");
-    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_256K = registerQuantumComponent("quantum_omni_cell_component_256k");
-    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_1M   = registerQuantumComponent("quantum_omni_cell_component_1m");
-    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_4M   = registerQuantumComponent("quantum_omni_cell_component_4m");
-    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_16M  = registerQuantumComponent("quantum_omni_cell_component_16m");
-    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_64M  = registerQuantumComponent("quantum_omni_cell_component_64m");
-    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_256M = registerQuantumComponent("quantum_omni_cell_component_256m");
+    // ---- 量子：组件（其他物品归类） ----
+    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_1K = registerComponent("quantum_omni_cell_component_1k");
+    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_4K = registerComponent("quantum_omni_cell_component_4k");
+    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_16K = registerComponent("quantum_omni_cell_component_16k");
+    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_64K = registerComponent("quantum_omni_cell_component_64k");
+    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_256K = registerComponent("quantum_omni_cell_component_256k");
+    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_1M = registerComponent("quantum_omni_cell_component_1m");
+    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_4M = registerComponent("quantum_omni_cell_component_4m");
+    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_16M = registerComponent("quantum_omni_cell_component_16m");
+    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_64M = registerComponent("quantum_omni_cell_component_64m");
+    public static final RegistryObject<Item> QUANTUM_OMNI_CELL_COMPONENT_256M = registerComponent("quantum_omni_cell_component_256m");
 
-    // 量子存储元件（能耗从3起每档×3；类型数恒为-1；容量(kB)与常规一致）
-    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_1K    = registerQuantumCell("quantum_omni_cell_1k",    QUANTUM_OMNI_CELL_COMPONENT_1K,     3,   -1,       1);
-    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_4K    = registerQuantumCell("quantum_omni_cell_4k",    QUANTUM_OMNI_CELL_COMPONENT_4K,     9,   -1,       4);
-    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_16K   = registerQuantumCell("quantum_omni_cell_16k",   QUANTUM_OMNI_CELL_COMPONENT_16K,   27,   -1,      16);
-    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_64K   = registerQuantumCell("quantum_omni_cell_64k",   QUANTUM_OMNI_CELL_COMPONENT_64K,   81,   -1,      64);
-    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_256K  = registerQuantumCell("quantum_omni_cell_256k",  QUANTUM_OMNI_CELL_COMPONENT_256K, 243,   -1,     256);
-    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_1M    = registerQuantumCell("quantum_omni_cell_1m",    QUANTUM_OMNI_CELL_COMPONENT_1M,   729,   -1,    1024);
-    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_4M    = registerQuantumCell("quantum_omni_cell_4m",    QUANTUM_OMNI_CELL_COMPONENT_4M,  2187,   -1,    4096);
-    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_16M   = registerQuantumCell("quantum_omni_cell_16m",   QUANTUM_OMNI_CELL_COMPONENT_16M, 6561,   -1,   16384);
-    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_64M   = registerQuantumCell("quantum_omni_cell_64m",   QUANTUM_OMNI_CELL_COMPONENT_64M,19683,   -1,   65536);
-    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_256M  = registerQuantumCell("quantum_omni_cell_256m",  QUANTUM_OMNI_CELL_COMPONENT_256M,59049,  -1,  262144);
+    // ---- 非便携：量子存储元件（= 元件；types = -1；idle 从 3 起，每档×3） ----
+    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_1K = registerQuantumCell("quantum_omni_cell_1k",    QUANTUM_OMNI_CELL_COMPONENT_1K,     3,   -1,       1);
+    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_4K = registerQuantumCell("quantum_omni_cell_4k",    QUANTUM_OMNI_CELL_COMPONENT_4K,     9,   -1,       4);
+    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_16K = registerQuantumCell("quantum_omni_cell_16k",   QUANTUM_OMNI_CELL_COMPONENT_16K,   27,   -1,      16);
+    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_64K = registerQuantumCell("quantum_omni_cell_64k",   QUANTUM_OMNI_CELL_COMPONENT_64K,   81,   -1,      64);
+    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_256K = registerQuantumCell("quantum_omni_cell_256k",  QUANTUM_OMNI_CELL_COMPONENT_256K, 243,   -1,     256);
+    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_1M = registerQuantumCell("quantum_omni_cell_1m",    QUANTUM_OMNI_CELL_COMPONENT_1M,   729,   -1,    1024);
+    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_4M = registerQuantumCell("quantum_omni_cell_4m",    QUANTUM_OMNI_CELL_COMPONENT_4M,  2187,   -1,    4096);
+    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_16M = registerQuantumCell("quantum_omni_cell_16m",   QUANTUM_OMNI_CELL_COMPONENT_16M, 6561,   -1,   16384);
+    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_64M = registerQuantumCell("quantum_omni_cell_64m",   QUANTUM_OMNI_CELL_COMPONENT_64M,19683,   -1,   65536);
+    public static final RegistryObject<AEUniversalCellItem> QUANTUM_OMNI_CELL_256M = registerQuantumCell("quantum_omni_cell_256m",  QUANTUM_OMNI_CELL_COMPONENT_256M,59049,  -1,  262144);
+
+    // ---- 便携：普通（参数沿用非便携：types/容量/idle） ----
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_1K = registerPortableCell("portable_omni_cell_1k",     1,  63,     1);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_4K = registerPortableCell("portable_omni_cell_4k",     2,  63,     4);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_16K = registerPortableCell("portable_omni_cell_16k",    3,  63,    16);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_64K = registerPortableCell("portable_omni_cell_64k",    4,  63,    64);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_256K = registerPortableCell("portable_omni_cell_256k",   5,  63,   256);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_1M = registerPortableCell("portable_omni_cell_1m",     6,  63,  1024);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_4M = registerPortableCell("portable_omni_cell_4m",     7,  63,  4096);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_16M = registerPortableCell("portable_omni_cell_16m",    8,  63, 16384);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_64M = registerPortableCell("portable_omni_cell_64m",    9,  63, 65536);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_256M = registerPortableCell("portable_omni_cell_256m",  10,  63,262144);
+
+    // ---- 便携：复杂 ----
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_1K = registerPortableCell("portable_complex_omni_cell_1k",     2,    12,     1);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_4K = registerPortableCell("portable_complex_omni_cell_4k",     4,    25,     4);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_16K = registerPortableCell("portable_complex_omni_cell_16k",    8,    50,    16);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_64K = registerPortableCell("portable_complex_omni_cell_64k",   16,   100,    64);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_256K = registerPortableCell("portable_complex_omni_cell_256k",  32,   200,   256);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_1M = registerPortableCell("portable_complex_omni_cell_1m",    64,   400,  1024);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_4M = registerPortableCell("portable_complex_omni_cell_4m",   128,   800,  4096);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_16M = registerPortableCell("portable_complex_omni_cell_16m",  256,  1600, 16384);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_64M = registerPortableCell("portable_complex_omni_cell_64m",  512,  3200, 65536);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_256M = registerPortableCell("portable_complex_omni_cell_256m",1024,  6400,262144);
+
+    // ---- 便携：量子（types = -1；idle 从 3 起×3） ----
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_1K = registerPortableCell("portable_quantum_omni_cell_1k",      3,   -1,       1);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_4K = registerPortableCell("portable_quantum_omni_cell_4k",      9,   -1,       4);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_16K = registerPortableCell("portable_quantum_omni_cell_16k",    27,   -1,      16);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_64K = registerPortableCell("portable_quantum_omni_cell_64k",    81,   -1,      64);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_256K = registerPortableCell("portable_quantum_omni_cell_256k",  243,   -1,     256);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_1M = registerPortableCell("portable_quantum_omni_cell_1m",    729,   -1,    1024);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_4M = registerPortableCell("portable_quantum_omni_cell_4m",   2187,   -1,    4096);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_16M = registerPortableCell("portable_quantum_omni_cell_16m",  6561,   -1,   16384);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_64M = registerPortableCell("portable_quantum_omni_cell_64m", 19683,   -1,   65536);
+    public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_256M = registerPortableCell("portable_quantum_omni_cell_256m", 59049,   -1,  262144);
 
     public static void register(IEventBus eventBus)
     {
         ITEMS.register(eventBus);
     }
 
-    // ---------- 提供只读访问 ----------
+    // ---------- 只读访问 ----------
     public static List<RegistryObject<? extends Item>> getAllItems()
     {
         return Collections.unmodifiableList(ALL);
     }
-    public static List<RegistryObject<Item>> getComponents()
-    {
-        return Collections.unmodifiableList(COMPONENTS);
-    }
+    /** 非便携元件（存储盘本体） */
     public static List<RegistryObject<AEUniversalCellItem>> getCells()
     {
         return Collections.unmodifiableList(CELLS);
     }
-    public static List<RegistryObject<Item>> getComplexComponents()
+    /** 便携元件（便携通用盘） */
+    public static List<RegistryObject<AEPortableUniversalCellItem>> getPortableCells()
     {
-        return Collections.unmodifiableList(COMPLEX_COMPONENTS);
+        return Collections.unmodifiableList(PORTABLE_CELLS);
     }
-    public static List<RegistryObject<AEUniversalCellItem>> getComplexCells()
+    /** 其他物品（组件/外壳/锭/处理器/压印模板等） */
+    public static List<RegistryObject<Item>> getOthers()
     {
-        return Collections.unmodifiableList(COMPLEX_CELLS);
-    }
-    public static List<RegistryObject<Item>> getQuantumComponents()
-    {
-        return Collections.unmodifiableList(QUANTUM_COMPONENTS);
-    }
-    public static List<RegistryObject<AEUniversalCellItem>> getQuantumCells()
-    {
-        return Collections.unmodifiableList(QUANTUM_CELLS);
+        return Collections.unmodifiableList(OTHERS);
     }
 
     // ---------- 工具方法 ----------
-    // 注册普通物品
     private static <T extends Item> RegistryObject<T> registerItem(String name, Supplier<T> supplier)
     {
-        RegistryObject<T> obj = ITEMS.register(name, supplier);
+        RegistryObject<T> obj = ITEMS.register(name, () -> {
+            T t = supplier.get();
+            return t instanceof Item ? t : (T) new Item(new Item.Properties());
+        });
         ALL.add(obj);
         return obj;
     }
 
-    // 注册全能存储组件
-    private static RegistryObject<Item> registerComponent(String name)
+    private static RegistryObject<Item> registerOtherItem(String name, Supplier<Item> sup)
     {
         RegistryObject<Item> obj = registerItem(name, () -> new Item(new Item.Properties()));
-        COMPONENTS.add(obj);
+        OTHERS.add(obj);
         return obj;
     }
 
-    // 注册全能存储元件
+    // 组件统一归“其他物品”
+    private static RegistryObject<Item> registerComponent(String name)
+    {
+        RegistryObject<Item> obj = registerOtherItem(name, () -> new Item(new Item.Properties()));
+        return obj;
+    }
+
+    // 非便携：全能存储元件（= 元件）
     private static RegistryObject<AEUniversalCellItem> registerCell(
             String name, RegistryObject<Item> component, int idlePower, int types, int kilobytes)
     {
@@ -211,15 +222,7 @@ public class OCItems
         return obj;
     }
 
-    // 注册复杂存储组件
-    private static RegistryObject<Item> registerComplexComponent(String name)
-    {
-        RegistryObject<Item> obj = registerItem(name, () -> new Item(new Item.Properties()));
-        COMPLEX_COMPONENTS.add(obj);
-        return obj;
-    }
-
-    // 注册复杂存储元件
+    // 非便携：复杂元件
     private static RegistryObject<AEUniversalCellItem> registerComplexCell(
             String name, RegistryObject<Item> component, int idlePower, int types, int kilobytes)
     {
@@ -227,19 +230,11 @@ public class OCItems
                 () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1),
                         component.get(), COMPLEX_OMNI_CELL_HOUSING.get(),
                         idlePower, types, kilobytes));
-        COMPLEX_CELLS.add(obj);
+        CELLS.add(obj);
         return obj;
     }
 
-    // 量子：注册存储组件
-    private static RegistryObject<Item> registerQuantumComponent(String name)
-    {
-        RegistryObject<Item> obj = registerItem(name, () -> new Item(new Item.Properties()));
-        QUANTUM_COMPONENTS.add(obj);
-        return obj;
-    }
-
-    // 量子：注册存储元件
+    // 非便携：量子元件
     private static RegistryObject<AEUniversalCellItem> registerQuantumCell(
             String name, RegistryObject<Item> component, int idlePower, int types, int kilobytes)
     {
@@ -247,7 +242,23 @@ public class OCItems
                 () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1),
                         component.get(), QUANTUM_OMNI_CELL_HOUSING.get(),
                         idlePower, types, kilobytes));
-        QUANTUM_CELLS.add(obj);
+        CELLS.add(obj);
+        return obj;
+    }
+
+    // 便携元件注册（菜单类型统一使用 OCMenus.PORTABLE_UNIVERSAL_CELL_MENU）
+    private static RegistryObject<AEPortableUniversalCellItem> registerPortableCell(
+            String name, int idlePower, int types, int kilobytes)
+    {
+        RegistryObject<AEPortableUniversalCellItem> obj = ITEMS.register(name, () ->
+                new AEPortableUniversalCellItem(
+                        OCMenus.PORTABLE_UNIVERSAL_CELL_MENU,
+                        new Item.Properties().stacksTo(1),
+                        types, kilobytes, idlePower
+                )
+        );
+        ALL.add(obj);
+        PORTABLE_CELLS.add(obj);
         return obj;
     }
 }

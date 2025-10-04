@@ -3,6 +3,7 @@ package com.wintercogs.ae2omnicells;
 import com.mojang.logging.LogUtils;
 import com.wintercogs.ae2omnicells.common.init.OCCreativeModeTabs;
 import com.wintercogs.ae2omnicells.common.init.OCItems;
+import com.wintercogs.ae2omnicells.common.init.OCMenus;
 import com.wintercogs.ae2omnicells.common.me.AEPlugin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -41,6 +42,7 @@ public class AE2OmniCells
 
         OCItems.register(modEventBus);
         OCCreativeModeTabs.register(modEventBus);
+        OCMenus.registerMenus(modEventBus);
 
         if(FMLEnvironment.dist == Dist.CLIENT)
         {

@@ -121,6 +121,7 @@ obfuscation {
 
 dependencies {
 
+    // 如果遇到AE的AT应用出问题，首先检查一下是不是有些依赖项忘记把前置放进来了
     compileOnly "org.jetbrains:annotations:26.0.2"
     modCompileOnly "maven.modrinth:ae2:${ae2_version}"
     modLocalRuntime "maven.modrinth:ae2:${ae2_version}"
@@ -129,6 +130,9 @@ dependencies {
     // mega元件
     modCompileOnly "maven.modrinth:mega:forge-2.4.6"
     modLocalRuntime "maven.modrinth:mega:forge-2.4.6"
+    modCompileOnly "maven.modrinth:cloth-config:11.1.136+forge"
+    modLocalRuntime "maven.modrinth:cloth-config:11.1.136+forge"
+
 
     modLocalRuntime "maven.modrinth:jei:zzpNSbJZ"
     // If you wish to declare dependencies against mods, make sure to use the 'mod*' configurations so that they're remapped.

@@ -10,10 +10,13 @@ import com.wintercogs.ae2omnicells.common.init.OCItems;
 import gripe._90.megacells.definition.MEGAItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -474,38 +477,33 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy("has_prev_quantum_component", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64M.get()))
                 .save(recipeOutput, AE2OmniCells.makeId("quantum_component/256m"));
 
+
         // ============================================================
-        // 存储元件（OMNI / COMPLEX / QUANTUM）1k → 256m
-        // 两套配方：有序(Shaped) + 无序(Shapeless)
+        // 存储单元（OMNI / COMPLEX / QUANTUM）1k → 256M
+        // 统一ID规范：
+        // - Shaped  : cells/shaped/<物品id路径>
+        // - Shapeless: cells/shapeless/<物品id路径>
+        // OMNI 的 1M+ 做 MEGA 联动 + 自家组件，且两分支共用同一 ID
         // ============================================================
 
         // -------------------------
-        // 普通系列（OMNI） – 外壳形状：
-        //  "ABA"
-        //  "B B" -> 中央填入 'M'（对应组件）
-        //  "CCC"
-        // A: 石英玻璃, B: 末影粉, C: 末影钢锭
+        // 普通系列（OMNI） – 外壳形状： "ABA" / "BMB" / "CCC"
+        // A: 石英玻璃, B: 末影粉, C: 末影钢锭, M: 对应组件
         // -------------------------
-
-        // 1k
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_1K.get())
-                .pattern("ABA")
-                .pattern("BMB")
-                .pattern("CCC")
+                .pattern("ABA").pattern("BMB").pattern("CCC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
                 .define('B', AEItems.ENDER_DUST.asItem())
                 .define('C', OCItems.ENDER_INGOT.get())
                 .define('M', AEItems.CELL_COMPONENT_1K)
                 .unlockedBy("has_component_1k", has(AEItems.CELL_COMPONENT_1K))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/omni/1k_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.OMNI_CELL_1K));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_1K.get())
                 .requires(OCItems.OMNI_CELL_HOUSING.get())
                 .requires(AEItems.CELL_COMPONENT_1K)
                 .unlockedBy("has_component_1k", has(AEItems.CELL_COMPONENT_1K))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/omni/1k_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.OMNI_CELL_1K));
 
-        // 4k
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_4K.get())
                 .pattern("ABA").pattern("BMB").pattern("CCC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -513,15 +511,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('C', OCItems.ENDER_INGOT.get())
                 .define('M', AEItems.CELL_COMPONENT_4K)
                 .unlockedBy("has_component_4k", has(AEItems.CELL_COMPONENT_4K))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/omni/4k_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.OMNI_CELL_4K));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_4K.get())
                 .requires(OCItems.OMNI_CELL_HOUSING.get())
                 .requires(AEItems.CELL_COMPONENT_4K)
                 .unlockedBy("has_component_4k", has(AEItems.CELL_COMPONENT_4K))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/omni/4k_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.OMNI_CELL_4K));
 
-        // 16k
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_16K.get())
                 .pattern("ABA").pattern("BMB").pattern("CCC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -529,15 +525,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('C', OCItems.ENDER_INGOT.get())
                 .define('M', AEItems.CELL_COMPONENT_16K)
                 .unlockedBy("has_component_16k", has(AEItems.CELL_COMPONENT_16K))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/omni/16k_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.OMNI_CELL_16K));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_16K.get())
                 .requires(OCItems.OMNI_CELL_HOUSING.get())
                 .requires(AEItems.CELL_COMPONENT_16K)
                 .unlockedBy("has_component_16k", has(AEItems.CELL_COMPONENT_16K))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/omni/16k_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.OMNI_CELL_16K));
 
-        // 64k
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_64K.get())
                 .pattern("ABA").pattern("BMB").pattern("CCC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -545,15 +539,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('C', OCItems.ENDER_INGOT.get())
                 .define('M', AEItems.CELL_COMPONENT_64K)
                 .unlockedBy("has_component_64k", has(AEItems.CELL_COMPONENT_64K))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/omni/64k_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.OMNI_CELL_64K));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_64K.get())
                 .requires(OCItems.OMNI_CELL_HOUSING.get())
                 .requires(AEItems.CELL_COMPONENT_64K)
                 .unlockedBy("has_component_64k", has(AEItems.CELL_COMPONENT_64K))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/omni/64k_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.OMNI_CELL_64K));
 
-        // 256k
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_256K.get())
                 .pattern("ABA").pattern("BMB").pattern("CCC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -561,247 +553,227 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('C', OCItems.ENDER_INGOT.get())
                 .define('M', AEItems.CELL_COMPONENT_256K)
                 .unlockedBy("has_component_256k", has(AEItems.CELL_COMPONENT_256K))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/omni/256k_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.OMNI_CELL_256K));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_256K.get())
                 .requires(OCItems.OMNI_CELL_HOUSING.get())
                 .requires(AEItems.CELL_COMPONENT_256K)
                 .unlockedBy("has_component_256k", has(AEItems.CELL_COMPONENT_256K))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/omni/256k_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.OMNI_CELL_256K));
 
-        // ============ 1M ============
-        ConditionalRecipe.builder()
-                .addCondition(modLoaded(AE2OmniCells.MEGA_MODID)) // mega 已加载 → 用 mega 组件
-                .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_1M.get())
-                        .pattern("ABA").pattern("BMB").pattern("CCC")
-                        .define('A', AEBlocks.QUARTZ_GLASS.asItem())
-                        .define('B', AEItems.ENDER_DUST.asItem())
-                        .define('C', OCItems.ENDER_INGOT.get())
-                        .define('M', MEGAItems.CELL_COMPONENT_1M.asItem())
-                        .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
-                        .save(c))
-                .build(recipeOutput, AE2OmniCells.makeId("cells/omni/1m_ordered_mega"));
+        {
+            var shapedId = cellShapedId(OCItems.OMNI_CELL_1M);
+            ConditionalRecipe.builder()
+                    .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
+                    .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_1M.get())
+                            .pattern("ABA").pattern("BMB").pattern("CCC")
+                            .define('A', AEBlocks.QUARTZ_GLASS.asItem())
+                            .define('B', AEItems.ENDER_DUST.asItem())
+                            .define('C', OCItems.ENDER_INGOT.get())
+                            .define('M', MEGAItems.CELL_COMPONENT_1M.asItem())
+                            .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
+                            .save(c, shapedId))
+                    .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
+                    .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_1M.get())
+                            .pattern("ABA").pattern("BMB").pattern("CCC")
+                            .define('A', AEBlocks.QUARTZ_GLASS.asItem())
+                            .define('B', AEItems.ENDER_DUST.asItem())
+                            .define('C', OCItems.ENDER_INGOT.get())
+                            .define('M', OCItems.OMNI_CELL_COMPONENT_1M.get())
+                            .unlockedBy("has_component_1m", has(OCItems.OMNI_CELL_COMPONENT_1M.get()))
+                            .save(c, shapedId))
+                    .build(recipeOutput, shapedId);
+            var shapelessId = cellShapelessId(OCItems.OMNI_CELL_1M);
+            ConditionalRecipe.builder()
+                    .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_1M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(MEGAItems.CELL_COMPONENT_1M.asItem())
+                            .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
+                            .save(c, shapelessId))
+                    .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_1M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(OCItems.OMNI_CELL_COMPONENT_1M.get())
+                            .unlockedBy("has_component_1m", has(OCItems.OMNI_CELL_COMPONENT_1M.get()))
+                            .save(c, shapelessId))
+                    .build(recipeOutput, shapelessId);
+        }
 
-        ConditionalRecipe.builder()
-                .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID))) // mega 未加载 → 用自家组件
-                .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_1M.get())
-                        .pattern("ABA").pattern("BMB").pattern("CCC")
-                        .define('A', AEBlocks.QUARTZ_GLASS.asItem())
-                        .define('B', AEItems.ENDER_DUST.asItem())
-                        .define('C', OCItems.ENDER_INGOT.get())
-                        .define('M', OCItems.OMNI_CELL_COMPONENT_1M.get())
-                        .unlockedBy("has_component_1m", has(OCItems.OMNI_CELL_COMPONENT_1M.get()))
-                        .save(c))
-                .build(recipeOutput, AE2OmniCells.makeId("cells/omni/1m_ordered_fallback"));
+        {
+            var shapedId = cellShapedId(OCItems.OMNI_CELL_4M);
+            ConditionalRecipe.builder()
+                    .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
+                    .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_4M.get())
+                            .pattern("ABA").pattern("BMB").pattern("CCC")
+                            .define('A', AEBlocks.QUARTZ_GLASS.asItem())
+                            .define('B', AEItems.ENDER_DUST.asItem())
+                            .define('C', OCItems.ENDER_INGOT.get())
+                            .define('M', MEGAItems.CELL_COMPONENT_4M.asItem())
+                            .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
+                            .save(c, shapedId))
+                    .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
+                    .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_4M.get())
+                            .pattern("ABA").pattern("BMB").pattern("CCC")
+                            .define('A', AEBlocks.QUARTZ_GLASS.asItem())
+                            .define('B', AEItems.ENDER_DUST.asItem())
+                            .define('C', OCItems.ENDER_INGOT.get())
+                            .define('M', OCItems.OMNI_CELL_COMPONENT_4M.get())
+                            .unlockedBy("has_component_4m", has(OCItems.OMNI_CELL_COMPONENT_4M.get()))
+                            .save(c, shapedId))
+                    .build(recipeOutput, shapedId);
+            var shapelessId = cellShapelessId(OCItems.OMNI_CELL_4M);
+            ConditionalRecipe.builder()
+                    .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_4M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(MEGAItems.CELL_COMPONENT_4M.asItem())
+                            .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
+                            .save(c, shapelessId))
+                    .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_4M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(OCItems.OMNI_CELL_COMPONENT_4M.get())
+                            .unlockedBy("has_component_4m", has(OCItems.OMNI_CELL_COMPONENT_4M.get()))
+                            .save(c, shapelessId))
+                    .build(recipeOutput, shapelessId);
+        }
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_1M.get())
-                .requires(OCItems.OMNI_CELL_HOUSING.get())
-                .requires(OCItems.OMNI_CELL_COMPONENT_1M.get())
-                .unlockedBy("has_component_1m", has(OCItems.OMNI_CELL_COMPONENT_1M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/omni/1m_shapeless"));
+        {
+            var shapedId = cellShapedId(OCItems.OMNI_CELL_16M);
+            ConditionalRecipe.builder()
+                    .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
+                    .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_16M.get())
+                            .pattern("ABA").pattern("BMB").pattern("CCC")
+                            .define('A', AEBlocks.QUARTZ_GLASS.asItem())
+                            .define('B', AEItems.ENDER_DUST.asItem())
+                            .define('C', OCItems.ENDER_INGOT.get())
+                            .define('M', MEGAItems.CELL_COMPONENT_16M.asItem())
+                            .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
+                            .save(c, shapedId))
+                    .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
+                    .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_16M.get())
+                            .pattern("ABA").pattern("BMB").pattern("CCC")
+                            .define('A', AEBlocks.QUARTZ_GLASS.asItem())
+                            .define('B', AEItems.ENDER_DUST.asItem())
+                            .define('C', OCItems.ENDER_INGOT.get())
+                            .define('M', OCItems.OMNI_CELL_COMPONENT_16M.get())
+                            .unlockedBy("has_component_16m", has(OCItems.OMNI_CELL_COMPONENT_16M.get()))
+                            .save(c, shapedId))
+                    .build(recipeOutput, shapedId);
+            var shapelessId = cellShapelessId(OCItems.OMNI_CELL_16M);
+            ConditionalRecipe.builder()
+                    .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_16M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(MEGAItems.CELL_COMPONENT_16M.asItem())
+                            .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
+                            .save(c, shapelessId))
+                    .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_16M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(OCItems.OMNI_CELL_COMPONENT_16M.get())
+                            .unlockedBy("has_component_16m", has(OCItems.OMNI_CELL_COMPONENT_16M.get()))
+                            .save(c, shapelessId))
+                    .build(recipeOutput, shapelessId);
+        }
 
-        ConditionalRecipe.builder()
-                .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
-                .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_1M.get())
-                        .requires(OCItems.OMNI_CELL_HOUSING.get())
-                        .requires(MEGAItems.CELL_COMPONENT_1M.asItem())
-                        .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
-                        .save(c))
-                .build(recipeOutput, AE2OmniCells.makeId("cells/omni/1m_shapeless_mega"));
+        {
+            var shapedId = cellShapedId(OCItems.OMNI_CELL_64M);
+            ConditionalRecipe.builder()
+                    .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
+                    .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_64M.get())
+                            .pattern("ABA").pattern("BMB").pattern("CCC")
+                            .define('A', AEBlocks.QUARTZ_GLASS.asItem())
+                            .define('B', AEItems.ENDER_DUST.asItem())
+                            .define('C', OCItems.ENDER_INGOT.get())
+                            .define('M', MEGAItems.CELL_COMPONENT_64M.asItem())
+                            .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
+                            .save(c, shapedId))
+                    .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
+                    .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_64M.get())
+                            .pattern("ABA").pattern("BMB").pattern("CCC")
+                            .define('A', AEBlocks.QUARTZ_GLASS.asItem())
+                            .define('B', AEItems.ENDER_DUST.asItem())
+                            .define('C', OCItems.ENDER_INGOT.get())
+                            .define('M', OCItems.OMNI_CELL_COMPONENT_64M.get())
+                            .unlockedBy("has_component_64m", has(OCItems.OMNI_CELL_COMPONENT_64M.get()))
+                            .save(c, shapedId))
+                    .build(recipeOutput, shapedId);
+            var shapelessId = cellShapelessId(OCItems.OMNI_CELL_64M);
+            ConditionalRecipe.builder()
+                    .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_64M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(MEGAItems.CELL_COMPONENT_64M.asItem())
+                            .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
+                            .save(c, shapelessId))
+                    .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_64M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(OCItems.OMNI_CELL_COMPONENT_64M.get())
+                            .unlockedBy("has_component_64m", has(OCItems.OMNI_CELL_COMPONENT_64M.get()))
+                            .save(c, shapelessId))
+                    .build(recipeOutput, shapelessId);
+        }
 
-
-        // ============ 4M ============
-        ConditionalRecipe.builder()
-                .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
-                .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_4M.get())
-                        .pattern("ABA").pattern("BMB").pattern("CCC")
-                        .define('A', AEBlocks.QUARTZ_GLASS.asItem())
-                        .define('B', AEItems.ENDER_DUST.asItem())
-                        .define('C', OCItems.ENDER_INGOT.get())
-                        .define('M', MEGAItems.CELL_COMPONENT_4M.asItem())
-                        .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
-                        .save(c))
-                .build(recipeOutput, AE2OmniCells.makeId("cells/omni/4m_ordered_mega"));
-
-        ConditionalRecipe.builder()
-                .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
-                .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_4M.get())
-                        .pattern("ABA").pattern("BMB").pattern("CCC")
-                        .define('A', AEBlocks.QUARTZ_GLASS.asItem())
-                        .define('B', AEItems.ENDER_DUST.asItem())
-                        .define('C', OCItems.ENDER_INGOT.get())
-                        .define('M', OCItems.OMNI_CELL_COMPONENT_4M.get())
-                        .unlockedBy("has_component_4m", has(OCItems.OMNI_CELL_COMPONENT_4M.get()))
-                        .save(c))
-                .build(recipeOutput, AE2OmniCells.makeId("cells/omni/4m_ordered_fallback"));
-
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_4M.get())
-                .requires(OCItems.OMNI_CELL_HOUSING.get())
-                .requires(OCItems.OMNI_CELL_COMPONENT_4M.get())
-                .unlockedBy("has_component_4m", has(OCItems.OMNI_CELL_COMPONENT_4M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/omni/4m_shapeless"));
-
-        ConditionalRecipe.builder()
-                .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
-                .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_4M.get())
-                        .requires(OCItems.OMNI_CELL_HOUSING.get())
-                        .requires(MEGAItems.CELL_COMPONENT_4M.asItem())
-                        .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
-                        .save(c))
-                .build(recipeOutput, AE2OmniCells.makeId("cells/omni/4m_shapeless_mega"));
-
-
-        // ============ 16M ============
-        ConditionalRecipe.builder()
-                .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
-                .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_16M.get())
-                        .pattern("ABA").pattern("BMB").pattern("CCC")
-                        .define('A', AEBlocks.QUARTZ_GLASS.asItem())
-                        .define('B', AEItems.ENDER_DUST.asItem())
-                        .define('C', OCItems.ENDER_INGOT.get())
-                        .define('M', MEGAItems.CELL_COMPONENT_16M.asItem())
-                        .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
-                        .save(c))
-                .build(recipeOutput, AE2OmniCells.makeId("cells/omni/16m_ordered_mega"));
-
-        ConditionalRecipe.builder()
-                .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
-                .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_16M.get())
-                        .pattern("ABA").pattern("BMB").pattern("CCC")
-                        .define('A', AEBlocks.QUARTZ_GLASS.asItem())
-                        .define('B', AEItems.ENDER_DUST.asItem())
-                        .define('C', OCItems.ENDER_INGOT.get())
-                        .define('M', OCItems.OMNI_CELL_COMPONENT_16M.get())
-                        .unlockedBy("has_component_16m", has(OCItems.OMNI_CELL_COMPONENT_16M.get()))
-                        .save(c))
-                .build(recipeOutput, AE2OmniCells.makeId("cells/omni/16m_ordered_fallback"));
-
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_16M.get())
-                .requires(OCItems.OMNI_CELL_HOUSING.get())
-                .requires(OCItems.OMNI_CELL_COMPONENT_16M.get())
-                .unlockedBy("has_component_16m", has(OCItems.OMNI_CELL_COMPONENT_16M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/omni/16m_shapeless"));
-
-        ConditionalRecipe.builder()
-                .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
-                .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_16M.get())
-                        .requires(OCItems.OMNI_CELL_HOUSING.get())
-                        .requires(MEGAItems.CELL_COMPONENT_16M.asItem())
-                        .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
-                        .save(c))
-                .build(recipeOutput, AE2OmniCells.makeId("cells/omni/16m_shapeless_mega"));
-
-
-        // ============ 64M ============
-        ConditionalRecipe.builder()
-                .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
-                .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_64M.get())
-                        .pattern("ABA").pattern("BMB").pattern("CCC")
-                        .define('A', AEBlocks.QUARTZ_GLASS.asItem())
-                        .define('B', AEItems.ENDER_DUST.asItem())
-                        .define('C', OCItems.ENDER_INGOT.get())
-                        .define('M', MEGAItems.CELL_COMPONENT_64M.asItem())
-                        .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
-                        .save(c))
-                .build(recipeOutput, AE2OmniCells.makeId("cells/omni/64m_ordered_mega"));
-
-        ConditionalRecipe.builder()
-                .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
-                .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_64M.get())
-                        .pattern("ABA").pattern("BMB").pattern("CCC")
-                        .define('A', AEBlocks.QUARTZ_GLASS.asItem())
-                        .define('B', AEItems.ENDER_DUST.asItem())
-                        .define('C', OCItems.ENDER_INGOT.get())
-                        .define('M', OCItems.OMNI_CELL_COMPONENT_64M.get())
-                        .unlockedBy("has_component_64m", has(OCItems.OMNI_CELL_COMPONENT_64M.get()))
-                        .save(c))
-                .build(recipeOutput, AE2OmniCells.makeId("cells/omni/64m_ordered_fallback"));
-
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_64M.get())
-                .requires(OCItems.OMNI_CELL_HOUSING.get())
-                .requires(OCItems.OMNI_CELL_COMPONENT_64M.get())
-                .unlockedBy("has_component_64m", has(OCItems.OMNI_CELL_COMPONENT_64M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/omni/64m_shapeless"));
-
-        ConditionalRecipe.builder()
-                .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
-                .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_64M.get())
-                        .requires(OCItems.OMNI_CELL_HOUSING.get())
-                        .requires(MEGAItems.CELL_COMPONENT_64M.asItem())
-                        .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
-                        .save(c))
-                .build(recipeOutput, AE2OmniCells.makeId("cells/omni/64m_shapeless_mega"));
-
-
-        // ============ 256M ============
-        ConditionalRecipe.builder()
-                .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
-                .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_256M.get())
-                        .pattern("ABA").pattern("BMB").pattern("CCC")
-                        .define('A', AEBlocks.QUARTZ_GLASS.asItem())
-                        .define('B', AEItems.ENDER_DUST.asItem())
-                        .define('C', OCItems.ENDER_INGOT.get())
-                        .define('M', MEGAItems.CELL_COMPONENT_256M.asItem())
-                        .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
-                        .save(c))
-                .build(recipeOutput, AE2OmniCells.makeId("cells/omni/256m_ordered_mega"));
-
-        ConditionalRecipe.builder()
-                .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
-                .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_256M.get())
-                        .pattern("ABA").pattern("BMB").pattern("CCC")
-                        .define('A', AEBlocks.QUARTZ_GLASS.asItem())
-                        .define('B', AEItems.ENDER_DUST.asItem())
-                        .define('C', OCItems.ENDER_INGOT.get())
-                        .define('M', OCItems.OMNI_CELL_COMPONENT_256M.get())
-                        .unlockedBy("has_component_256m", has(OCItems.OMNI_CELL_COMPONENT_256M.get()))
-                        .save(c))
-                .build(recipeOutput, AE2OmniCells.makeId("cells/omni/256m_ordered_fallback"));
-
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_256M.get())
-                .requires(OCItems.OMNI_CELL_HOUSING.get())
-                .requires(OCItems.OMNI_CELL_COMPONENT_256M.get())
-                .unlockedBy("has_component_256m", has(OCItems.OMNI_CELL_COMPONENT_256M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/omni/256m_shapeless"));
-
-        ConditionalRecipe.builder()
-                .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
-                .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_256M.get())
-                        .requires(OCItems.OMNI_CELL_HOUSING.get())
-                        .requires(MEGAItems.CELL_COMPONENT_256M.asItem())
-                        .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
-                        .save(c))
-                .build(recipeOutput, AE2OmniCells.makeId("cells/omni/256m_shapeless_mega"));
-
+        {
+            var shapedId = cellShapedId(OCItems.OMNI_CELL_256M);
+            ConditionalRecipe.builder()
+                    .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
+                    .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_256M.get())
+                            .pattern("ABA").pattern("BMB").pattern("CCC")
+                            .define('A', AEBlocks.QUARTZ_GLASS.asItem())
+                            .define('B', AEItems.ENDER_DUST.asItem())
+                            .define('C', OCItems.ENDER_INGOT.get())
+                            .define('M', MEGAItems.CELL_COMPONENT_256M.asItem())
+                            .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
+                            .save(c, shapedId))
+                    .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
+                    .addRecipe(c -> ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_CELL_256M.get())
+                            .pattern("ABA").pattern("BMB").pattern("CCC")
+                            .define('A', AEBlocks.QUARTZ_GLASS.asItem())
+                            .define('B', AEItems.ENDER_DUST.asItem())
+                            .define('C', OCItems.ENDER_INGOT.get())
+                            .define('M', OCItems.OMNI_CELL_COMPONENT_256M.get())
+                            .unlockedBy("has_component_256m", has(OCItems.OMNI_CELL_COMPONENT_256M.get()))
+                            .save(c, shapedId))
+                    .build(recipeOutput, shapedId);
+            var shapelessId = cellShapelessId(OCItems.OMNI_CELL_256M);
+            ConditionalRecipe.builder()
+                    .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_256M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(MEGAItems.CELL_COMPONENT_256M.asItem())
+                            .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
+                            .save(c, shapelessId))
+                    .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.OMNI_CELL_256M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(OCItems.OMNI_CELL_COMPONENT_256M.get())
+                            .unlockedBy("has_component_256m", has(OCItems.OMNI_CELL_COMPONENT_256M.get()))
+                            .save(c, shapelessId))
+                    .build(recipeOutput, shapelessId);
+        }
 
         // -------------------------
-        // 复杂系列（COMPLEX） – 外壳形状：
-        //  "ABA"
-        //  "B B" -> 中央填 'M'
-        //  "CDC"
+        // 复杂系列（COMPLEX） – 外壳形状： "ABA" / "BMB" / "CDC"
         // A: 石英玻璃, B: 末影粉, C: 充能末影钢, D: 复杂处理器
         // -------------------------
-
-        // 1k
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_1K.get())
-                .pattern("ABA")
-                .pattern("BMB")
-                .pattern("CDC")
+                .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
                 .define('B', AEItems.ENDER_DUST.asItem())
                 .define('C', OCItems.CHARGED_ENDER_INGOT.get())
                 .define('D', OCItems.COMPLEX_LINK_PROCESSOR.get())
                 .define('M', OCItems.COMPLEX_OMNI_CELL_COMPONENT_1K.get())
                 .unlockedBy("has_complex_component_1k", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_1K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/1k_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.COMPLEX_OMNI_CELL_1K));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_1K.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_1K.get())
                 .unlockedBy("has_complex_component_1k", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_1K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/1k_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.COMPLEX_OMNI_CELL_1K));
 
-        // 4k
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_4K.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -810,15 +782,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.COMPLEX_LINK_PROCESSOR.get())
                 .define('M', OCItems.COMPLEX_OMNI_CELL_COMPONENT_4K.get())
                 .unlockedBy("has_complex_component_4k", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_4K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/4k_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.COMPLEX_OMNI_CELL_4K));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_4K.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_4K.get())
                 .unlockedBy("has_complex_component_4k", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_4K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/4k_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.COMPLEX_OMNI_CELL_4K));
 
-        // 16k
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_16K.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -827,15 +797,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.COMPLEX_LINK_PROCESSOR.get())
                 .define('M', OCItems.COMPLEX_OMNI_CELL_COMPONENT_16K.get())
                 .unlockedBy("has_complex_component_16k", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_16K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/16k_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.COMPLEX_OMNI_CELL_16K));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_16K.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_16K.get())
                 .unlockedBy("has_complex_component_16k", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_16K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/16k_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.COMPLEX_OMNI_CELL_16K));
 
-        // 64k
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_64K.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -844,15 +812,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.COMPLEX_LINK_PROCESSOR.get())
                 .define('M', OCItems.COMPLEX_OMNI_CELL_COMPONENT_64K.get())
                 .unlockedBy("has_complex_component_64k", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_64K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/64k_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.COMPLEX_OMNI_CELL_64K));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_64K.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_64K.get())
                 .unlockedBy("has_complex_component_64k", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_64K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/64k_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.COMPLEX_OMNI_CELL_64K));
 
-        // 256k
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_256K.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -861,15 +827,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.COMPLEX_LINK_PROCESSOR.get())
                 .define('M', OCItems.COMPLEX_OMNI_CELL_COMPONENT_256K.get())
                 .unlockedBy("has_complex_component_256k", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_256K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/256k_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.COMPLEX_OMNI_CELL_256K));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_256K.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_256K.get())
                 .unlockedBy("has_complex_component_256k", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_256K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/256k_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.COMPLEX_OMNI_CELL_256K));
 
-        // 1M
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_1M.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -878,15 +842,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.COMPLEX_LINK_PROCESSOR.get())
                 .define('M', OCItems.COMPLEX_OMNI_CELL_COMPONENT_1M.get())
                 .unlockedBy("has_complex_component_1m", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_1M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/1m_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.COMPLEX_OMNI_CELL_1M));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_1M.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_1M.get())
                 .unlockedBy("has_complex_component_1m", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_1M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/1m_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.COMPLEX_OMNI_CELL_1M));
 
-        // 4M
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_4M.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -895,15 +857,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.COMPLEX_LINK_PROCESSOR.get())
                 .define('M', OCItems.COMPLEX_OMNI_CELL_COMPONENT_4M.get())
                 .unlockedBy("has_complex_component_4m", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_4M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/4m_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.COMPLEX_OMNI_CELL_4M));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_4M.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_4M.get())
                 .unlockedBy("has_complex_component_4m", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_4M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/4m_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.COMPLEX_OMNI_CELL_4M));
 
-        // 16M
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_16M.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -912,15 +872,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.COMPLEX_LINK_PROCESSOR.get())
                 .define('M', OCItems.COMPLEX_OMNI_CELL_COMPONENT_16M.get())
                 .unlockedBy("has_complex_component_16m", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_16M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/16m_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.COMPLEX_OMNI_CELL_16M));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_16M.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_16M.get())
                 .unlockedBy("has_complex_component_16m", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_16M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/16m_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.COMPLEX_OMNI_CELL_16M));
 
-        // 64M
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_64M.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -929,15 +887,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.COMPLEX_LINK_PROCESSOR.get())
                 .define('M', OCItems.COMPLEX_OMNI_CELL_COMPONENT_64M.get())
                 .unlockedBy("has_complex_component_64m", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_64M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/64m_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.COMPLEX_OMNI_CELL_64M));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_64M.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_64M.get())
                 .unlockedBy("has_complex_component_64m", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_64M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/64m_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.COMPLEX_OMNI_CELL_64M));
 
-        // 256M
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_256M.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -946,43 +902,32 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.COMPLEX_LINK_PROCESSOR.get())
                 .define('M', OCItems.COMPLEX_OMNI_CELL_COMPONENT_256M.get())
                 .unlockedBy("has_complex_component_256m", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_256M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/256m_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.COMPLEX_OMNI_CELL_256M));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.COMPLEX_OMNI_CELL_256M.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_256M.get())
                 .unlockedBy("has_complex_component_256m", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_256M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/complex/256m_shapeless"));
-
+                .save(recipeOutput, cellShapelessId(OCItems.COMPLEX_OMNI_CELL_256M));
 
         // -------------------------
-        // 量子系列（QUANTUM） – 外壳形状：
-        //  "ABA"
-        //  "B B" -> 中央填 'M'
-        //  "CDC"
+        // 量子系列（QUANTUM） – 外壳形状： "ABA" / "BMB" / "CDC"
         // A: 石英玻璃, B: 末影粉, C: 充能末影钢, D: 多维展开处理器
         // -------------------------
-
-        // 1k
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_1K.get())
-                .pattern("ABA")
-                .pattern("BMB")
-                .pattern("CDC")
+                .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
                 .define('B', AEItems.ENDER_DUST.asItem())
                 .define('C', OCItems.CHARGED_ENDER_INGOT.get())
                 .define('D', OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR.get())
                 .define('M', OCItems.QUANTUM_OMNI_CELL_COMPONENT_1K.get())
                 .unlockedBy("has_quantum_component_1k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_1K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/1k_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.QUANTUM_OMNI_CELL_1K));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_1K.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_1K.get())
                 .unlockedBy("has_quantum_component_1k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_1K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/1k_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.QUANTUM_OMNI_CELL_1K));
 
-        // 4k
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_4K.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -991,15 +936,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR.get())
                 .define('M', OCItems.QUANTUM_OMNI_CELL_COMPONENT_4K.get())
                 .unlockedBy("has_quantum_component_4k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_4K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/4k_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.QUANTUM_OMNI_CELL_4K));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_4K.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_4K.get())
                 .unlockedBy("has_quantum_component_4k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_4K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/4k_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.QUANTUM_OMNI_CELL_4K));
 
-        // 16k
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_16K.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -1008,32 +951,28 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR.get())
                 .define('M', OCItems.QUANTUM_OMNI_CELL_COMPONENT_16K.get())
                 .unlockedBy("has_quantum_component_16k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_16K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/16k_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.QUANTUM_OMNI_CELL_16K));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_16K.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_16K.get())
                 .unlockedBy("has_quantum_component_16k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_16K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/16k_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.QUANTUM_OMNI_CELL_16K));
 
-        // 64k
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_64K.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
                 .define('B', AEItems.ENDER_DUST.asItem())
                 .define('C', OCItems.CHARGED_ENDER_INGOT.get())
                 .define('D', OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR.get())
-                .define('M', OCItems.QUANTUM_OMNI_CELL_COMPONENT_64K.get())
-                .unlockedBy("has_quantum_component_64k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/64k_ordered"));
-
+                .define('M', OCItems.QUANTUM_OMNI_CELL_COMPONENT_64M.get())
+                .unlockedBy("has_quantum_component_64k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64M.get()))
+                .save(recipeOutput, cellShapedId(OCItems.QUANTUM_OMNI_CELL_64K));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_64K.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
-                .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64K.get())
-                .unlockedBy("has_quantum_component_64k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/64k_shapeless"));
+                .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64M.get())
+                .unlockedBy("has_quantum_component_64k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64M.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.QUANTUM_OMNI_CELL_64K));
 
-        // 256k
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_256K.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -1042,15 +981,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR.get())
                 .define('M', OCItems.QUANTUM_OMNI_CELL_COMPONENT_256K.get())
                 .unlockedBy("has_quantum_component_256k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_256K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/256k_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.QUANTUM_OMNI_CELL_256K));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_256K.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_256K.get())
                 .unlockedBy("has_quantum_component_256k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_256K.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/256k_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.QUANTUM_OMNI_CELL_256K));
 
-        // 1M
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_1M.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -1059,15 +996,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR.get())
                 .define('M', OCItems.QUANTUM_OMNI_CELL_COMPONENT_1M.get())
                 .unlockedBy("has_quantum_component_1m", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_1M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/1m_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.QUANTUM_OMNI_CELL_1M));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_1M.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_1M.get())
                 .unlockedBy("has_quantum_component_1m", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_1M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/1m_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.QUANTUM_OMNI_CELL_1M));
 
-        // 4M
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_4M.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -1076,15 +1011,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR.get())
                 .define('M', OCItems.QUANTUM_OMNI_CELL_COMPONENT_4M.get())
                 .unlockedBy("has_quantum_component_4m", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_4M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/4m_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.QUANTUM_OMNI_CELL_4M));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_4M.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_4M.get())
                 .unlockedBy("has_quantum_component_4m", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_4M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/4m_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.QUANTUM_OMNI_CELL_4M));
 
-        // 16M
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_16M.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -1093,15 +1026,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR.get())
                 .define('M', OCItems.QUANTUM_OMNI_CELL_COMPONENT_16M.get())
                 .unlockedBy("has_quantum_component_16m", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_16M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/16m_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.QUANTUM_OMNI_CELL_16M));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_16M.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_16M.get())
                 .unlockedBy("has_quantum_component_16m", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_16M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/16m_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.QUANTUM_OMNI_CELL_16M));
 
-        // 64M
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_64M.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -1110,15 +1041,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR.get())
                 .define('M', OCItems.QUANTUM_OMNI_CELL_COMPONENT_64M.get())
                 .unlockedBy("has_quantum_component_64m", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/64m_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.QUANTUM_OMNI_CELL_64M));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_64M.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64M.get())
                 .unlockedBy("has_quantum_component_64m", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/64m_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.QUANTUM_OMNI_CELL_64M));
 
-        // 256M
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_256M.get())
                 .pattern("ABA").pattern("BMB").pattern("CDC")
                 .define('A', AEBlocks.QUARTZ_GLASS.asItem())
@@ -1127,15 +1056,348 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR.get())
                 .define('M', OCItems.QUANTUM_OMNI_CELL_COMPONENT_256M.get())
                 .unlockedBy("has_quantum_component_256m", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_256M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/256m_ordered"));
-
+                .save(recipeOutput, cellShapedId(OCItems.QUANTUM_OMNI_CELL_256M));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_256M.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_256M.get())
                 .unlockedBy("has_quantum_component_256m", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_256M.get()))
-                .save(recipeOutput, AE2OmniCells.makeId("cells/quantum/256m_shapeless"));
+                .save(recipeOutput, cellShapelessId(OCItems.QUANTUM_OMNI_CELL_256M));
 
 
+        // =====================
+        // 便携 · 普通（OMNI） 1k~256k：使用 AE 原版组件
+        // =====================
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_1K.get())
+                .requires(OCItems.OMNI_CELL_HOUSING.get())
+                .requires(AEItems.CELL_COMPONENT_1K)
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_component_1k", has(AEItems.CELL_COMPONENT_1K))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_OMNI_CELL_1K));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_4K.get())
+                .requires(OCItems.OMNI_CELL_HOUSING.get())
+                .requires(AEItems.CELL_COMPONENT_4K)
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_component_4k", has(AEItems.CELL_COMPONENT_4K))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_OMNI_CELL_4K));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_16K.get())
+                .requires(OCItems.OMNI_CELL_HOUSING.get())
+                .requires(AEItems.CELL_COMPONENT_16K)
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_component_16k", has(AEItems.CELL_COMPONENT_16K))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_OMNI_CELL_16K));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_64K.get())
+                .requires(OCItems.OMNI_CELL_HOUSING.get())
+                .requires(AEItems.CELL_COMPONENT_64K)
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_component_64k", has(AEItems.CELL_COMPONENT_64K))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_OMNI_CELL_64K));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_256K.get())
+                .requires(OCItems.OMNI_CELL_HOUSING.get())
+                .requires(AEItems.CELL_COMPONENT_256K)
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_component_256k", has(AEItems.CELL_COMPONENT_256K))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_OMNI_CELL_256K));
+
+
+        // =====================
+        // 便携 · 普通（OMNI） 1M~256M：MEGA 联动 / 自家组件（二选一）
+        // —— 两条分支共用同一配方 ID：cells/shapeless/<portable-path>
+        // =====================
+        {
+            var id = cellShapelessId(OCItems.PORTABLE_OMNI_CELL_1M);
+            ConditionalRecipe.builder()
+                    .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_1M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(MEGAItems.CELL_COMPONENT_1M.asItem())
+                            .requires(AEBlocks.CHEST.asItem())
+                            .requires(AEBlocks.ENERGY_CELL.asItem())
+                            .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
+                            .save(c, id))
+                    .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_1M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(OCItems.OMNI_CELL_COMPONENT_1M.get())
+                            .requires(AEBlocks.CHEST.asItem())
+                            .requires(AEBlocks.ENERGY_CELL.asItem())
+                            .unlockedBy("has_component_1m", has(OCItems.OMNI_CELL_COMPONENT_1M.get()))
+                            .save(c, id))
+                    .build(recipeOutput, id);
+        }
+
+        {
+            var id = cellShapelessId(OCItems.PORTABLE_OMNI_CELL_4M);
+            ConditionalRecipe.builder()
+                    .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_4M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(MEGAItems.CELL_COMPONENT_4M.asItem())
+                            .requires(AEBlocks.CHEST.asItem())
+                            .requires(AEBlocks.ENERGY_CELL.asItem())
+                            .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
+                            .save(c, id))
+                    .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_4M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(OCItems.OMNI_CELL_COMPONENT_4M.get())
+                            .requires(AEBlocks.CHEST.asItem())
+                            .requires(AEBlocks.ENERGY_CELL.asItem())
+                            .unlockedBy("has_component_4m", has(OCItems.OMNI_CELL_COMPONENT_4M.get()))
+                            .save(c, id))
+                    .build(recipeOutput, id);
+        }
+
+        {
+            var id = cellShapelessId(OCItems.PORTABLE_OMNI_CELL_16M);
+            ConditionalRecipe.builder()
+                    .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_16M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(MEGAItems.CELL_COMPONENT_16M.asItem())
+                            .requires(AEBlocks.CHEST.asItem())
+                            .requires(AEBlocks.ENERGY_CELL.asItem())
+                            .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
+                            .save(c, id))
+                    .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_16M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(OCItems.OMNI_CELL_COMPONENT_16M.get())
+                            .requires(AEBlocks.CHEST.asItem())
+                            .requires(AEBlocks.ENERGY_CELL.asItem())
+                            .unlockedBy("has_component_16m", has(OCItems.OMNI_CELL_COMPONENT_16M.get()))
+                            .save(c, id))
+                    .build(recipeOutput, id);
+        }
+
+        {
+            var id = cellShapelessId(OCItems.PORTABLE_OMNI_CELL_64M);
+            ConditionalRecipe.builder()
+                    .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_64M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(MEGAItems.CELL_COMPONENT_64M.asItem())
+                            .requires(AEBlocks.CHEST.asItem())
+                            .requires(AEBlocks.ENERGY_CELL.asItem())
+                            .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
+                            .save(c, id))
+                    .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_64M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(OCItems.OMNI_CELL_COMPONENT_64M.get())
+                            .requires(AEBlocks.CHEST.asItem())
+                            .requires(AEBlocks.ENERGY_CELL.asItem())
+                            .unlockedBy("has_component_64m", has(OCItems.OMNI_CELL_COMPONENT_64M.get()))
+                            .save(c, id))
+                    .build(recipeOutput, id);
+        }
+
+        {
+            var id = cellShapelessId(OCItems.PORTABLE_OMNI_CELL_256M);
+            ConditionalRecipe.builder()
+                    .addCondition(modLoaded(AE2OmniCells.MEGA_MODID))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_256M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(MEGAItems.CELL_COMPONENT_256M.asItem())
+                            .requires(AEBlocks.CHEST.asItem())
+                            .requires(AEBlocks.ENERGY_CELL.asItem())
+                            .unlockedBy("has_housing", has(OCItems.OMNI_CELL_HOUSING.get()))
+                            .save(c, id))
+                    .addCondition(not(modLoaded(AE2OmniCells.MEGA_MODID)))
+                    .addRecipe(c -> ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_256M.get())
+                            .requires(OCItems.OMNI_CELL_HOUSING.get())
+                            .requires(OCItems.OMNI_CELL_COMPONENT_256M.get())
+                            .requires(AEBlocks.CHEST.asItem())
+                            .requires(AEBlocks.ENERGY_CELL.asItem())
+                            .unlockedBy("has_component_256m", has(OCItems.OMNI_CELL_COMPONENT_256M.get()))
+                            .save(c, id))
+                    .build(recipeOutput, id);
+        }
+
+        // =====================
+        // 便携 · 复杂（COMPLEX） 1k~256M：复杂外壳 + 复杂组件
+        // =====================
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_COMPLEX_OMNI_CELL_1K.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_1K.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_complex_component_1k", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_1K.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_COMPLEX_OMNI_CELL_1K));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_COMPLEX_OMNI_CELL_4K.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_4K.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_complex_component_4k", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_4K.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_COMPLEX_OMNI_CELL_4K));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_COMPLEX_OMNI_CELL_16K.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_16K.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_complex_component_16k", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_16K.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_COMPLEX_OMNI_CELL_16K));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_COMPLEX_OMNI_CELL_64K.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_64K.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_complex_component_64k", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_64K.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_COMPLEX_OMNI_CELL_64K));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_COMPLEX_OMNI_CELL_256K.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_256K.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_complex_component_256k", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_256K.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_COMPLEX_OMNI_CELL_256K));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_COMPLEX_OMNI_CELL_1M.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_1M.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_complex_component_1m", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_1M.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_COMPLEX_OMNI_CELL_1M));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_COMPLEX_OMNI_CELL_4M.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_4M.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_complex_component_4m", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_4M.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_COMPLEX_OMNI_CELL_4M));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_COMPLEX_OMNI_CELL_16M.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_16M.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_complex_component_16m", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_16M.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_COMPLEX_OMNI_CELL_16M));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_COMPLEX_OMNI_CELL_64M.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_64M.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_complex_component_64m", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_64M.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_COMPLEX_OMNI_CELL_64M));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_COMPLEX_OMNI_CELL_256M.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.COMPLEX_OMNI_CELL_COMPONENT_256M.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_complex_component_256m", has(OCItems.COMPLEX_OMNI_CELL_COMPONENT_256M.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_COMPLEX_OMNI_CELL_256M));
+
+        // =====================
+        // 便携 · 量子（QUANTUM） 1k~256M：量子外壳 + 量子组件
+        // =====================
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_QUANTUM_OMNI_CELL_1K.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_1K.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_quantum_component_1k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_1K.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_QUANTUM_OMNI_CELL_1K));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_QUANTUM_OMNI_CELL_4K.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_4K.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_quantum_component_4k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_4K.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_QUANTUM_OMNI_CELL_4K));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_QUANTUM_OMNI_CELL_16K.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_16K.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_quantum_component_16k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_16K.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_QUANTUM_OMNI_CELL_16K));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_QUANTUM_OMNI_CELL_64K.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64K.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_quantum_component_64k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64K.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_QUANTUM_OMNI_CELL_64K));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_QUANTUM_OMNI_CELL_256K.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_256K.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_quantum_component_256k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_256K.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_QUANTUM_OMNI_CELL_256K));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_QUANTUM_OMNI_CELL_1M.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_1M.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_quantum_component_1m", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_1M.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_QUANTUM_OMNI_CELL_1M));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_QUANTUM_OMNI_CELL_4M.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_4M.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_quantum_component_4m", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_4M.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_QUANTUM_OMNI_CELL_4M));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_QUANTUM_OMNI_CELL_16M.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_16M.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_quantum_component_16m", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_16M.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_QUANTUM_OMNI_CELL_16M));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_QUANTUM_OMNI_CELL_64M.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64M.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_quantum_component_64m", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64M.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_QUANTUM_OMNI_CELL_64M));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_QUANTUM_OMNI_CELL_256M.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
+                .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_256M.get())
+                .requires(AEBlocks.CHEST.asItem())
+                .requires(AEBlocks.ENERGY_CELL.asItem())
+                .unlockedBy("has_quantum_component_256m", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_256M.get()))
+                .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_QUANTUM_OMNI_CELL_256M));
 
     }
+
+    // 统一生成“存储单元”配方 ID（非便携）
+    private static ResourceLocation cellShapedId(RegistryObject<? extends Item> cell)
+    {
+        return AE2OmniCells.makeId("cells/shaped/" + cell.getId().getPath());
+    }
+    private static ResourceLocation cellShapelessId(RegistryObject<? extends Item> cell)
+    {
+        return AE2OmniCells.makeId("cells/shapeless/" + cell.getId().getPath());
+    }
+
 }
