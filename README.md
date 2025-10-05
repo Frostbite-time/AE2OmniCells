@@ -1,29 +1,61 @@
+# AE2 Omni Cells
 
-Installation information
-=======
+**语言 / Language**: [简体中文](./README.md) | [English](./docs/ENGLISH_README.md)
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+**AE2 Omni Cells** 以“单盘混装一切 AE 资源键（物品、流体等）”为核心设计，提供覆盖 **1k → 256m** 的容量梯度，并以“**可同时存储的种类上限**”为主要差异构建三条产品线（含便携版）。不对“种类数量”额外收取容量费用，仅对“种类上限”做清晰、可预期的限制。
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+---
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+## 特性
 
-Mapping Names:
-============
-The MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+* **统一容量梯度**：1k / 4k / 16k / 64k / 256k / 1m / 4m / 16m / 64m / 256m
+* **单盘混装**：同一磁盘可同时存储多种 AE 资源类型（以实际安装模组的 AE2 集成为准）
+* **类型上限可控**：仅限制“同时存储的不同种类数量”，不额外扣字节
+* **便携版本**：每一容量、每一系列均提供对应的便携全能单元
+* **数据安全**：采用“小 NBT”策略，物品仅保存必要提示信息；实际存储数据写入独立容器，降低 NBT 膨胀风险
+* **制作链路完整**：末影钢 → 压印模板 → 电路板 → 处理器 → 组件/外壳 → 成品磁盘（JEI/REI/EMI 可查看）
 
-MDG Legacy:
-==========
-This template uses [ModDevGradle Legacy](https://github.com/neoforged/ModDevGradle). Documentation can be found [here](https://github.com/neoforged/ModDevGradle/blob/main/LEGACY.md).
+---
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+## 三条产品线
+
+| 系列       | 同时存储的“种类上限”                 | 推荐场景              |
+| -------- | --------------------------- | ----------------- |
+| **全能**   | 固定 **63** 种                 | 生存常规/中小规模网络，简单易管控 |
+| **复杂全能** | 随容量递增（示例：1k≈12 → 256m≈6400） | 渐进式平衡；随进度自然提升上限   |
+| **量子**   | **无限**                      | 后期/终局阶段的极端多样性整合   |
+
+> 复杂全能系列的“容量 ↔ 类型上限”完整表见文档；整合包可据此分阶段设置配方与成本。
+
+---
+
+## 制作与依赖
+
+* **基础材料**：先合成 **末影钢**（可进一步充能）
+* **压印模板**：全能 / 复杂 / 多维展开（对应后续电路板）
+* **电路板与处理器**：三系各自的电路板与处理器是组件与磁盘配方的核心
+* **组件 / 外壳 / 成品**：遵循 AE2 的配方结构；所有配方请以 JEI/REI/EMI 为准
+
+> 若安装了相关扩展（例如 EAE），部分装饰方块也可参与电路切割机配方（以 JEI/REI/EMI 展示为准）。
+
+---
+
+## 数据存储
+
+* 所有存储元件仅存储UUID以及一些用于客户端的预览信息；
+* 元件对应的实际数据存储在存档文件夹下data/ae_universal_cell_data；
+* 无法读取的错误条目不会被清除，每次进入游戏都会尝试再次读取，以适应模组环境变化的情况。
+
+---
+
+## 反馈与贡献
+
+* **问题反馈**：请提交 Issue，包含复现步骤、期望结果、实际结果，以及必要的日志/崩溃报告；
+* **功能/平衡建议**：欢迎在 Issue 讨论，提出背景与目标场景。
+
+---
+
+## 许可证
+
+* **代码**： [LGPL-3.0](https://www.gnu.org/licenses/lgpl-3.0.html)
+* **材质与美术资源**： [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/)
