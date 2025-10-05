@@ -6,8 +6,8 @@ import appeng.menu.me.common.MEStorageMenu;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 
 public class OCMenus

@@ -7,20 +7,19 @@ import com.wintercogs.ae2omnicells.common.init.OCItems;
 import com.wintercogs.ae2omnicells.common.init.OCMenus;
 import com.wintercogs.ae2omnicells.common.me.AEPlugin;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 
 @Mod(AE2OmniCells.MODID)
@@ -32,26 +31,21 @@ public class AE2OmniCells
     public static final String MEGA_MODID = "megacells";
     public static boolean MEGA_LOADED = false;
 
+    public static final String EAE_MODID = "extendedae";
+    public static boolean EAE_LOADED = false;
 
-    public AE2OmniCells()
+
+    public AE2OmniCells(IEventBus modEventBus, ModContainer modContainer)
     {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::constructMod);
         modEventBus.addListener(this::commonSetup);
-        MinecraftForge.EVENT_BUS.register(this);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        NeoForge.EVENT_BUS.register(this);
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
         OCItems.register(modEventBus);
         OCBlocks.register(modEventBus);
         OCCreativeModeTabs.register(modEventBus);
         OCMenus.registerMenus(modEventBus);
-
-        if(FMLEnvironment.dist == Dist.CLIENT)
-        {
-            AE2OmniCellsClient.clientInit();
-            AE2OmniCellsClient.clientRegister(modEventBus, MinecraftForge.EVENT_BUS);
-        }
-
     }
 
     private void constructMod(FMLConstructModEvent event)
@@ -63,9 +57,6 @@ public class AE2OmniCells
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         AEPlugin.register();
-
-        if(FMLEnvironment.dist == Dist.CLIENT)
-            AE2OmniCellsClient.clientCommonSetup();
     }
 
     @SubscribeEvent
@@ -74,7 +65,7 @@ public class AE2OmniCells
         LOGGER.info("AE2OmniCells - Server started");
     }
 
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
         @SubscribeEvent
@@ -86,6 +77,6 @@ public class AE2OmniCells
 
     public static ResourceLocation makeId(String path)
     {
-        return new ResourceLocation(AE2OmniCells.MODID, path);
+        return ResourceLocation.fromNamespaceAndPath(AE2OmniCells.MODID, path);
     }
 }

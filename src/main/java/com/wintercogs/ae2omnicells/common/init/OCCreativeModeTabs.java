@@ -10,9 +10,10 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
@@ -28,23 +29,23 @@ public class OCCreativeModeTabs
                     .title(Component.translatable("creativetab.ae2omnicells.items"))
                     .displayItems((params, output) -> {
                         // 其他物品
-                        for (RegistryObject<Item> ro : OCItems.getOthers()) {
+                        for (DeferredItem<Item> ro : OCItems.getOthers()) {
                             output.accept(ro.get());
                         }
 
                         // 方块物品
-                        for (RegistryObject<? extends Block> ro : OCBlocks.ALL)
+                        for (DeferredBlock<? extends Block> ro : OCBlocks.ALL)
                         {
                             output.accept(ro.get());
                         }
 
                         // 普通元件（非便携）
-                        for (RegistryObject<AEUniversalCellItem> ro : OCItems.getCells()) {
+                        for (DeferredItem<AEUniversalCellItem> ro : OCItems.getCells()) {
                             output.accept(ro.get());
                         }
 
                         // 便携元件：每个展示两份（空电 + 满电），两件相邻
-                        for (RegistryObject<AEPortableUniversalCellItem> ro : OCItems.getPortableCells()) {
+                        for (DeferredItem<AEPortableUniversalCellItem> ro : OCItems.getPortableCells()) {
                             AEPortableUniversalCellItem portable = ro.get();
 
                             // 空电
