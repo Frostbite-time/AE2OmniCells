@@ -76,6 +76,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('F', OCItems.CHARGED_ENDER_INGOT.get())
                 .unlockedBy("has_charged_ender_ingot", has(OCItems.CHARGED_ENDER_INGOT.get()))
                 .save(recipeOutput);
+        InscriberRecipeBuilder.inscribe(OCBlocks.ENDER_INGOT_BLOCK.get(), OCItems.OMNI_LINK_PRINT_PRESS.get(), 1)
+                .setTop(Ingredient.of(OCItems.COMPLEX_LINK_PRINT_PRESS.get()))
+                .setMode(InscriberProcessType.INSCRIBE)
+                .save(recipeOutput, AE2OmniCells.makeId("inscriber/omni_link_print_press"));
 
         // 复杂链路压印模板
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.COMPLEX_LINK_PRINT_PRESS.get())
@@ -90,6 +94,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('F', OCItems.CHARGED_ENDER_INGOT.get())
                 .unlockedBy("has_charged_ender_ingot", has(OCItems.CHARGED_ENDER_INGOT.get()))
                 .save(recipeOutput);
+        InscriberRecipeBuilder.inscribe(OCBlocks.ENDER_INGOT_BLOCK.get(), OCItems.COMPLEX_LINK_PRINT_PRESS.get(), 1)
+                .setTop(Ingredient.of(OCItems.COMPLEX_LINK_PRINT_PRESS.get()))
+                .setMode(InscriberProcessType.INSCRIBE)
+                .save(recipeOutput, AE2OmniCells.makeId("inscriber/complex_link_print_press"));
 
         // 多维展开压印模板
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.MULTIDIMENSIONAL_EXPANSION_PRINT_PRESS.get())
@@ -104,6 +112,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('F', OCItems.CHARGED_ENDER_INGOT.get())
                 .unlockedBy("has_charged_ender_ingot", has(OCItems.CHARGED_ENDER_INGOT.get()))
                 .save(recipeOutput);
+        InscriberRecipeBuilder.inscribe(OCBlocks.ENDER_INGOT_BLOCK.get(), OCItems.MULTIDIMENSIONAL_EXPANSION_PRINT_PRESS.get(), 1)
+                .setTop(Ingredient.of(OCItems.MULTIDIMENSIONAL_EXPANSION_PRINT_PRESS.get()))
+                .setMode(InscriberProcessType.INSCRIBE)
+                .save(recipeOutput, AE2OmniCells.makeId("inscriber/multidimensional_expansion_print_press"));
 
         // 全能链路电路板
         InscriberRecipeBuilder.inscribe(OCItems.ENDER_INGOT.get(), OCItems.OMNI_LINK_CIRCUIT_PRINT.get(), 1)
