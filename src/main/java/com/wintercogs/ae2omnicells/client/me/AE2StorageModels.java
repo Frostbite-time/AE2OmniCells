@@ -4,6 +4,7 @@ import appeng.api.client.StorageCellModels;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.items.AEUniversalCellItem;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -45,7 +46,7 @@ public class AE2StorageModels
 
     public static void registerItemColors(RegisterColorHandlersEvent.Item event)
     {
-        event.register(AEUniversalCellItem::getColor,
+        event.register((itemStack, idx) -> FastColor.ARGB32.opaque(AEUniversalCellItem.getColor(itemStack, idx)),
                 // 普通
                 OMNI_CELL_1K.get(),
                 OMNI_CELL_4K.get(),
