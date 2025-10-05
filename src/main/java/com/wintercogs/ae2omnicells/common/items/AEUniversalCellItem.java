@@ -13,6 +13,7 @@ import appeng.core.AELog;
 import appeng.core.localization.PlayerMessages;
 import appeng.items.contents.CellConfig;
 import appeng.items.storage.StorageCellTooltipComponent;
+import appeng.items.tools.powered.powersink.AEBasePoweredItem;
 import appeng.util.ConfigInventory;
 import appeng.util.Platform;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
@@ -63,6 +64,11 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
     public static int getColor(ItemStack stack, int tintIndex)
     {
         if (tintIndex != 1) return 0xFFFFFF; // 白
+        if(stack.getItem() instanceof AEBasePoweredItem poweredContainer)
+        {
+            if(poweredContainer.getAECurrentPower(stack) <= 0)
+                return CellState.ABSENT.getStateColor();
+        }
         CellState state = IAEUniversalCell.getCellState(stack);
         return state.getStateColor();
     }
