@@ -20,7 +20,7 @@ public class ModBlockModelProvider extends BlockModelProvider
     @Override
     protected void registerModels()
     {
-        driveBlockModel("block/drive/omni_drive_cell", "ae2:block/drive/cells/256k_item_cell");
+        driveBlockModel("block/drive/omni_drive_cell", "block/drive/cells/omni_cell_drive");
         driveBlockModel("block/drive/complex_omni_drive_cell", "block/drive/cells/complex_omni_cell_drive");
         driveBlockModel("block/drive/quantum_omni_drive_cell", "block/drive/cells/quantum_omni_cell_drive");
     }
