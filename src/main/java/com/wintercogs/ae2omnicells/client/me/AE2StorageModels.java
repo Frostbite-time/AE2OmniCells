@@ -5,8 +5,8 @@ import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.items.AEUniversalCellItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import static com.wintercogs.ae2omnicells.common.init.OCItems.*;
 
@@ -114,7 +114,7 @@ public class AE2StorageModels
     }
 
     @SafeVarargs
-    private static void registerModels(ResourceLocation model, RegistryObject<? extends Item>... items)
+    private static void registerModels(ResourceLocation model, DeferredItem<? extends Item>... items)
     {
         for (var ro : items)
         {

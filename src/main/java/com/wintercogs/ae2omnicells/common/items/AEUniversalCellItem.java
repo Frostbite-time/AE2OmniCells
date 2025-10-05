@@ -1,46 +1,41 @@
 package com.wintercogs.ae2omnicells.common.items;
 
 import appeng.api.config.FuzzyMode;
+import appeng.api.ids.AEComponents;
 import appeng.api.stacks.GenericStack;
 import appeng.api.storage.StorageCells;
 import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.ICellWorkbenchItem;
-import appeng.api.storage.cells.StorageCell;
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.UpgradeInventories;
 import appeng.core.AEConfig;
-import appeng.core.AELog;
 import appeng.core.localization.PlayerMessages;
 import appeng.items.contents.CellConfig;
 import appeng.items.storage.StorageCellTooltipComponent;
+import appeng.recipes.game.StorageCellDisassemblyRecipe;
 import appeng.util.ConfigInventory;
+import appeng.util.InteractionUtil;
 import appeng.util.Platform;
-import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.me.IAEUniversalCell;
 import com.wintercogs.ae2omnicells.common.me.localization.AEUniversalTooltips;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * 用于承载物品到存储系统的桥接物品
@@ -73,16 +68,13 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack pStack,
-                                @Nullable Level pLevel,
-                                @NotNull List<Component> lines,
-                                @NotNull TooltipFlag pIsAdvanced)
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag tooltipFlag)
     {
         if (Platform.isClient())
         {
-            long used = IAEUniversalCell.getUsedBytes(pStack);
+            long used = IAEUniversalCell.getUsedBytes(stack);
             lines.add(AEUniversalTooltips.bytesUsed(used, getTotalBytes()));
-            long typesUsed = IAEUniversalCell.getUsedTypes(pStack);
+            long typesUsed = IAEUniversalCell.getUsedTypes(stack);
             lines.add(AEUniversalTooltips.typesUsed(typesUsed, getTotalTypes()));
         }
     }
@@ -150,30 +142,17 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
     @Override
     public ConfigInventory getConfigInventory(ItemStack is)
     {
-        // 通用盘：允许所有 AEKey 作为过滤对象（白名单/黑名单配置用）
-        return CellConfig.create(key -> true, is);
+        return CellConfig.create(is);
     }
 
     @Override
-    public FuzzyMode getFuzzyMode(ItemStack is)
-    {
-        final CompoundTag tag = is.getOrCreateTag();
-        final String fz = tag.getString("FuzzyMode");
-        if (fz.isEmpty()) return FuzzyMode.IGNORE_ALL;
-        try
-        {
-            return FuzzyMode.valueOf(fz);
-        }
-        catch(IllegalArgumentException ex)
-        {
-            return FuzzyMode.IGNORE_ALL;
-        }
+    public FuzzyMode getFuzzyMode(ItemStack is) {
+        return is.getOrDefault(AEComponents.STORAGE_CELL_FUZZY_MODE, FuzzyMode.IGNORE_ALL);
     }
 
     @Override
-    public void setFuzzyMode(ItemStack is, FuzzyMode fzMode)
-    {
-        is.getOrCreateTag().putString("FuzzyMode", fzMode.name());
+    public void setFuzzyMode(ItemStack is, FuzzyMode fzMode) {
+        is.set(AEComponents.STORAGE_CELL_FUZZY_MODE, fzMode);
     }
 
     @Override
@@ -183,61 +162,43 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
                 player.getItemInHand(hand));
     }
 
+    private boolean disassembleDrive(ItemStack stack, Level level, Player player) {
+        if (!InteractionUtil.isInAlternateUseMode(player)) {
+            return false;
+        }
+
+        var disassembledStacks = StorageCellDisassemblyRecipe.getDisassemblyResult(level, stack.getItem());
+        if (disassembledStacks.isEmpty()) {
+            return false;
+        }
+
+        var playerInventory = player.getInventory();
+        if (playerInventory.getSelected() != stack) {
+            return false;
+        }
+
+        var inv = StorageCells.getCellInventory(stack, null);
+        if (inv != null && !inv.getAvailableStacks().isEmpty()) {
+            player.displayClientMessage(PlayerMessages.OnlyEmptyCellsCanBeDisassembled.text(), true);
+            return false;
+        }
+
+        playerInventory.setItem(playerInventory.selected, ItemStack.EMPTY);
+
+        for (var disassembledStack : disassembledStacks) {
+            playerInventory.placeItemBackInInventory(disassembledStack.copy());
+        }
+
+        getUpgrades(stack).forEach(playerInventory::placeItemBackInInventory);
+
+        return true;
+    }
+
     @Override
     public @NotNull InteractionResult onItemUseFirst(@NotNull ItemStack stack, UseOnContext context)
     {
         return this.disassembleDrive(stack, context.getLevel(), context.getPlayer())
                 ? InteractionResult.sidedSuccess(context.getLevel().isClientSide())
                 : InteractionResult.PASS;
-    }
-
-    public ResourceLocation getRecipeId()
-    {
-        return AE2OmniCells.makeId("cells/shapeless/" +
-                Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(this)).getPath());
-    }
-
-    private boolean disassembleDrive(ItemStack stack, Level level, Player player)
-    {
-        Recipe<?> recipe = level.getRecipeManager().byKey(this.getRecipeId()).orElse(null);
-        if (recipe instanceof CraftingRecipe)
-        {
-            CraftingRecipe craftingRecipe = (CraftingRecipe)recipe;
-            if (level.isClientSide()) return true;
-
-            Inventory playerInventory = player.getInventory();
-            if (playerInventory.getSelected() != stack) return false;
-
-            StorageCell inv = StorageCells.getCellInventory(stack, null);
-            if (inv == null) return false;
-
-            if (inv.getAvailableStacks().isEmpty())
-            {
-                playerInventory.setItem(playerInventory.selected, ItemStack.EMPTY);
-
-                for(Ingredient ingredient : craftingRecipe.getIngredients())
-                {
-                    ItemStack ingredientStack = ingredient.getItems()[0].copy();
-                    playerInventory.placeItemBackInInventory(ingredientStack);
-                }
-
-                for(ItemStack upgrade : this.getUpgrades(stack))
-                {
-                    playerInventory.placeItemBackInInventory(upgrade);
-                }
-            }
-            else
-            {
-                player.displayClientMessage(PlayerMessages.OnlyEmptyCellsCanBeDisassembled.text(), true);
-            }
-
-            return true;
-
-        }
-        else
-        {
-            AELog.debug("Cannot disassemble portable cell because it's crafting recipe doesn't exist: %s", new Object[]{this.getRecipeId()});
-            return false;
-        }
     }
 }

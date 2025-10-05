@@ -1,6 +1,7 @@
 package com.wintercogs.ae2omnicells.common.items;
 
 import appeng.api.config.FuzzyMode;
+import appeng.api.ids.AEComponents;
 import appeng.api.stacks.GenericStack;
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.UpgradeInventories;
@@ -21,9 +22,7 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -104,7 +103,6 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
     @Override
     public IUpgradeInventory getUpgrades(ItemStack is)
     {
-        // 4 槽，并保留能量卡变化的回调（提升能量上限倍率）
         return UpgradeInventories.forItem(is, 6, this::onUpgradesChanged);
     }
 
@@ -112,35 +110,22 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
     public ConfigInventory getConfigInventory(ItemStack is)
     {
         // 通用盘：允许所有 AEKey 作为过滤对象
-        return CellConfig.create(key -> true, is);
+        return CellConfig.create(is);
     }
 
     @Override
-    public FuzzyMode getFuzzyMode(ItemStack is)
-    {
-        final var tag = is.getOrCreateTag();
-        final String fz = tag.getString("FuzzyMode");
-        if (fz.isEmpty()) return FuzzyMode.IGNORE_ALL;
-        try {
-            return FuzzyMode.valueOf(fz);
-        } catch (IllegalArgumentException ex) {
-            return FuzzyMode.IGNORE_ALL;
-        }
+    public FuzzyMode getFuzzyMode(ItemStack is) {
+        return is.getOrDefault(AEComponents.STORAGE_CELL_FUZZY_MODE, FuzzyMode.IGNORE_ALL);
     }
 
     @Override
-    public void setFuzzyMode(ItemStack is, FuzzyMode fzMode)
-    {
-        is.getOrCreateTag().putString("FuzzyMode", fzMode.name());
+    public void setFuzzyMode(ItemStack is, FuzzyMode fzMode) {
+        is.set(AEComponents.STORAGE_CELL_FUZZY_MODE, fzMode);
     }
 
     // ---------- Tooltip：文本 + 预览组件 ----------
-
     @Override
-    public void appendHoverText(@NotNull ItemStack stack,
-                                @Nullable Level level,
-                                @NotNull List<Component> lines,
-                                @NotNull TooltipFlag isAdvanced)
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag advancedTooltips)
     {
         // 仅客户端做纯展示文本（不影响服务端逻辑）
         if (Platform.isClient())

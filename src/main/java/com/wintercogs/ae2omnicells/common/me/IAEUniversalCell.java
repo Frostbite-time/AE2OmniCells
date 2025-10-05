@@ -3,9 +3,7 @@ package com.wintercogs.ae2omnicells.common.me;
 import appeng.api.stacks.GenericStack;
 import appeng.api.storage.cells.CellState;
 import appeng.api.upgrades.IUpgradeableItem;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import com.wintercogs.ae2omnicells.common.init.OCDataComponents;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
@@ -18,12 +16,7 @@ import java.util.List;
  * 是否无限容量、总字节数、待机功耗等信息
  * @author Frostbite
  */
-public interface IAEUniversalCell extends IUpgradeableItem
-{
-    String CELL_STATE_TAG_NAME = "ae_universal_cell_state";
-    String CELL_BYTES_USAGE_TAG_NAME = "ae_universal_cell_bytes_usage";
-    String CELL_TYPES_USAGE_TAG_NAME = "ae_universal_cell_types_usage";
-    String CELL_SHOW_TOOLTIP_STACKS_TAG_NAME = "ae_universal_cell_show_tooltip_stacks";
+public interface IAEUniversalCell extends IUpgradeableItem {
 
     /** 约定：返回值小于等于0则视为不限制类型总数 */
     int getTotalBytes();
@@ -33,43 +26,38 @@ public interface IAEUniversalCell extends IUpgradeableItem
 
     double getIdleDrain();
 
-    // 以下辅助方法均只操作用于让客户端显示的数据，其修改的任何数据对服务端无实际意义。
-    // 修改时，为了保证数据准确无误，务必从服务端给出正确的上下文后内部计算
-    // 不应该内部互相调用，除非内部调用时的最终数据来源为服务端
+    // === 以下辅助方法：从 NBT 迁移为 Data Components，行为保持一致 ===
     static int getUsedBytes(ItemStack stack)
     {
-        CompoundTag tag = stack.getTag();
-        if (tag == null) return 0;
-        if (tag.contains(CELL_BYTES_USAGE_TAG_NAME)) return tag.getInt(CELL_BYTES_USAGE_TAG_NAME);
-        return 0;
+        Integer v = stack.get(OCDataComponents.CELL_BYTES_USAGE.get());
+        return v == null ? 0 : v;
     }
 
     static void setUsedBytes(ItemStack stack, int usedBytes)
     {
-        CompoundTag tag = stack.getOrCreateTag();
-        tag.putInt(CELL_BYTES_USAGE_TAG_NAME, Math.max(0, usedBytes));
+        stack.set(OCDataComponents.CELL_BYTES_USAGE.get(), Math.max(0, usedBytes));
     }
 
     static int getUsedTypes(ItemStack stack)
     {
-        CompoundTag tag = stack.getTag();
-        if(tag == null) return 0;
-        if(tag.contains(CELL_TYPES_USAGE_TAG_NAME)) return tag.getInt(CELL_TYPES_USAGE_TAG_NAME);
-        return 0;
+        Integer v = stack.get(OCDataComponents.CELL_TYPES_USAGE.get());
+        return v == null ? 0 : v;
     }
 
     static void setUsedTypes(ItemStack stack, int usedTypes)
     {
-        CompoundTag tag = stack.getOrCreateTag();
-        tag.putInt(CELL_TYPES_USAGE_TAG_NAME, Math.max(0, usedTypes));
+        stack.set(OCDataComponents.CELL_TYPES_USAGE.get(), Math.max(0, usedTypes));
     }
 
     static CellState getCellState(ItemStack stack)
     {
-        CompoundTag tag = stack.getTag();
-        if (tag == null) return CellState.EMPTY;
-        if (tag.contains(CELL_STATE_TAG_NAME)) return CellState.valueOf(tag.getString(CELL_STATE_TAG_NAME));
-        return CellState.EMPTY;
+        String s = stack.get(OCDataComponents.CELL_STATE.get());
+        if (s == null) return CellState.EMPTY;
+        try {
+            return CellState.valueOf(s);
+        } catch (IllegalArgumentException ex) {
+            return CellState.EMPTY;
+        }
     }
 
     static void setCellState(ItemStack stack, IAEUniversalCell cellType, int usedBytes, int usedTypes)
@@ -78,60 +66,42 @@ public interface IAEUniversalCell extends IUpgradeableItem
         final int totalTypes = cellType.getTotalTypes(); // <=0 视为无限
 
         final CellState state;
-        if (usedBytes <= 0 && usedTypes <= 0)
-        {
+        if (usedBytes <= 0 && usedTypes <= 0) {
             state = CellState.EMPTY;
-        }
-        else if (totalBytes > 0 && usedBytes >= totalBytes)
-        {
+        } else if (totalBytes > 0 && usedBytes >= totalBytes) {
             state = CellState.FULL;
-        }
-        else if (totalTypes > 0 && usedTypes >= totalTypes)
-        {
+        } else if (totalTypes > 0 && usedTypes >= totalTypes) {
             state = CellState.TYPES_FULL;
-        }
-        else
-        {
+        } else {
             state = CellState.NOT_EMPTY;
         }
 
-        stack.getOrCreateTag().putString(CELL_STATE_TAG_NAME, state.name());
+        stack.set(OCDataComponents.CELL_STATE.get(), state.name());
     }
 
     static List<GenericStack> getTooltipShowStacks(ItemStack stack)
     {
-        CompoundTag tag = stack.getTag();
-        if (tag == null) return List.of();
-
-        // 期望是一个 ListTag<CompoundTag>，每个元素是 GenericStack.writeTag(...) 的结果
-        ListTag list = tag.getList(CELL_SHOW_TOOLTIP_STACKS_TAG_NAME, Tag.TAG_COMPOUND);
-        if (list.isEmpty()) return List.of();
-
-        List<GenericStack> out = new ArrayList<>(list.size());
-        for (int i = 0; i < list.size(); i++)
-        {
-            CompoundTag entry = list.getCompound(i);
-            GenericStack genericStack = GenericStack.readTag(entry);
-            if (genericStack != null) out.add(genericStack); // 坏条目静默跳过
-        }
-        return Collections.unmodifiableList(out);
+        List<GenericStack> raw = stack.get(OCDataComponents.CELL_SHOW_TOOLTIP_STACKS.get());
+        if (raw == null || raw.isEmpty()) return List.of();
+        // 返回不可变拷贝，保持与原逻辑“只读视图”的语义
+        return Collections.unmodifiableList(new ArrayList<>(raw));
     }
 
     static void setTooltipShowStacks(ItemStack stack, List<GenericStack> showStacks)
     {
-        if (showStacks == null || showStacks.isEmpty())
-        {
-            CompoundTag tag = stack.getTag();
-            if (tag != null) tag.remove(CELL_SHOW_TOOLTIP_STACKS_TAG_NAME);
+        if (showStacks == null || showStacks.isEmpty()) {
+            stack.remove(OCDataComponents.CELL_SHOW_TOOLTIP_STACKS.get());
             return;
         }
-
-        ListTag list = new ListTag();
-        for (GenericStack gs : showStacks)
-        {
-            if (gs == null) continue;
-            list.add(GenericStack.writeTag(gs));
+        // 过滤掉可能的 null，保持与旧实现“跳过坏条目”的语义
+        List<GenericStack> cleaned = new ArrayList<>(showStacks.size());
+        for (GenericStack gs : showStacks) {
+            if (gs != null) cleaned.add(gs);
         }
-        stack.getOrCreateTag().put(CELL_SHOW_TOOLTIP_STACKS_TAG_NAME, list);
+        if (cleaned.isEmpty()) {
+            stack.remove(OCDataComponents.CELL_SHOW_TOOLTIP_STACKS.get());
+        } else {
+            stack.set(OCDataComponents.CELL_SHOW_TOOLTIP_STACKS.get(), cleaned);
+        }
     }
 }

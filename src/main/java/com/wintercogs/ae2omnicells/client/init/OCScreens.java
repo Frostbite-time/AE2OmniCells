@@ -5,23 +5,21 @@ import appeng.init.client.InitScreens;
 import appeng.menu.me.common.MEStorageMenu;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.init.OCMenus;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
-@Mod.EventBusSubscriber(modid = AE2OmniCells.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = AE2OmniCells.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class OCScreens
 {
     @SubscribeEvent
-    public static void registerScreens(FMLClientSetupEvent event)
+    public static void registerScreens(RegisterMenuScreensEvent event)
     {
-        event.enqueueWork(() -> {
-            InitScreens.<MEStorageMenu, MEStorageScreen<MEStorageMenu>>register(
-                    OCMenus.PORTABLE_UNIVERSAL_CELL_MENU,
-                    MEStorageScreen::new,
-                    "/screens/terminals/portable_universal_cell.json"
-            );
-        });
+        InitScreens.<MEStorageMenu, MEStorageScreen<MEStorageMenu>>register(event,
+                OCMenus.PORTABLE_UNIVERSAL_CELL_MENU,
+                MEStorageScreen::new,
+                "/screens/terminals/portable_universal_cell.json"
+        );
     }
 }

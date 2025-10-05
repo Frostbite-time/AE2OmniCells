@@ -1,6 +1,8 @@
 package com.wintercogs.ae2omnicells.common.me;
 
 import appeng.api.stacks.AEKey;
+import com.wintercogs.ae2omnicells.common.init.OCDataComponents;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -8,7 +10,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.LevelResource;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,9 +43,6 @@ public class AEUniversalCellData extends SavedData
     /** 单条目里的 amount 子标签名 */
     private static final String ENTRY_AMOUNT_TAG = "amount";
 
-    /** 在ItemStack中，用于元件仓库 UUID 的 nbt 子标签名 */
-    public static final String UUID_TAG = "ae_universal_cell_uuid";
-
     /** 统一目录名（位于 world/data/ 下） */
     private static final String SAVED_FOLDER_NAME = "ae_universal_cell_data";
 
@@ -69,6 +68,12 @@ public class AEUniversalCellData extends SavedData
         this.pendingReadErrors = pendingReadErrors;
     }
 
+    public static final SavedData.Factory<AEUniversalCellData> FACTORY =
+            new SavedData.Factory<>(
+                    () -> new AEUniversalCellData(new HashMap<>(), new ArrayList<>()),
+                    AEUniversalCellData::load
+            );
+
     /** 获取原始存储数据 */
     public @NotNull Map<AEKey, Long> getOriginalStorage()
     {
@@ -81,11 +86,10 @@ public class AEUniversalCellData extends SavedData
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if (server == null) return null;
 
-        // 不是必须，但有助于在迁移存档后首次读写前保证目录存在
         ensureSaveDirExists(server);
 
         final String key = makeKey(uuid);
-        return server.overworld().getDataStorage().get(AEUniversalCellData::load, key);
+        return server.overworld().getDataStorage().get(FACTORY, key);
     }
 
     /**
@@ -100,31 +104,27 @@ public class AEUniversalCellData extends SavedData
         ensureSaveDirExists(server);
 
         final var dataStorage = server.overworld().getDataStorage();
-        final CompoundTag tag = itemStack.getOrCreateTag();
 
-        // 先尝试读取已有 UUID 且对应文件存在
-        if (tag.contains(UUID_TAG)) {
-            try {
-                UUID existing = UUID.fromString(tag.getString(UUID_TAG));
-                AEUniversalCellData data = getCellDataByUUID(existing);
-                if (data != null) {
-                    return data;
-                }
-            } catch (IllegalArgumentException ignored) {
-                // 非法 UUID 字符串，忽略，走创建流程
+        // 1) 读取已有 UUID（从数据组件）
+        UUID existing = itemStack.get(OCDataComponents.CELL_UUID.get());
+        if (existing != null) {
+            AEUniversalCellData data = getCellDataByUUID(existing);
+            if (data != null) {
+                return data;
             }
+            // 组件里有 UUID 但文件不存在 -> 继续走创建流程
         }
 
-        // 分配一个全新的、与现有文件不冲突的 UUID
+        // 2) 分配一个全新的、与现有文件不冲突的 UUID
         UUID fresh;
         do {
             fresh = UUID.randomUUID();
-        } while (getCellDataByUUID(fresh) != null); // 近乎不可能，但防御一下
+        } while (getCellDataByUUID(fresh) != null); // 极小概率，防御一下
 
-        // 写回物品上的 UUID
-        tag.putString(UUID_TAG, fresh.toString());
+        // 3) 写回物品的 UUID（数据组件）
+        itemStack.set(OCDataComponents.CELL_UUID.get(), fresh);
 
-        // 创建并注册新的 SavedData（注册到 DataStorage 后由世界存档生命周期负责持久化）
+        // 4) 创建并注册新的 SavedData（注册到 DataStorage 后由世界存档生命周期负责持久化）
         AEUniversalCellData newData = new AEUniversalCellData(new HashMap<>());
         dataStorage.set(makeKey(fresh), newData);
         newData.setDirty(); // 标脏以便尽快保存
@@ -132,9 +132,9 @@ public class AEUniversalCellData extends SavedData
         return newData;
     }
 
-    /** 硬盘序列化 */
+    /** 硬盘序列化（1.21.1 新签名，提供 registries） */
     @Override
-    public @NotNull CompoundTag save(@NotNull CompoundTag tag)
+    public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries)
     {
         // 统一放在 INV_SAVED_TAG 里
         CompoundTag invTag = new CompoundTag();
@@ -157,7 +157,7 @@ public class AEUniversalCellData extends SavedData
             try
             {
                 CompoundTag entry = new CompoundTag();
-                entry.put(ENTRY_KEY_TAG, key.toTagGeneric()); // 通用写法，包含 #c
+                entry.put(ENTRY_KEY_TAG, key.toTagGeneric(registries));
                 entry.putLong(ENTRY_AMOUNT_TAG, amount);
                 entriesList.add(entry);
             }
@@ -174,7 +174,6 @@ public class AEUniversalCellData extends SavedData
         ListTag errorList = new ListTag();
         for (CompoundTag bad : pendingReadErrors)
         {
-            // 这里直接写入一份 copy，避免外部引用导致的潜在修改
             errorList.add(bad.copy());
         }
         invTag.put(ERROR_ENTRIES_TAG, errorList);
@@ -183,8 +182,8 @@ public class AEUniversalCellData extends SavedData
         return tag;
     }
 
-    /** 从硬盘反序列化，用于 SavedData 的工厂方法 */
-    public static AEUniversalCellData load(CompoundTag tag)
+    /** 从硬盘反序列化（1.21.1 需要 registries） */
+    public static AEUniversalCellData load(CompoundTag tag, HolderLookup.Provider registries)
     {
         HashMap<AEKey, Long> storage = new HashMap<>();
         List<CompoundTag> errorQueue = new ArrayList<>();
@@ -200,7 +199,7 @@ public class AEUniversalCellData extends SavedData
             try
             {
                 CompoundTag keyTag = entry.getCompound(ENTRY_KEY_TAG);
-                AEKey key = AEKey.fromTagGeneric(keyTag);
+                AEKey key = AEKey.fromTagGeneric(registries, keyTag); // 1.21.1 需传 registries
                 if(key == null)
                 {
                     // 解析失败 -> 放入错误队列，打印
@@ -211,8 +210,7 @@ public class AEUniversalCellData extends SavedData
                 long amount = entry.getLong(ENTRY_AMOUNT_TAG);
                 storage.merge(key, amount, Long::sum);
             }
-            catch
-            (Throwable ex)
+            catch(Throwable ex)
             {
                 // 解析失败 -> 放入错误队列，打印
                 errorQueue.add(entry.copy());
@@ -229,8 +227,8 @@ public class AEUniversalCellData extends SavedData
             try
             {
                 CompoundTag keyTag = badEntry.getCompound(ENTRY_KEY_TAG);
-                AEKey key = AEKey.fromTagGeneric(keyTag);
-                if (key != null)
+                AEKey key = AEKey.fromTagGeneric(registries, keyTag);
+                if(key != null)
                 {
                     long amount = badEntry.getLong(ENTRY_AMOUNT_TAG);
                     storage.merge(key, amount, Long::sum);
@@ -258,7 +256,7 @@ public class AEUniversalCellData extends SavedData
 
     // ---------------------------------- 辅助方法 ----------------------------------
 
-    /** 生成 DataStorage 的路径（1.20.1 支持子路径，但不会自动建目录） */
+    /** 生成 DataStorage 的路径（保持子路径：ae_universal_cell_data/<uuid>） */
     private static String makeKey(@NotNull UUID uuid)
     {
         return SAVED_FOLDER_NAME + "/" + uuid;

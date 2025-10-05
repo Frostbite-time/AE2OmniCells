@@ -8,11 +8,11 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.client.model.generators.ModelProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 public class ModItemModelProvider extends ItemModelProvider
 {
@@ -25,11 +25,11 @@ public class ModItemModelProvider extends ItemModelProvider
     @Override
     protected void registerModels()
     {
-        for(RegistryObject<Item> registryItem : OCItems.getOthers())
+        for(DeferredItem<Item> registryItem : OCItems.getOthers())
         {
             basicItem(registryItem.get());
         }
-        for(RegistryObject<AEUniversalCellItem> registryItem : OCItems.getCells())
+        for(DeferredItem<AEUniversalCellItem> registryItem : OCItems.getCells())
         {
             cellWithOwnBaseAndAeLed(registryItem.get());
         }
@@ -162,7 +162,7 @@ public class ModItemModelProvider extends ItemModelProvider
      */
     private void allowExternalTexture(String path)
     {
-        ResourceLocation rl = new ResourceLocation(path);
+        ResourceLocation rl = ResourceLocation.parse(path);
         if (!rl.getNamespace().equals(AE2OmniCells.MODID))
         {
             this.existingFileHelper.trackGenerated(rl, ModelProvider.TEXTURE);

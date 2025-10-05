@@ -8,18 +8,18 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraftforge.common.data.BlockTagsProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import org.slf4j.Logger;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@Mod.EventBusSubscriber(modid = AE2OmniCells.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = AE2OmniCells.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class DataGenerators
 {
     public static final Logger LOGGER = LogUtils.getLogger();
@@ -35,7 +35,7 @@ public class DataGenerators
 
         // 生成方块战利品表
         generator.addProvider(event.includeServer(),new LootTableProvider(packOutput, Collections.emptySet(),
-                List.of(new LootTableProvider.SubProviderEntry(ModBlockLootTableProvider::new, LootContextParamSets.BLOCK))));
+                List.of(new LootTableProvider.SubProviderEntry(ModBlockLootTableProvider::new, LootContextParamSets.BLOCK)), lookupProvider));
         // 生成物品和方块模型
         generator.addProvider(event.includeClient(),new ModItemModelProvider(packOutput,existingFileHelper));
         generator.addProvider(event.includeServer(),new ModBlockModelProvider(packOutput,existingFileHelper));
@@ -48,7 +48,7 @@ public class DataGenerators
         generator.addProvider(event.includeServer(), new ModFluidTagsProvider(packOutput,lookupProvider,existingFileHelper));
 
         // 生成配方表
-        generator.addProvider(event.includeServer(),new ModRecipeProvider(packOutput));
+        generator.addProvider(event.includeServer(),new ModRecipeProvider(packOutput, lookupProvider));
 
     }
 }

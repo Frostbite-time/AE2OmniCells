@@ -1,10 +1,7 @@
 package com.wintercogs.ae2omnicells;
 
 import com.mojang.logging.LogUtils;
-import com.wintercogs.ae2omnicells.common.init.OCBlocks;
-import com.wintercogs.ae2omnicells.common.init.OCCreativeModeTabs;
-import com.wintercogs.ae2omnicells.common.init.OCItems;
-import com.wintercogs.ae2omnicells.common.init.OCMenus;
+import com.wintercogs.ae2omnicells.common.init.*;
 import com.wintercogs.ae2omnicells.common.me.AEPlugin;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -42,6 +39,7 @@ public class AE2OmniCells
         NeoForge.EVENT_BUS.register(this);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
+        OCDataComponents.register(modEventBus);
         OCItems.register(modEventBus);
         OCBlocks.register(modEventBus);
         OCCreativeModeTabs.register(modEventBus);
