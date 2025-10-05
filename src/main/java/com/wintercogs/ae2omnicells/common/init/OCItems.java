@@ -1,11 +1,9 @@
 package com.wintercogs.ae2omnicells.common.init;
 
-import appeng.core.definitions.AEItems;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.items.AEPortableUniversalCellItem;
 import com.wintercogs.ae2omnicells.common.items.AEUniversalCellItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.ItemLike;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -60,16 +58,16 @@ public class OCItems
     public static final DeferredItem<Item> OMNI_CELL_COMPONENT_256M = registerComponent("omni_cell_component_256m");
 
     // ---- 非便携：全能存储元件（= 元件） ----
-    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_1K = registerCell("omni_cell_1k",    AEItems.CELL_COMPONENT_1K,   1,  63,     1);
-    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_4K = registerCell("omni_cell_4k",    AEItems.CELL_COMPONENT_4K,   2,  63,     4);
-    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_16K = registerCell("omni_cell_16k",   AEItems.CELL_COMPONENT_16K,  3,  63,    16);
-    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_64K = registerCell("omni_cell_64k",   AEItems.CELL_COMPONENT_64K,  4,  63,    64);
-    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_256K = registerCell("omni_cell_256k",  AEItems.CELL_COMPONENT_256K, 5,  63,   256);
-    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_1M = registerCell("omni_cell_1m",    OMNI_CELL_COMPONENT_1M,      6,  63,  1024);
-    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_4M = registerCell("omni_cell_4m",    OMNI_CELL_COMPONENT_4M,      7,  63,  4096);
-    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_16M = registerCell("omni_cell_16m",   OMNI_CELL_COMPONENT_16M,     8,  63, 16384);
-    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_64M = registerCell("omni_cell_64m",   OMNI_CELL_COMPONENT_64M,     9,  63, 65536);
-    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_256M = registerCell("omni_cell_256m",  OMNI_CELL_COMPONENT_256M,   10,  63,262144);
+    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_1K = registerCell("omni_cell_1k", 1, 63, 1);
+    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_4K = registerCell("omni_cell_4k", 2, 63, 4);
+    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_16K = registerCell("omni_cell_16k", 3, 63, 16);
+    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_64K = registerCell("omni_cell_64k", 4, 63, 64);
+    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_256K = registerCell("omni_cell_256k", 5, 63, 256);
+    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_1M = registerCell("omni_cell_1m", 6, 63, 1024);
+    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_4M = registerCell("omni_cell_4m", 7, 63, 4096);
+    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_16M = registerCell("omni_cell_16m", 8, 63, 16384);
+    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_64M = registerCell("omni_cell_64m", 9, 63, 65536);
+    public static final DeferredItem<AEUniversalCellItem> OMNI_CELL_256M = registerCell("omni_cell_256m", 10, 63, 262144);
 
     // ---- 复杂：组件（其他物品归类） ----
     public static final DeferredItem<Item> COMPLEX_OMNI_CELL_COMPONENT_1K = registerComponent("complex_omni_cell_component_1k");
@@ -84,16 +82,16 @@ public class OCItems
     public static final DeferredItem<Item> COMPLEX_OMNI_CELL_COMPONENT_256M = registerComponent("complex_omni_cell_component_256m");
 
     // ---- 非便携：复杂存储元件（= 元件） ----
-    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_1K = registerComplexCell("complex_omni_cell_1k",    COMPLEX_OMNI_CELL_COMPONENT_1K,    2,    12,     1);
-    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_4K = registerComplexCell("complex_omni_cell_4k",    COMPLEX_OMNI_CELL_COMPONENT_4K,    4,    25,     4);
-    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_16K = registerComplexCell("complex_omni_cell_16k",   COMPLEX_OMNI_CELL_COMPONENT_16K,   8,    50,    16);
-    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_64K = registerComplexCell("complex_omni_cell_64k",   COMPLEX_OMNI_CELL_COMPONENT_64K,  16,   100,    64);
-    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_256K = registerComplexCell("complex_omni_cell_256k",  COMPLEX_OMNI_CELL_COMPONENT_256K, 32,   200,   256);
-    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_1M = registerComplexCell("complex_omni_cell_1m",    COMPLEX_OMNI_CELL_COMPONENT_1M,   64,   400,  1024);
-    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_4M = registerComplexCell("complex_omni_cell_4m",    COMPLEX_OMNI_CELL_COMPONENT_4M,  128,   800,  4096);
-    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_16M = registerComplexCell("complex_omni_cell_16m",   COMPLEX_OMNI_CELL_COMPONENT_16M, 256,  1600, 16384);
-    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_64M = registerComplexCell("complex_omni_cell_64m",   COMPLEX_OMNI_CELL_COMPONENT_64M, 512,  3200, 65536);
-    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_256M = registerComplexCell("complex_omni_cell_256m",  COMPLEX_OMNI_CELL_COMPONENT_256M,1024,  6400,262144);
+    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_1K = registerComplexCell("complex_omni_cell_1k", 2, 12, 1);
+    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_4K = registerComplexCell("complex_omni_cell_4k", 4, 25, 4);
+    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_16K = registerComplexCell("complex_omni_cell_16k", 8, 50, 16);
+    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_64K = registerComplexCell("complex_omni_cell_64k", 16, 100, 64);
+    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_256K = registerComplexCell("complex_omni_cell_256k", 32, 200, 256);
+    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_1M = registerComplexCell("complex_omni_cell_1m", 64, 400, 1024);
+    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_4M = registerComplexCell("complex_omni_cell_4m", 128, 800, 4096);
+    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_16M = registerComplexCell("complex_omni_cell_16m", 256, 1600, 16384);
+    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_64M = registerComplexCell("complex_omni_cell_64m", 512, 3200, 65536);
+    public static final DeferredItem<AEUniversalCellItem> COMPLEX_OMNI_CELL_256M = registerComplexCell("complex_omni_cell_256m", 1024, 6400, 262144);
 
     // ---- 量子：组件（其他物品归类） ----
     public static final DeferredItem<Item> QUANTUM_OMNI_CELL_COMPONENT_1K = registerComponent("quantum_omni_cell_component_1k");
@@ -108,52 +106,52 @@ public class OCItems
     public static final DeferredItem<Item> QUANTUM_OMNI_CELL_COMPONENT_256M = registerComponent("quantum_omni_cell_component_256m");
 
     // ---- 非便携：量子存储元件（= 元件；types = -1；idle 从 3 起，每档×3） ----
-    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_1K = registerQuantumCell("quantum_omni_cell_1k",    QUANTUM_OMNI_CELL_COMPONENT_1K,     3,   -1,       1);
-    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_4K = registerQuantumCell("quantum_omni_cell_4k",    QUANTUM_OMNI_CELL_COMPONENT_4K,     9,   -1,       4);
-    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_16K = registerQuantumCell("quantum_omni_cell_16k",   QUANTUM_OMNI_CELL_COMPONENT_16K,   27,   -1,      16);
-    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_64K = registerQuantumCell("quantum_omni_cell_64k",   QUANTUM_OMNI_CELL_COMPONENT_64K,   81,   -1,      64);
-    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_256K = registerQuantumCell("quantum_omni_cell_256k",  QUANTUM_OMNI_CELL_COMPONENT_256K, 243,   -1,     256);
-    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_1M = registerQuantumCell("quantum_omni_cell_1m",    QUANTUM_OMNI_CELL_COMPONENT_1M,   729,   -1,    1024);
-    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_4M = registerQuantumCell("quantum_omni_cell_4m",    QUANTUM_OMNI_CELL_COMPONENT_4M,  2187,   -1,    4096);
-    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_16M = registerQuantumCell("quantum_omni_cell_16m",   QUANTUM_OMNI_CELL_COMPONENT_16M, 6561,   -1,   16384);
-    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_64M = registerQuantumCell("quantum_omni_cell_64m",   QUANTUM_OMNI_CELL_COMPONENT_64M,19683,   -1,   65536);
-    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_256M = registerQuantumCell("quantum_omni_cell_256m",  QUANTUM_OMNI_CELL_COMPONENT_256M,59049,  -1,  262144);
+    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_1K = registerQuantumCell("quantum_omni_cell_1k", 3, -1, 1);
+    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_4K = registerQuantumCell("quantum_omni_cell_4k", 9, -1, 4);
+    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_16K = registerQuantumCell("quantum_omni_cell_16k", 27, -1, 16);
+    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_64K = registerQuantumCell("quantum_omni_cell_64k", 81, -1, 64);
+    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_256K = registerQuantumCell("quantum_omni_cell_256k", 243, -1, 256);
+    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_1M = registerQuantumCell("quantum_omni_cell_1m", 729, -1, 1024);
+    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_4M = registerQuantumCell("quantum_omni_cell_4m", 2187, -1, 4096);
+    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_16M = registerQuantumCell("quantum_omni_cell_16m", 6561, -1, 16384);
+    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_64M = registerQuantumCell("quantum_omni_cell_64m", 19683, -1, 65536);
+    public static final DeferredItem<AEUniversalCellItem> QUANTUM_OMNI_CELL_256M = registerQuantumCell("quantum_omni_cell_256m", 59049, -1, 262144);
 
     // ---- 便携：普通（参数沿用非便携：types/容量/idle） ----
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_1K = registerPortableCell("portable_omni_cell_1k",     1,  63,     1);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_4K = registerPortableCell("portable_omni_cell_4k",     2,  63,     4);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_16K = registerPortableCell("portable_omni_cell_16k",    3,  63,    16);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_64K = registerPortableCell("portable_omni_cell_64k",    4,  63,    64);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_256K = registerPortableCell("portable_omni_cell_256k",   5,  63,   256);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_1M = registerPortableCell("portable_omni_cell_1m",     6,  63,  1024);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_4M = registerPortableCell("portable_omni_cell_4m",     7,  63,  4096);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_16M = registerPortableCell("portable_omni_cell_16m",    8,  63, 16384);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_64M = registerPortableCell("portable_omni_cell_64m",    9,  63, 65536);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_256M = registerPortableCell("portable_omni_cell_256m",  10,  63,262144);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_1K = registerPortableCell("portable_omni_cell_1k", 1, 63, 1);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_4K = registerPortableCell("portable_omni_cell_4k", 2, 63, 4);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_16K = registerPortableCell("portable_omni_cell_16k", 3, 63, 16);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_64K = registerPortableCell("portable_omni_cell_64k", 4, 63, 64);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_256K = registerPortableCell("portable_omni_cell_256k", 5, 63, 256);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_1M = registerPortableCell("portable_omni_cell_1m", 6, 63, 1024);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_4M = registerPortableCell("portable_omni_cell_4m", 7, 63, 4096);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_16M = registerPortableCell("portable_omni_cell_16m", 8, 63, 16384);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_64M = registerPortableCell("portable_omni_cell_64m", 9, 63, 65536);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_OMNI_CELL_256M = registerPortableCell("portable_omni_cell_256m", 10, 63, 262144);
 
     // ---- 便携：复杂 ----
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_1K = registerPortableCell("portable_complex_omni_cell_1k",     2,    12,     1);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_4K = registerPortableCell("portable_complex_omni_cell_4k",     4,    25,     4);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_16K = registerPortableCell("portable_complex_omni_cell_16k",    8,    50,    16);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_64K = registerPortableCell("portable_complex_omni_cell_64k",   16,   100,    64);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_256K = registerPortableCell("portable_complex_omni_cell_256k",  32,   200,   256);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_1M = registerPortableCell("portable_complex_omni_cell_1m",    64,   400,  1024);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_4M = registerPortableCell("portable_complex_omni_cell_4m",   128,   800,  4096);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_16M = registerPortableCell("portable_complex_omni_cell_16m",  256,  1600, 16384);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_64M = registerPortableCell("portable_complex_omni_cell_64m",  512,  3200, 65536);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_256M = registerPortableCell("portable_complex_omni_cell_256m",1024,  6400,262144);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_1K = registerPortableCell("portable_complex_omni_cell_1k", 2, 12, 1);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_4K = registerPortableCell("portable_complex_omni_cell_4k", 4, 25, 4);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_16K = registerPortableCell("portable_complex_omni_cell_16k", 8, 50, 16);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_64K = registerPortableCell("portable_complex_omni_cell_64k", 16, 100, 64);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_256K = registerPortableCell("portable_complex_omni_cell_256k", 32, 200, 256);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_1M = registerPortableCell("portable_complex_omni_cell_1m", 64, 400, 1024);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_4M = registerPortableCell("portable_complex_omni_cell_4m", 128, 800, 4096);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_16M = registerPortableCell("portable_complex_omni_cell_16m", 256, 1600, 16384);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_64M = registerPortableCell("portable_complex_omni_cell_64m", 512, 3200, 65536);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_COMPLEX_OMNI_CELL_256M = registerPortableCell("portable_complex_omni_cell_256m", 1024, 6400, 262144);
 
     // ---- 便携：量子（types = -1；idle 从 3 起×3） ----
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_1K = registerPortableCell("portable_quantum_omni_cell_1k",      3,   -1,       1);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_4K = registerPortableCell("portable_quantum_omni_cell_4k",      9,   -1,       4);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_16K = registerPortableCell("portable_quantum_omni_cell_16k",    27,   -1,      16);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_64K = registerPortableCell("portable_quantum_omni_cell_64k",    81,   -1,      64);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_256K = registerPortableCell("portable_quantum_omni_cell_256k",  243,   -1,     256);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_1M = registerPortableCell("portable_quantum_omni_cell_1m",    729,   -1,    1024);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_4M = registerPortableCell("portable_quantum_omni_cell_4m",   2187,   -1,    4096);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_16M = registerPortableCell("portable_quantum_omni_cell_16m",  6561,   -1,   16384);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_64M = registerPortableCell("portable_quantum_omni_cell_64m", 19683,   -1,   65536);
-    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_256M = registerPortableCell("portable_quantum_omni_cell_256m", 59049,   -1,  262144);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_1K = registerPortableCell("portable_quantum_omni_cell_1k", 3, -1, 1);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_4K = registerPortableCell("portable_quantum_omni_cell_4k", 9, -1, 4);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_16K = registerPortableCell("portable_quantum_omni_cell_16k", 27, -1, 16);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_64K = registerPortableCell("portable_quantum_omni_cell_64k", 81, -1, 64);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_256K = registerPortableCell("portable_quantum_omni_cell_256k", 243, -1, 256);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_1M = registerPortableCell("portable_quantum_omni_cell_1m", 729, -1, 1024);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_4M = registerPortableCell("portable_quantum_omni_cell_4m", 2187, -1, 4096);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_16M = registerPortableCell("portable_quantum_omni_cell_16m", 6561, -1, 16384);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_64M = registerPortableCell("portable_quantum_omni_cell_64m", 19683, -1, 65536);
+    public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_256M = registerPortableCell("portable_quantum_omni_cell_256m", 59049, -1, 262144);
 
     public static void register(IEventBus eventBus)
     {
@@ -208,21 +206,10 @@ public class OCItems
 
     // 非便携：全能存储元件（= 元件）
     private static DeferredItem<AEUniversalCellItem> registerCell(
-            String name, DeferredItem<Item> component, int idlePower, int types, int kilobytes)
+            String name, int idlePower, int types, int kilobytes)
     {
         DeferredItem<AEUniversalCellItem> obj = registerItem(name,
                 () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1),
-                        component.get(), OMNI_CELL_HOUSING.get(),
-                        idlePower, types, kilobytes));
-        CELLS.add(obj);
-        return obj;
-    }
-    private static DeferredItem<AEUniversalCellItem> registerCell(
-            String name, ItemLike component, int idlePower, int types, int kilobytes)
-    {
-        DeferredItem<AEUniversalCellItem> obj = registerItem(name,
-                () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1),
-                        component.asItem(), OMNI_CELL_HOUSING.get(),
                         idlePower, types, kilobytes));
         CELLS.add(obj);
         return obj;
@@ -230,11 +217,10 @@ public class OCItems
 
     // 非便携：复杂元件
     private static DeferredItem<AEUniversalCellItem> registerComplexCell(
-            String name, DeferredItem<Item> component, int idlePower, int types, int kilobytes)
+            String name, int idlePower, int types, int kilobytes)
     {
         DeferredItem<AEUniversalCellItem> obj = registerItem(name,
                 () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1),
-                        component.get(), COMPLEX_OMNI_CELL_HOUSING.get(),
                         idlePower, types, kilobytes));
         CELLS.add(obj);
         return obj;
@@ -242,11 +228,10 @@ public class OCItems
 
     // 非便携：量子元件
     private static DeferredItem<AEUniversalCellItem> registerQuantumCell(
-            String name, DeferredItem<Item> component, int idlePower, int types, int kilobytes)
+            String name, int idlePower, int types, int kilobytes)
     {
         DeferredItem<AEUniversalCellItem> obj = registerItem(name,
                 () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1),
-                        component.get(), QUANTUM_OMNI_CELL_HOUSING.get(),
                         idlePower, types, kilobytes));
         CELLS.add(obj);
         return obj;

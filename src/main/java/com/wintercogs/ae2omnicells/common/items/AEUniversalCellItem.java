@@ -28,7 +28,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,17 +42,13 @@ import java.util.Optional;
  */
 public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICellWorkbenchItem
 {
-    private final ItemLike coreItem;
-    private final ItemLike housingItem;
     private final double idleDrain;
     private final int totalBytes;
     private final int totalTypes;
 
-    public AEUniversalCellItem(Properties pProperties, Item coreItem, Item housingItem, double idleDrain, int totalTypes, int kilobytes)
+    public AEUniversalCellItem(Properties pProperties, double idleDrain, int totalTypes, int kilobytes)
     {
         super(pProperties);
-        this.coreItem = coreItem;
-        this.housingItem = housingItem;
         this.idleDrain = idleDrain;
         this.totalBytes = kilobytes > 0 ? kilobytes * 1024 : -1;
         this.totalTypes = totalTypes;
