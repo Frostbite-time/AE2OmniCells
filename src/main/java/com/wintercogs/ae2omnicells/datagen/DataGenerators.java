@@ -38,6 +38,7 @@ public class DataGenerators
                 List.of(new LootTableProvider.SubProviderEntry(ModBlockLootTableProvider::new, LootContextParamSets.BLOCK))));
         // 生成物品和方块模型
         generator.addProvider(event.includeClient(),new ModItemModelProvider(packOutput,existingFileHelper));
+        generator.addProvider(event.includeServer(),new ModBlockModelProvider(packOutput,existingFileHelper));
         generator.addProvider(event.includeClient(),new ModBlockStateProvider(packOutput,existingFileHelper));
 
         // 生成方块、物品、流体标签
