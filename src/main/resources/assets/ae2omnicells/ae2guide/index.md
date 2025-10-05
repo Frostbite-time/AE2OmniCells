@@ -1,12 +1,12 @@
 ---
 navigation:
-  title: OMNI存储元件
+  title: OMNI Storage Cells
   position: 210
 ---
 
-# OMNI存储元件
+# OMNI Storage Cells
 
-> 可在**单个存储元件**中同时存放 AE 支持的任意资源类型：**物品、流体**，以及其他 AE2 资源键。
+> Store **any AE-supported resource types**—**items, fluids**, and other AE2 resource keys—**together in a single storage cell**.
 
 <Row>
   <ItemImage id="omni_cell_256m" scale="4" />
@@ -14,27 +14,27 @@ navigation:
   <ItemImage id="quantum_omni_cell_256m" scale="4" />
 </Row>
 
-## 概览
-本模组提供三大系列、从 **1k → 256m** 的多种容量规格。  
-所有系列均可存储 AE 支持的任意资源类型，区别在于**可同时存储的“种类数上限”**不同。
+## Overview
+This mod provides three major series with capacity tiers from **1k → 256m**.  
+All series can store any AE-supported resource types; the difference lies in the **maximum number of distinct types that can be stored simultaneously**.
 
-### 系列与类型上限
-| 系列 | 类型上限（同时存储的种类数） | 可用容量 |
+### Series & Type Limits
+| Series | Type Limit (distinct types stored at once) | Available Capacities |
 |---|---:|---|
-| **全能存储元件** | **63** 种 | 1k / 4k / 16k / 64k / 256k / 1m / 4m / 16m / 64m / 256m |
-| **复杂全能存储元件** | 随容量提升而扩大，**最高约 6400** 种 | 1k → 256m（与上同） |
-| **量子存储元件** | **无限** | 1k → 256m（与上同） |
+| **OMNI Storage Cells** | **63** types | 1k / 4k / 16k / 64k / 256k / 1m / 4m / 16m / 64m / 256m |
+| **Complex OMNI Storage Cells** | Increases with capacity, **up to ~6400** types | 1k → 256m (same as above) |
+| **Quantum Storage Cells** | **Unlimited** | 1k → 256m (same as above) |
 
-> 提示：三大系列的**容量规格相同**，仅“类型上限”策略不同，按你的网络规模与物品多样性选择即可。
+> Tip: All three series share the **same capacity tiers**; only their “type-limit” strategy differs. Choose based on your network scale and the diversity of your resources.
 
-## 详细说明
-- **全能存储元件**  
-  固定最多同时存储 **63 种**资源类型，简单易控，适合常规网络。
-- **复杂全能存储元件**  
-  初始可存储种类偏少，但会随着容量升级而提高类型上限，**上限最高可达约 6400** 种。
-- **量子存储元件**  
-  **无限类型**限制，适合超大规模/极高多样性的网络与整合包后期。
+## Details
+- **OMNI Storage Cells**  
+  Fixed limit of **up to 63** types stored simultaneously. Simple and easy to manage—ideal for typical networks.
+- **Complex OMNI Storage Cells**  
+  Start with fewer types but increase the type limit as capacity scales, **reaching up to ~6400** types at the top tier.
+- **Quantum Storage Cells**  
+  **No type limit**—well-suited for ultra-large / highly diverse networks and late-game stages in modpacks.
 
-## 数据管理
-- **磁盘数据独立存储**：物品本体仅保存用于客户端 Tooltip 展示的少量信息，**无 NBT 过大风险**；
-- **数据位置**（单独位置保存，详见[存储元件](cells.md)）。
+## Data Management
+- **Cell data stored independently**: the item only keeps a small amount of data for client-side tooltip display, meaning **no risk of oversized NBT**.
+- **Data location** (saved separately; see [Storage Cells](cells.md) for details).

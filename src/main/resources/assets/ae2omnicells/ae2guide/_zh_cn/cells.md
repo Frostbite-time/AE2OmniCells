@@ -1,7 +1,7 @@
 ---
 navigation:
   parent: index.md
-  title: Storage Cells
+  title: 存储元件
   icon: ae2omnicells:quantum_omni_cell_256m
   position: 20
 item_ids:
@@ -100,24 +100,24 @@ item_ids:
   - portable_quantum_omni_cell_256m
 ---
 
-# Storage Cells
+# 存储元件
 
-> Store **any AE-supported resource types**—**items, fluids**, and other AE resource keys—**together on a single disk**.
+> 在**单个磁盘**中同时存放 AE 支持的任意资源类型：**物品、流体**，以及其他 AE 资源键。
 
-This page covers all three series (including portable variants) with unified capacities: **1k / 4k / 16k / 64k / 256k / 1m / 4m / 16m / 64m / 256m**.  
-The only difference between series is the strategy for the **maximum number of distinct types that can be stored simultaneously**.
+本页涵盖三大系列（含便携版），容量统一为：**1k / 4k / 16k / 64k / 256k / 1m / 4m / 16m / 64m / 256m**。  
+系列的区别仅在于 可同时存储的“种类数上限” 策略不同。
 
-## Quick Comparison
+## 快速对比
 
-| Series | Max Distinct Types Stored Simultaneously | Recommended Use Cases |
+| 系列 | 同时存储的种类上限 | 适用场景 |
 |---|---:|---|
-| **OMNI Storage Cells** | **63** types | Typical networks with a focused set of types |
-| **Complex OMNI Storage Cells** | **Scales with capacity (12→6400)** | Networks where type count surges as scale increases |
-| **Quantum Storage Cells** | **Unlimited** | Late-game, ultra-large, highly diverse networks |
+| **全能存储元件** | **63** 种 | 常规网络，类型较集中 |
+| **复杂全能存储元件** | **随容量提升（12→6400）** | 类型随规模增长而激增的网络 |
+| **量子存储元件** | **无限** | 超大规模、多样性极高的后期网络 |
 
 ---
 
-## OMNI Storage Cells
+## 全能存储元件
 <Row>
   <ItemImage id="omni_cell_1k" scale="3" />
   <ItemImage id="omni_cell_4k" scale="3" />
@@ -131,12 +131,12 @@ The only difference between series is the strategy for the **maximum number of d
   <ItemImage id="omni_cell_256m" scale="3" />
 </Row>
 
-- **Type limit: 63**
-- Supports mixing all AE resource types (items, fluids, etc.) on the same disk.
+- **类型上限：63 种**
+- 支持 AE 的所有资源类型（物品、流体等）混装于同一磁盘内。
 
 ---
 
-## Complex OMNI Storage Cells
+## 复杂全能存储元件
 <Row>
   <ItemImage id="complex_omni_cell_1k" scale="3" />
   <ItemImage id="complex_omni_cell_4k" scale="3" />
@@ -150,16 +150,16 @@ The only difference between series is the strategy for the **maximum number of d
   <ItemImage id="complex_omni_cell_256m" scale="3" />
 </Row>
 
-- **Type limit increases with capacity**:  
-  | Capacity | 1k | 4k | 16k | 64k | 256k | 1m | 4m | 16m | 64m | 256m |
+- **类型上限会随容量提升而扩大**：  
+  | 容量 | 1k | 4k | 16k | 64k | 256k | 1m | 4m | 16m | 64m | 256m |
   |---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-  | Limit (types) | 12 | 25 | 50 | 100 | 200 | 400 | 800 | 1600 | 3200 | 6400 |
+  | 上限（种） | 12 | 25 | 50 | 100 | 200 | 400 | 800 | 1600 | 3200 | **6400** |
 
-> Recommendation: choose this series when you expect the **number of item/fluid types** to surge sharply as you progress—this line offers better scalability and value.
+> 选择建议：当你预计**物品/流体种类**会随进度急剧上升时，此系列更具伸缩性与性价比。
 
 ---
 
-## Quantum Storage Cells
+## 量子存储元件
 <Row>
   <ItemImage id="quantum_omni_cell_1k" scale="3" />
   <ItemImage id="quantum_omni_cell_4k" scale="3" />
@@ -173,20 +173,20 @@ The only difference between series is the strategy for the **maximum number of d
   <ItemImage id="quantum_omni_cell_256m" scale="3" />
 </Row>
 
-- **Type limit: Unlimited**
-- Ideal for an ultimate storage solution where you need to hold **extremely diverse** resource types at once;
-- You can place nearly all resource types simultaneously (only constrained by total capacity).
+- **类型上限：无限**
+- 适合需要同时存放**极其多样**资源类型的终极存储方案；
+- 你几乎可以将所有类型的资源同时放入（仅受容量值大小限制）。
 
 ---
 
-## Portable Storage Cells
+## 便携存储元件
 
-Every series and capacity above also has a **portable variant**.  
-Portable versions behave the same as their series counterparts and suit use cases like traveling or out-of-network access.
+以上每个系列与容量，均提供**对应的便携版本**。   
+便携版与同系列磁盘行为一致，适合外出或离站访问网络使用场景。
 
 ---
 
-## Data Persistence
+## 数据保存
 
-- **Disk data stored independently**: the item itself only carries a small amount of information for client-side tooltip display, so there is **no risk of oversized NBT**.
-- **Data location**: saved under `data/ae_universal_cell_data` in the save folder.
+- **磁盘数据独立保存**：物品本体仅携带少量用于客户端 Tooltip 展示的信息，**无 NBT 过大风险**；
+- **数据位置**：存档文件夹下data/ae_universal_cell_data。
