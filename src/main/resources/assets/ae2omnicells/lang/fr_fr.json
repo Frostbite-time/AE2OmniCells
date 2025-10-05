@@ -1,6 +1,9 @@
 {
   "creativetab.ae2omnicells.items": "Cellules de stockage OMNI",
 
+  "ae2omnicells.cell.upgrades.group": "Cellule Omni",
+  "ae2omnicells.cell.portable.upgrades.group": "Cellule Omni Portable",
+
   "item.ae2omnicells.ender_ingot": "Lingot d’acier d’Ender",
   "item.ae2omnicells.charged_ender_ingot": "Lingot d’acier d’Ender chargé",
   "item.ae2omnicells.omni_link_print_press": "Presse de l’Inscriber Lien OMNI",

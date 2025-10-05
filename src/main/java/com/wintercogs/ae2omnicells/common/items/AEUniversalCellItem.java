@@ -35,7 +35,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,17 +47,13 @@ import java.util.*;
  */
 public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICellWorkbenchItem
 {
-    private final ItemLike coreItem;
-    private final ItemLike housingItem;
     private final double idleDrain;
     private final int totalBytes;
     private final int totalTypes;
 
-    public AEUniversalCellItem(Properties pProperties, Item coreItem, Item housingItem, double idleDrain, int totalTypes, int kilobytes)
+    public AEUniversalCellItem(Properties pProperties, double idleDrain, int totalTypes, int kilobytes)
     {
         super(pProperties);
-        this.coreItem = coreItem;
-        this.housingItem = housingItem;
         this.idleDrain = idleDrain;
         this.totalBytes = kilobytes > 0 ? kilobytes * 1024 : -1;
         this.totalTypes = totalTypes;

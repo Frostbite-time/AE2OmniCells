@@ -100,34 +100,34 @@ public class ModItemModelProvider extends ItemModelProvider
         // —— 量子（quantum） ——
         portableCell(OCItems.PORTABLE_QUANTUM_OMNI_CELL_1K.get(),
                 "ae2omnicells:item/portable_cell_quantum_housing",
-                "ae2:item/portable_cell_side_1k").texture("layer4", "ae2omnicells:item/quantum_effect");
+                "ae2:item/portable_cell_side_1k");
         portableCell(OCItems.PORTABLE_QUANTUM_OMNI_CELL_4K.get(),
                 "ae2omnicells:item/portable_cell_quantum_housing",
-                "ae2:item/portable_cell_side_4k").texture("layer4", "ae2omnicells:item/quantum_effect");
+                "ae2:item/portable_cell_side_4k");
         portableCell(OCItems.PORTABLE_QUANTUM_OMNI_CELL_16K.get(),
                 "ae2omnicells:item/portable_cell_quantum_housing",
-                "ae2:item/portable_cell_side_16k").texture("layer4", "ae2omnicells:item/quantum_effect");
+                "ae2:item/portable_cell_side_16k");
         portableCell(OCItems.PORTABLE_QUANTUM_OMNI_CELL_64K.get(),
                 "ae2omnicells:item/portable_cell_quantum_housing",
-                "ae2:item/portable_cell_side_64k").texture("layer4", "ae2omnicells:item/quantum_effect");
+                "ae2:item/portable_cell_side_64k");
         portableCell(OCItems.PORTABLE_QUANTUM_OMNI_CELL_256K.get(),
                 "ae2omnicells:item/portable_cell_quantum_housing",
-                "ae2:item/portable_cell_side_256k").texture("layer4", "ae2omnicells:item/quantum_effect");
+                "ae2:item/portable_cell_side_256k");
         portableCell(OCItems.PORTABLE_QUANTUM_OMNI_CELL_1M.get(),
                 "ae2omnicells:item/portable_cell_quantum_housing",
-                "ae2omnicells:item/portable_cell_side_1m").texture("layer4", "ae2omnicells:item/quantum_effect");
+                "ae2omnicells:item/portable_cell_side_1m");
         portableCell(OCItems.PORTABLE_QUANTUM_OMNI_CELL_4M.get(),
                 "ae2omnicells:item/portable_cell_quantum_housing",
-                "ae2omnicells:item/portable_cell_side_4m").texture("layer4", "ae2omnicells:item/quantum_effect");
+                "ae2omnicells:item/portable_cell_side_4m");
         portableCell(OCItems.PORTABLE_QUANTUM_OMNI_CELL_16M.get(),
                 "ae2omnicells:item/portable_cell_quantum_housing",
-                "ae2omnicells:item/portable_cell_side_16m").texture("layer4", "ae2omnicells:item/quantum_effect");
+                "ae2omnicells:item/portable_cell_side_16m");
         portableCell(OCItems.PORTABLE_QUANTUM_OMNI_CELL_64M.get(),
                 "ae2omnicells:item/portable_cell_quantum_housing",
-                "ae2omnicells:item/portable_cell_side_64m").texture("layer4", "ae2omnicells:item/quantum_effect");
+                "ae2omnicells:item/portable_cell_side_64m");
         portableCell(OCItems.PORTABLE_QUANTUM_OMNI_CELL_256M.get(),
                 "ae2omnicells:item/portable_cell_quantum_housing",
-                "ae2omnicells:item/portable_cell_side_256m").texture("layer4", "ae2omnicells:item/quantum_effect");
+                "ae2omnicells:item/portable_cell_side_256m");
 
     }
 

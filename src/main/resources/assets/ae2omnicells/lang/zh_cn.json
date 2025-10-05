@@ -1,6 +1,9 @@
 {
   "creativetab.ae2omnicells.items": "OMNI存储元件",
 
+  "ae2omnicells.cell.upgrades.group": "OMNI存储元件",
+  "ae2omnicells.cell.portable.upgrades.group": "便携OMNI存储元件",
+
   "item.ae2omnicells.ender_ingot": "末影钢锭",
   "item.ae2omnicells.charged_ender_ingot": "充能末影钢锭",
   "item.ae2omnicells.omni_link_print_press": "全能链路压印模板",
