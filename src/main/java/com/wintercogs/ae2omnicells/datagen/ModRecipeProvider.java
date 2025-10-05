@@ -17,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
+import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.NotNull;
 
@@ -75,7 +76,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy("has_charged_ender_ingot", has(OCItems.CHARGED_ENDER_INGOT.get()))
                 .save(recipeOutput);
         InscriberRecipeBuilder.inscribe(OCBlocks.ENDER_INGOT_BLOCK.get(), OCItems.OMNI_LINK_PRINT_PRESS.get(), 1)
-                .setTop(Ingredient.of(OCItems.COMPLEX_LINK_PRINT_PRESS.get()))
+                .setTop(Ingredient.of(OCItems.OMNI_LINK_PRINT_PRESS.get()))
                 .setMode(InscriberProcessType.INSCRIBE)
                 .save(recipeOutput, AE2OmniCells.makeId("inscriber/omni_link_print_press"));
 
@@ -925,12 +926,12 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('C', OCItems.CHARGED_ENDER_INGOT.get())
                 .define('D', OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR.get())
                 .define('M', OCItems.QUANTUM_OMNI_CELL_COMPONENT_64K.get())
-                .unlockedBy("has_quantum_component_64k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64M.get()))
+                .unlockedBy("has_quantum_component_64k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64K.get()))
                 .save(recipeOutput, cellShapedId(OCItems.QUANTUM_OMNI_CELL_64K));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_64K.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING.get())
                 .requires(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64K.get())
-                .unlockedBy("has_quantum_component_64k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64M.get()))
+                .unlockedBy("has_quantum_component_64k", has(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64K.get()))
                 .save(recipeOutput, cellShapelessId(OCItems.QUANTUM_OMNI_CELL_64K));
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.QUANTUM_OMNI_CELL_256K.get())
@@ -1025,53 +1026,48 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
 
         // =====================
-        // 便携 · 普通（OMNI） 1k~256k：使用 AE 原版组件
+        // 便携 · 普通（OMNI）
         // =====================
         ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_1K.get())
                 .requires(OCItems.OMNI_CELL_HOUSING.get())
-                .requires(AEItems.CELL_COMPONENT_1K)
+                .requires(OCItems.OMNI_CELL_COMPONENT_1K)
                 .requires(AEBlocks.ME_CHEST.asItem())
                 .requires(AEBlocks.ENERGY_CELL.asItem())
-                .unlockedBy("has_component_1k", has(AEItems.CELL_COMPONENT_1K))
+                .unlockedBy("has_component_1k", has(OCItems.OMNI_CELL_COMPONENT_1K))
                 .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_OMNI_CELL_1K));
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_4K.get())
                 .requires(OCItems.OMNI_CELL_HOUSING.get())
-                .requires(AEItems.CELL_COMPONENT_4K)
+                .requires(OCItems.OMNI_CELL_COMPONENT_4K)
                 .requires(AEBlocks.ME_CHEST.asItem())
                 .requires(AEBlocks.ENERGY_CELL.asItem())
-                .unlockedBy("has_component_4k", has(AEItems.CELL_COMPONENT_4K))
+                .unlockedBy("has_component_4k", has(OCItems.OMNI_CELL_COMPONENT_4K))
                 .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_OMNI_CELL_4K));
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_16K.get())
                 .requires(OCItems.OMNI_CELL_HOUSING.get())
-                .requires(AEItems.CELL_COMPONENT_16K)
+                .requires(OCItems.OMNI_CELL_COMPONENT_16K)
                 .requires(AEBlocks.ME_CHEST.asItem())
                 .requires(AEBlocks.ENERGY_CELL.asItem())
-                .unlockedBy("has_component_16k", has(AEItems.CELL_COMPONENT_16K))
+                .unlockedBy("has_component_16k", has(OCItems.OMNI_CELL_COMPONENT_16K))
                 .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_OMNI_CELL_16K));
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_64K.get())
                 .requires(OCItems.OMNI_CELL_HOUSING.get())
-                .requires(AEItems.CELL_COMPONENT_64K)
+                .requires(OCItems.OMNI_CELL_COMPONENT_64K)
                 .requires(AEBlocks.ME_CHEST.asItem())
                 .requires(AEBlocks.ENERGY_CELL.asItem())
-                .unlockedBy("has_component_64k", has(AEItems.CELL_COMPONENT_64K))
+                .unlockedBy("has_component_64k", has(OCItems.OMNI_CELL_COMPONENT_64K))
                 .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_OMNI_CELL_64K));
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_256K.get())
                 .requires(OCItems.OMNI_CELL_HOUSING.get())
-                .requires(AEItems.CELL_COMPONENT_256K)
+                .requires(OCItems.OMNI_CELL_COMPONENT_256K)
                 .requires(AEBlocks.ME_CHEST.asItem())
                 .requires(AEBlocks.ENERGY_CELL.asItem())
-                .unlockedBy("has_component_256k", has(AEItems.CELL_COMPONENT_256K))
+                .unlockedBy("has_component_256k", has(OCItems.OMNI_CELL_COMPONENT_256K))
                 .save(recipeOutput, cellShapelessId(OCItems.PORTABLE_OMNI_CELL_256K));
 
-
-        // =====================
-        // 便携 · 普通（OMNI） 1M~256M：MEGA 联动 / 自家组件（二选一）
-        // —— 两条分支共用同一配方 ID：cells/shapeless/<portable-path>
-        // =====================
         ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, OCItems.PORTABLE_OMNI_CELL_1M.get())
                 .requires(OCItems.OMNI_CELL_HOUSING.get())
                 .requires(OCItems.OMNI_CELL_COMPONENT_1M.get())
@@ -1281,15 +1277,18 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         // EAE联动配方---------------------------------------------------------------------------------------------------------
         CircuitCutterRecipeBuilder.cut(OCItems.OMNI_LINK_CIRCUIT_PRINT.get(), 9)
                 .input(OCBlocks.ENDER_INGOT_BLOCK.get())
-                .save(recipeOutput, AE2OmniCells.makeId("cutter/omni_link_circuit_print"));
+                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
+                        AE2OmniCells.makeId("cutter/omni_link_circuit_print"));
 
         CircuitCutterRecipeBuilder.cut(OCItems.COMPLEX_LINK_CIRCUIT_PRINT.get(), 9)
                 .input(OCBlocks.NETHERITE_SCRAP_BLOCK.get())
-                .save(recipeOutput, AE2OmniCells.makeId("cutter/complex_link_circuit_print"));
+                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
+                        AE2OmniCells.makeId("cutter/complex_link_circuit_print"));
 
         CircuitCutterRecipeBuilder.cut(OCItems.MULTIDIMENSIONAL_EXPANSION_CIRCUIT_PRINT.get(), 9)
                 .input(OCBlocks.SINGULARITY_BLOCK.get())
-                .save(recipeOutput, AE2OmniCells.makeId("cutter/multidimensional_expansion_circuit_print"));
+                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
+                        AE2OmniCells.makeId("cutter/multidimensional_expansion_circuit_print"));
 
     }
 
