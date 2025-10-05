@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -26,17 +27,23 @@ public class OCCreativeModeTabs
                     .icon(() -> new ItemStack(OCItems.QUANTUM_OMNI_CELL_256M.get()))
                     .title(Component.translatable("creativetab.ae2omnicells.items"))
                     .displayItems((params, output) -> {
-                        // 1) 其他物品
+                        // 其他物品
                         for (RegistryObject<Item> ro : OCItems.getOthers()) {
                             output.accept(ro.get());
                         }
 
-                        // 2) 普通元件（非便携）
+                        // 方块物品
+                        for (RegistryObject<? extends Block> ro : OCBlocks.ALL)
+                        {
+                            output.accept(ro.get());
+                        }
+
+                        // 普通元件（非便携）
                         for (RegistryObject<AEUniversalCellItem> ro : OCItems.getCells()) {
                             output.accept(ro.get());
                         }
 
-                        // 3) 便携元件：每个展示两份（空电 + 满电），两件相邻
+                        // 便携元件：每个展示两份（空电 + 满电），两件相邻
                         for (RegistryObject<AEPortableUniversalCellItem> ro : OCItems.getPortableCells()) {
                             AEPortableUniversalCellItem portable = ro.get();
 

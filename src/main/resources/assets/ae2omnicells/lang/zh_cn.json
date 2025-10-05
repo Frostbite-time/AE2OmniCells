@@ -3,26 +3,28 @@
 
   "item.ae2omnicells.ender_ingot": "末影钢锭",
   "item.ae2omnicells.charged_ender_ingot": "充能末影钢锭",
-
+  "item.ae2omnicells.omni_link_print_press": "全能链路压印模板",
   "item.ae2omnicells.complex_link_print_press": "复杂链路压印模板",
   "item.ae2omnicells.multidimensional_expansion_print_press": "多维展开压印模板",
-
+  "item.ae2omnicells.omni_link_circuit_print": "全能链路电路板",
   "item.ae2omnicells.complex_link_circuit_print": "复杂链路电路板",
   "item.ae2omnicells.multidimensional_expansion_circuit_print": "多维展开电路板",
-
+  "item.ae2omnicells.omni_link_processor": "全能链路处理器",
   "item.ae2omnicells.complex_link_processor": "复杂链路处理器",
   "item.ae2omnicells.multidimensional_expansion_processor": "多维展开处理器",
-
   "item.ae2omnicells.omni_cell_housing": "全能存储元件外壳",
   "item.ae2omnicells.complex_omni_cell_housing": "复杂全能存储元件外壳",
   "item.ae2omnicells.quantum_omni_cell_housing": "量子存储元件外壳",
-
+  "item.ae2omnicells.omni_cell_component_1k": "1k 全能存储组件",
+  "item.ae2omnicells.omni_cell_component_4k": "4k 全能存储组件",
+  "item.ae2omnicells.omni_cell_component_16k": "16k 全能存储组件",
+  "item.ae2omnicells.omni_cell_component_64k": "64k 全能存储组件",
+  "item.ae2omnicells.omni_cell_component_256k": "256k 全能存储组件",
   "item.ae2omnicells.omni_cell_component_1m": "1M 全能存储组件",
   "item.ae2omnicells.omni_cell_component_4m": "4M 全能存储组件",
   "item.ae2omnicells.omni_cell_component_16m": "16M 全能存储组件",
   "item.ae2omnicells.omni_cell_component_64m": "64M 全能存储组件",
   "item.ae2omnicells.omni_cell_component_256m": "256M 全能存储组件",
-
   "item.ae2omnicells.omni_cell_1k": "1k 全能存储元件",
   "item.ae2omnicells.omni_cell_4k": "4k 全能存储元件",
   "item.ae2omnicells.omni_cell_16k": "16k 全能存储元件",
@@ -33,7 +35,6 @@
   "item.ae2omnicells.omni_cell_16m": "16M 全能存储元件",
   "item.ae2omnicells.omni_cell_64m": "64M 全能存储元件",
   "item.ae2omnicells.omni_cell_256m": "256M 全能存储元件",
-
   "item.ae2omnicells.complex_omni_cell_component_1k": "1k 复杂全能存储组件",
   "item.ae2omnicells.complex_omni_cell_component_4k": "4k 复杂全能存储组件",
   "item.ae2omnicells.complex_omni_cell_component_16k": "16k 复杂全能存储组件",
@@ -44,7 +45,6 @@
   "item.ae2omnicells.complex_omni_cell_component_16m": "16M 复杂全能存储组件",
   "item.ae2omnicells.complex_omni_cell_component_64m": "64M 复杂全能存储组件",
   "item.ae2omnicells.complex_omni_cell_component_256m": "256M 复杂全能存储组件",
-
   "item.ae2omnicells.complex_omni_cell_1k": "1k 复杂全能存储元件",
   "item.ae2omnicells.complex_omni_cell_4k": "4k 复杂全能存储元件",
   "item.ae2omnicells.complex_omni_cell_16k": "16k 复杂全能存储元件",
@@ -55,7 +55,6 @@
   "item.ae2omnicells.complex_omni_cell_16m": "16M 复杂全能存储元件",
   "item.ae2omnicells.complex_omni_cell_64m": "64M 复杂全能存储元件",
   "item.ae2omnicells.complex_omni_cell_256m": "256M 复杂全能存储元件",
-
   "item.ae2omnicells.quantum_omni_cell_component_1k": "1k 量子存储组件",
   "item.ae2omnicells.quantum_omni_cell_component_4k": "4k 量子存储组件",
   "item.ae2omnicells.quantum_omni_cell_component_16k": "16k 量子存储组件",
@@ -66,7 +65,6 @@
   "item.ae2omnicells.quantum_omni_cell_component_16m": "16M 量子存储组件",
   "item.ae2omnicells.quantum_omni_cell_component_64m": "64M 量子存储组件",
   "item.ae2omnicells.quantum_omni_cell_component_256m": "256M 量子存储组件",
-
   "item.ae2omnicells.quantum_omni_cell_1k": "1k 量子存储元件",
   "item.ae2omnicells.quantum_omni_cell_4k": "4k 量子存储元件",
   "item.ae2omnicells.quantum_omni_cell_16k": "16k 量子存储元件",
@@ -77,7 +75,6 @@
   "item.ae2omnicells.quantum_omni_cell_16m": "16M 量子存储元件",
   "item.ae2omnicells.quantum_omni_cell_64m": "64M 量子存储元件",
   "item.ae2omnicells.quantum_omni_cell_256m": "256M 量子存储元件",
-
   "item.ae2omnicells.portable_omni_cell_1k": "1k 便携全能存储元件",
   "item.ae2omnicells.portable_omni_cell_4k": "4k 便携全能存储元件",
   "item.ae2omnicells.portable_omni_cell_16k": "16k 便携全能存储元件",
@@ -88,7 +85,6 @@
   "item.ae2omnicells.portable_omni_cell_16m": "16M 便携全能存储元件",
   "item.ae2omnicells.portable_omni_cell_64m": "64M 便携全能存储元件",
   "item.ae2omnicells.portable_omni_cell_256m": "256M 便携全能存储元件",
-
   "item.ae2omnicells.portable_complex_omni_cell_1k": "1k 便携复杂全能存储元件",
   "item.ae2omnicells.portable_complex_omni_cell_4k": "4k 便携复杂全能存储元件",
   "item.ae2omnicells.portable_complex_omni_cell_16k": "16k 便携复杂全能存储元件",
@@ -99,7 +95,6 @@
   "item.ae2omnicells.portable_complex_omni_cell_16m": "16M 便携复杂全能存储元件",
   "item.ae2omnicells.portable_complex_omni_cell_64m": "64M 便携复杂全能存储元件",
   "item.ae2omnicells.portable_complex_omni_cell_256m": "256M 便携复杂全能存储元件",
-
   "item.ae2omnicells.portable_quantum_omni_cell_1k": "1k 便携量子存储元件",
   "item.ae2omnicells.portable_quantum_omni_cell_4k": "4k 便携量子存储元件",
   "item.ae2omnicells.portable_quantum_omni_cell_16k": "16k 便携量子存储元件",
@@ -109,5 +104,9 @@
   "item.ae2omnicells.portable_quantum_omni_cell_4m": "4M 便携量子存储元件",
   "item.ae2omnicells.portable_quantum_omni_cell_16m": "16M 便携量子存储元件",
   "item.ae2omnicells.portable_quantum_omni_cell_64m": "64M 便携量子存储元件",
-  "item.ae2omnicells.portable_quantum_omni_cell_256m": "256M 便携量子存储元件"
+  "item.ae2omnicells.portable_quantum_omni_cell_256m": "256M 便携量子存储元件",
+
+  "block.ae2omnicells.ender_ingot_block": "末影钢块",
+  "block.ae2omnicells.netherite_scrap_block": "下界合金碎片块",
+  "block.ae2omnicells.singularity_block": "奇点块"
 }

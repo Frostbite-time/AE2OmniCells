@@ -34,10 +34,13 @@ public class OCItems
     // ---- 杂项 / 其他物品 ----
     public static final RegistryObject<Item> ENDER_INGOT = registerOtherItem("ender_ingot", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> CHARGED_ENDER_INGOT = registerOtherItem("charged_ender_ingot", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> OMNI_LINK_PRINT_PRESS = registerOtherItem("omni_link_print_press", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> COMPLEX_LINK_PRINT_PRESS = registerOtherItem("complex_link_print_press", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> MULTIDIMENSIONAL_EXPANSION_PRINT_PRESS = registerOtherItem("multidimensional_expansion_print_press", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> OMNI_LINK_CIRCUIT_PRINT = registerOtherItem("omni_link_circuit_print", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> COMPLEX_LINK_CIRCUIT_PRINT = registerOtherItem("complex_link_circuit_print", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> MULTIDIMENSIONAL_EXPANSION_CIRCUIT_PRINT = registerOtherItem("multidimensional_expansion_circuit_print", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> OMNI_LINK_PROCESSOR = registerOtherItem("omni_link_processor", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> COMPLEX_LINK_PROCESSOR = registerOtherItem("complex_link_processor", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> MULTIDIMENSIONAL_EXPANSION_PROCESSOR = registerOtherItem("multidimensional_expansion_processor", () -> new Item(new Item.Properties()));
 
@@ -47,6 +50,11 @@ public class OCItems
     public static final RegistryObject<Item> QUANTUM_OMNI_CELL_HOUSING = registerOtherItem("quantum_omni_cell_housing", () -> new Item(new Item.Properties()));
 
     // ---- 全能存储组件（其他物品归类） ----
+    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_1K = registerComponent("omni_cell_component_1k");
+    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_4K = registerComponent("omni_cell_component_4k");
+    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_16K = registerComponent("omni_cell_component_16k");
+    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_64K = registerComponent("omni_cell_component_64k");
+    public static final RegistryObject<Item> OMNI_CELL_COMPONENT_256K = registerComponent("omni_cell_component_256k");
     public static final RegistryObject<Item> OMNI_CELL_COMPONENT_1M = registerComponent("omni_cell_component_1m");
     public static final RegistryObject<Item> OMNI_CELL_COMPONENT_4M = registerComponent("omni_cell_component_4m");
     public static final RegistryObject<Item> OMNI_CELL_COMPONENT_16M = registerComponent("omni_cell_component_16m");

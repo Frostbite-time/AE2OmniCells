@@ -133,6 +133,12 @@ dependencies {
     modCompileOnly "maven.modrinth:cloth-config:11.1.136+forge"
     modLocalRuntime "maven.modrinth:cloth-config:11.1.136+forge"
 
+    // EAE
+    modCompileOnly "maven.modrinth:extended-ae:1.20-1.4.2-forge"
+    modLocalRuntime "maven.modrinth:extended-ae:1.20-1.4.2-forge"
+    modCompileOnly "maven.modrinth:glodium:1.20-1.5-forge"
+    modLocalRuntime "maven.modrinth:glodium:1.20-1.5-forge"
+
 
     modLocalRuntime "maven.modrinth:jei:zzpNSbJZ"
     // If you wish to declare dependencies against mods, make sure to use the 'mod*' configurations so that they're remapped.

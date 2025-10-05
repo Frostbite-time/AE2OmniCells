@@ -1,6 +1,7 @@
 package com.wintercogs.ae2omnicells;
 
 import com.mojang.logging.LogUtils;
+import com.wintercogs.ae2omnicells.common.init.OCBlocks;
 import com.wintercogs.ae2omnicells.common.init.OCCreativeModeTabs;
 import com.wintercogs.ae2omnicells.common.init.OCItems;
 import com.wintercogs.ae2omnicells.common.init.OCMenus;
@@ -41,6 +42,7 @@ public class AE2OmniCells
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
         OCItems.register(modEventBus);
+        OCBlocks.register(modEventBus);
         OCCreativeModeTabs.register(modEventBus);
         OCMenus.registerMenus(modEventBus);
 
