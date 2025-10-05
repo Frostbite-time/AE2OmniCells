@@ -2,6 +2,7 @@ package com.wintercogs.ae2omnicells.client.me;
 
 import appeng.api.client.StorageCellModels;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
+import com.wintercogs.ae2omnicells.common.items.AEPortableUniversalCellItem;
 import com.wintercogs.ae2omnicells.common.items.AEUniversalCellItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
@@ -79,7 +80,10 @@ public class AE2StorageModels
                 QUANTUM_OMNI_CELL_4M.get(),
                 QUANTUM_OMNI_CELL_16M.get(),
                 QUANTUM_OMNI_CELL_64M.get(),
-                QUANTUM_OMNI_CELL_256M.get(),
+                QUANTUM_OMNI_CELL_256M.get()
+        );
+
+        event.register((itemStack, idx) -> FastColor.ARGB32.opaque(AEPortableUniversalCellItem.getColor(itemStack, idx)),
                 // 便携系列
                 PORTABLE_OMNI_CELL_1K.get(),
                 PORTABLE_OMNI_CELL_4K.get(),

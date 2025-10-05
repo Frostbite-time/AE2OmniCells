@@ -1,6 +1,9 @@
 {
   "creativetab.ae2omnicells.items": "OMNI 스토리지 셀",
 
+  "ae2omnicells.cell.upgrades.group": "OMNI 스토리지 셀",
+  "ae2omnicells.cell.portable.upgrades.group": "포터블 OMNI 스토리지 셀",
+
   "item.ae2omnicells.ender_ingot": "엔더 스틸 주괴",
   "item.ae2omnicells.charged_ender_ingot": "충전된 엔더 스틸 주괴",
   "item.ae2omnicells.omni_link_print_press": "OMNI 링크 인스크라이버 프레스",

@@ -1,6 +1,9 @@
 {
   "creativetab.ae2omnicells.items": "Ячейки хранения OMNI",
 
+  "ae2omnicells.cell.upgrades.group": "ячейка хранения OMNI",
+  "ae2omnicells.cell.portable.upgrades.group": "переносная ячейка хранения OMNI",
+
   "item.ae2omnicells.ender_ingot": "Слиток эндер-стали",
   "item.ae2omnicells.charged_ender_ingot": "Заряженный слиток эндер-стали",
   "item.ae2omnicells.omni_link_print_press": "Пресс связи OMNI",

@@ -1,6 +1,9 @@
 {
   "creativetab.ae2omnicells.items": "OMNI-Speicherzellen",
 
+  "ae2omnicells.cell.upgrades.group": "OMNI-Speicherzelle",
+  "ae2omnicells.cell.portable.upgrades.group": "Tragbare OMNI-Speicherzelle",
+
   "item.ae2omnicells.ender_ingot": "Enderstahlbarren",
   "item.ae2omnicells.charged_ender_ingot": "Geladener Enderstahlbarren",
   "item.ae2omnicells.omni_link_print_press": "Omni-Link-Prägestempel",

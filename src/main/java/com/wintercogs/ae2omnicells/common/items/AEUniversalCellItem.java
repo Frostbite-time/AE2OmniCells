@@ -4,7 +4,6 @@ import appeng.api.config.FuzzyMode;
 import appeng.api.ids.AEComponents;
 import appeng.api.stacks.GenericStack;
 import appeng.api.storage.StorageCells;
-import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.ICellWorkbenchItem;
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.UpgradeInventories;
@@ -57,9 +56,9 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
 
     public static int getColor(ItemStack stack, int tintIndex)
     {
-        if (tintIndex != 1) return 0xFFFFFF; // 白
-        CellState state = IAEUniversalCell.getCellState(stack);
-        return state.getStateColor();
+        if(tintIndex == 0) return 0x80caff; // 蓝色
+        else if (tintIndex == 1) return IAEUniversalCell.getCellState(stack).getStateColor();
+        return 0xFFFFFF; // 白
     }
 
     @Override
