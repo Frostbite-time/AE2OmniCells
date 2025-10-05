@@ -7,6 +7,7 @@ import com.wintercogs.ae2omnicells.common.items.AEUniversalCellItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
 
@@ -14,34 +15,43 @@ import static com.wintercogs.ae2omnicells.common.init.OCItems.*;
 
 public class AE2StorageModels
 {
-    private static final ResourceLocation OMNI_MODEL = AE2OmniCells.makeId("block/drive/omni_drive_cell");
-    private static final ResourceLocation COMPLEX_OMNI_MODEL = AE2OmniCells.makeId("block/drive/complex_omni_drive_cell");
-    private static final ResourceLocation QUANTUM_OMNI_MODEL = AE2OmniCells.makeId("block/drive/quantum_omni_drive_cell");
+    private static final String OMNI_MODEL_PREFIX = AE2OmniCells.makeId("drive/cells/omni/cell_").toString();
+    private static final String COMPLEX_MODEL_PREFIX = AE2OmniCells.makeId("drive/cells/complex/cell_").toString();
+    private static final String QUANTUM_MODEL_PREFIX = AE2OmniCells.makeId("drive/cells/quantum/cell_").toString();
+
+    // 统一的 Tier 后缀顺序
+    private static final String[] SUFFIXES = {
+            "1k", "4k", "16k", "64k", "256k",
+            "1m", "4m", "16m", "64m", "256m"
+    };
 
     public static void registerStorageModels()
     {
         // 普通（非便携 + 便携）
-        registerModels(OMNI_MODEL,
-                OMNI_CELL_1K, OMNI_CELL_4K, OMNI_CELL_16K, OMNI_CELL_64K, OMNI_CELL_256K,
-                OMNI_CELL_1M, OMNI_CELL_4M, OMNI_CELL_16M, OMNI_CELL_64M, OMNI_CELL_256M,
-                PORTABLE_OMNI_CELL_1K, PORTABLE_OMNI_CELL_4K, PORTABLE_OMNI_CELL_16K, PORTABLE_OMNI_CELL_64K, PORTABLE_OMNI_CELL_256K,
-                PORTABLE_OMNI_CELL_1M, PORTABLE_OMNI_CELL_4M, PORTABLE_OMNI_CELL_16M, PORTABLE_OMNI_CELL_64M, PORTABLE_OMNI_CELL_256M
+        registerSeries(
+                OMNI_MODEL_PREFIX,
+                new DeferredItem[]{ OMNI_CELL_1K, OMNI_CELL_4K, OMNI_CELL_16K, OMNI_CELL_64K, OMNI_CELL_256K,
+                        OMNI_CELL_1M, OMNI_CELL_4M, OMNI_CELL_16M, OMNI_CELL_64M, OMNI_CELL_256M },
+                new DeferredItem[]{ PORTABLE_OMNI_CELL_1K, PORTABLE_OMNI_CELL_4K, PORTABLE_OMNI_CELL_16K, PORTABLE_OMNI_CELL_64K, PORTABLE_OMNI_CELL_256K,
+                        PORTABLE_OMNI_CELL_1M, PORTABLE_OMNI_CELL_4M, PORTABLE_OMNI_CELL_16M, PORTABLE_OMNI_CELL_64M, PORTABLE_OMNI_CELL_256M }
         );
 
         // 复杂（非便携 + 便携）
-        registerModels(COMPLEX_OMNI_MODEL,
-                COMPLEX_OMNI_CELL_1K, COMPLEX_OMNI_CELL_4K, COMPLEX_OMNI_CELL_16K, COMPLEX_OMNI_CELL_64K, COMPLEX_OMNI_CELL_256K,
-                COMPLEX_OMNI_CELL_1M, COMPLEX_OMNI_CELL_4M, COMPLEX_OMNI_CELL_16M, COMPLEX_OMNI_CELL_64M, COMPLEX_OMNI_CELL_256M,
-                PORTABLE_COMPLEX_OMNI_CELL_1K, PORTABLE_COMPLEX_OMNI_CELL_4K, PORTABLE_COMPLEX_OMNI_CELL_16K, PORTABLE_COMPLEX_OMNI_CELL_64K, PORTABLE_COMPLEX_OMNI_CELL_256K,
-                PORTABLE_COMPLEX_OMNI_CELL_1M, PORTABLE_COMPLEX_OMNI_CELL_4M, PORTABLE_COMPLEX_OMNI_CELL_16M, PORTABLE_COMPLEX_OMNI_CELL_64M, PORTABLE_COMPLEX_OMNI_CELL_256M
+        registerSeries(
+                COMPLEX_MODEL_PREFIX,
+                new DeferredItem[]{ COMPLEX_OMNI_CELL_1K, COMPLEX_OMNI_CELL_4K, COMPLEX_OMNI_CELL_16K, COMPLEX_OMNI_CELL_64K, COMPLEX_OMNI_CELL_256K,
+                        COMPLEX_OMNI_CELL_1M, COMPLEX_OMNI_CELL_4M, COMPLEX_OMNI_CELL_16M, COMPLEX_OMNI_CELL_64M, COMPLEX_OMNI_CELL_256M },
+                new DeferredItem[]{ PORTABLE_COMPLEX_OMNI_CELL_1K, PORTABLE_COMPLEX_OMNI_CELL_4K, PORTABLE_COMPLEX_OMNI_CELL_16K, PORTABLE_COMPLEX_OMNI_CELL_64K, PORTABLE_COMPLEX_OMNI_CELL_256K,
+                        PORTABLE_COMPLEX_OMNI_CELL_1M, PORTABLE_COMPLEX_OMNI_CELL_4M, PORTABLE_COMPLEX_OMNI_CELL_16M, PORTABLE_COMPLEX_OMNI_CELL_64M, PORTABLE_COMPLEX_OMNI_CELL_256M }
         );
 
         // 量子（非便携 + 便携）
-        registerModels(QUANTUM_OMNI_MODEL,
-                QUANTUM_OMNI_CELL_1K, QUANTUM_OMNI_CELL_4K, QUANTUM_OMNI_CELL_16K, QUANTUM_OMNI_CELL_64K, QUANTUM_OMNI_CELL_256K,
-                QUANTUM_OMNI_CELL_1M, QUANTUM_OMNI_CELL_4M, QUANTUM_OMNI_CELL_16M, QUANTUM_OMNI_CELL_64M, QUANTUM_OMNI_CELL_256M,
-                PORTABLE_QUANTUM_OMNI_CELL_1K, PORTABLE_QUANTUM_OMNI_CELL_4K, PORTABLE_QUANTUM_OMNI_CELL_16K, PORTABLE_QUANTUM_OMNI_CELL_64K, PORTABLE_QUANTUM_OMNI_CELL_256K,
-                PORTABLE_QUANTUM_OMNI_CELL_1M, PORTABLE_QUANTUM_OMNI_CELL_4M, PORTABLE_QUANTUM_OMNI_CELL_16M, PORTABLE_QUANTUM_OMNI_CELL_64M, PORTABLE_QUANTUM_OMNI_CELL_256M
+        registerSeries(
+                QUANTUM_MODEL_PREFIX,
+                new DeferredItem[]{ QUANTUM_OMNI_CELL_1K, QUANTUM_OMNI_CELL_4K, QUANTUM_OMNI_CELL_16K, QUANTUM_OMNI_CELL_64K, QUANTUM_OMNI_CELL_256K,
+                        QUANTUM_OMNI_CELL_1M, QUANTUM_OMNI_CELL_4M, QUANTUM_OMNI_CELL_16M, QUANTUM_OMNI_CELL_64M, QUANTUM_OMNI_CELL_256M },
+                new DeferredItem[]{ PORTABLE_QUANTUM_OMNI_CELL_1K, PORTABLE_QUANTUM_OMNI_CELL_4K, PORTABLE_QUANTUM_OMNI_CELL_16K, PORTABLE_QUANTUM_OMNI_CELL_64K, PORTABLE_QUANTUM_OMNI_CELL_256K,
+                        PORTABLE_QUANTUM_OMNI_CELL_1M, PORTABLE_QUANTUM_OMNI_CELL_4M, PORTABLE_QUANTUM_OMNI_CELL_16M, PORTABLE_QUANTUM_OMNI_CELL_64M, PORTABLE_QUANTUM_OMNI_CELL_256M }
         );
     }
 
@@ -118,12 +128,23 @@ public class AE2StorageModels
         );
     }
 
-    @SafeVarargs
-    private static void registerModels(ResourceLocation model, DeferredItem<? extends Item>... items)
-    {
-        for (var ro : items)
-        {
-            StorageCellModels.registerModel(ro.get(), model);
+    // ===== 新：按系列（非便携+便携）循环注册 =====
+    private static void registerSeries(
+            String prefix,
+            DeferredItem<? extends Item>[] nonPortable,
+            DeferredItem<? extends Item>[] portable
+    ) {
+        if (nonPortable.length != SUFFIXES.length || portable.length != SUFFIXES.length) {
+            throw new IllegalArgumentException("Tier arrays must match SUFFIXES length: " + SUFFIXES.length);
         }
+        for (int i = 0; i < SUFFIXES.length; i++) {
+            registerModel(prefix, SUFFIXES[i], nonPortable[i].get());
+            registerModel(prefix, SUFFIXES[i], portable[i].get());
+        }
+    }
+
+    private static void registerModel(String prefix, String cap, ItemLike item)
+    {
+        StorageCellModels.registerModel(item, ResourceLocation.parse(prefix + cap));
     }
 }

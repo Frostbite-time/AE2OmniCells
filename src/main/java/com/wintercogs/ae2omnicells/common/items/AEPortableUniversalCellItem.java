@@ -3,7 +3,6 @@ package com.wintercogs.ae2omnicells.common.items;
 import appeng.api.config.FuzzyMode;
 import appeng.api.ids.AEComponents;
 import appeng.api.stacks.GenericStack;
-import appeng.api.storage.cells.CellState;
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.UpgradeInventories;
 import appeng.api.upgrades.Upgrades;
@@ -64,9 +63,9 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
 
     public static int getColor(ItemStack stack, int tintIndex)
     {
-        if (tintIndex != 1) return 0xFFFFFF; // 白
-        CellState state = IAEUniversalCell.getCellState(stack);
-        return state.getStateColor();
+        if(tintIndex == 0) return 0x80caff; // 蓝色
+        else if (tintIndex == 1) return IAEUniversalCell.getCellState(stack).getStateColor();
+        return 0xFFFFFF; // 白
     }
 
     // ---------- AbstractPortableCell 必需实现 ----------
