@@ -1,5 +1,7 @@
 # AE2 Omni Cells
 
+![banner](https://i.imgur.com/4Qds3if.png)
+
 **Language / 语言**: [简体中文](../README.md) | [English](./ENGLISH_README.md)
 
 **AE2 Omni Cells** is centered on “a single cell that can mix all AE resource keys (items, fluids, etc.)”. It provides capacity tiers from **1k → 256m**, and defines three product lines (including portable variants) differentiated by the **maximum number of distinct types that can be stored simultaneously**. There is **no extra byte charge per type**; only a clear, predictable limit on the number of types.

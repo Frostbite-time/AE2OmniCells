@@ -1,5 +1,7 @@
 # AE2 Omni Cells
 
+![banner](https://i.imgur.com/4Qds3if.png)
+
 **语言 / Language**: [简体中文](./README.md) | [English](./docs/ENGLISH_README.md)
 
 **AE2 Omni Cells** 以“单盘混装一切 AE 资源键（物品、流体等）”为核心设计，提供覆盖 **1k → 256m** 的容量梯度，并以“**可同时存储的种类上限**”为主要差异构建三条产品线（含便携版）。不对“种类数量”额外收取容量费用，仅对“种类上限”做清晰、可预期的限制。
