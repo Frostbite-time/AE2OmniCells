@@ -16,14 +16,15 @@ import appeng.api.upgrades.IUpgradeInventory;
 import appeng.core.definitions.AEItems;
 import appeng.util.ConfigInventory;
 import appeng.util.prioritylist.IPartitionList;
+import it.unimi.dsi.fastutil.longs.Long2LongMap;
+import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 能存储多种不同资源的元件的内部存储（通用盘）
@@ -45,7 +46,7 @@ public class AEUniversalCellInventory implements StorageCell
     private final @NotNull AEUniversalCellData cellData;
 
     /** 来自AEUniversalCellData的原始存储引用（AEKey -> amount） */
-    private final @NotNull Map<AEKey, Long> storage;
+    private final @NotNull Object2LongMap<AEKey> storage;
 
     /** 对应的物品堆（用于更新客户端 NBT 用于 tooltip/states） */
     private final @NotNull ItemStack itemStack;
@@ -57,7 +58,6 @@ public class AEUniversalCellInventory implements StorageCell
 
     /** 有效总字节（<=0 视为无限 -> Long.MAX_VALUE） */
     private final long totalBytesEff;
-
 
     /** 有效“最多类型数”（<=0 视为无限 -> Long.MAX_VALUE） */
     private final long totalTypesEff;
@@ -72,7 +72,7 @@ public class AEUniversalCellInventory implements StorageCell
      * apb 桶累计：key=amountPerByte（>0），value=该桶内所有 Key 的数量总和。
      * 用于 O(1) 计算“额外再塞多少单位会增加几个字节”
      */
-    private final Map<Long, Long> bucketSums = new HashMap<>();
+    private final Long2LongOpenHashMap bucketSums = new Long2LongOpenHashMap();
 
     public AEUniversalCellInventory(@NotNull AEUniversalCellData cellData,
                                     @NotNull ItemStack itemStack,
@@ -83,6 +83,8 @@ public class AEUniversalCellInventory implements StorageCell
         this.itemStack = itemStack;
         this.cellType = cellType;
 
+        this.bucketSums.defaultReturnValue(0L);
+
         // 统一把 无限 映射为 Long.MAX_VALUE，简化后续判断
         long totalBytes = cellType.getTotalBytes();
         this.totalBytesEff = (totalBytes <= 0) ? Long.MAX_VALUE : totalBytes;
@@ -90,24 +92,23 @@ public class AEUniversalCellInventory implements StorageCell
         long totalTypes = cellType.getTotalTypes();
         this.totalTypesEff = (totalTypes <= 0) ? Long.MAX_VALUE : totalTypes;
 
-
         // 首次全量统计：填充 storedTypesCached、bucketSums、usedBytesCached
         long types = 0;
-        for (Map.Entry<AEKey, Long> e : storage.entrySet())
+        for (Object2LongMap.Entry<AEKey> e : storage.object2LongEntrySet())
         {
-            long v = (e.getValue() == null ? 0 : e.getValue());
+            long v = e.getLongValue();
             if (v <= 0) continue;
             types++;
             long apb = Math.max(1, e.getKey().getType().getAmountPerByte());
-            bucketSums.merge(apb, v, Long::sum);
+            bucketSums.addTo(apb, v);
         }
         this.storedTypesCached = types;
 
         long bytesForValues = 0;
-        for (Map.Entry<Long, Long> b : bucketSums.entrySet())
+        for (Long2LongMap.Entry b : bucketSums.long2LongEntrySet())
         {
-            long apb = b.getKey();
-            long sum = b.getValue();
+            long apb = b.getLongKey();
+            long sum = b.getLongValue();
             bytesForValues = safeAdd(bytesForValues, ceilDiv(sum, apb));
         }
         this.usedBytesCached = bytesForValues;
@@ -169,7 +170,7 @@ public class AEUniversalCellInventory implements StorageCell
 
         // 取当前 apb 与现存量
         final long amountPerByte = Math.max(1, what.getType().getAmountPerByte());
-        final long current = storage.getOrDefault(what, 0L);
+        final long current = storage.getLong(what);
 
         final long freeBytes = freeBytes();
         final boolean openingNewType = (current <= 0);
@@ -210,7 +211,7 @@ public class AEUniversalCellInventory implements StorageCell
         if (mode == Actionable.MODULATE)
         {
             // ---- 增量更新缓存：桶累计、已用字节、已用类型数 ----
-            final long oldBucket = bucketSums.getOrDefault(amountPerByte, 0L);
+            final long oldBucket = bucketSums.get(amountPerByte);
             final long newBucket = safeAdd(oldBucket, toInsert);
 
             // 值字节的增量 = ceil(new/apb) - ceil(old/apb)
@@ -241,7 +242,7 @@ public class AEUniversalCellInventory implements StorageCell
     {
         if (amount <= 0) return 0;
 
-        final long current = storage.getOrDefault(what, 0L);
+        final long current = storage.getLong(what);
         if (current <= 0) return 0;
 
         final long taken = Math.min(amount, current);
@@ -249,7 +250,7 @@ public class AEUniversalCellInventory implements StorageCell
         if (mode == Actionable.MODULATE)
         {
             final long amountPerByte = Math.max(1, what.getType().getAmountPerByte());
-            final long oldBucket = bucketSums.getOrDefault(amountPerByte, 0L);
+            final long oldBucket = bucketSums.get(amountPerByte);
             final long newBucket = Math.max(0, oldBucket - taken);
 
             // 值字节的增量 = ceil(new/apb) - ceil(old/apb)（可能为负）
@@ -264,7 +265,7 @@ public class AEUniversalCellInventory implements StorageCell
             }
             else
             {
-                storage.remove(what);
+                storage.removeLong(what);
                 storedTypesCached = Math.max(0, storedTypesCached - 1);
             }
 
@@ -281,9 +282,9 @@ public class AEUniversalCellInventory implements StorageCell
     @Override
     public void getAvailableStacks(KeyCounter out)
     {
-        for (Map.Entry<AEKey, Long> entry : storage.entrySet())
+        for (Object2LongMap.Entry<AEKey> entry : storage.object2LongEntrySet())
         {
-            long value = (entry.getValue() == null ? 0 : entry.getValue());
+            long value = entry.getLongValue();
             if (value > 0) out.add(entry.getKey(), value);
         }
     }
@@ -315,9 +316,9 @@ public class AEUniversalCellInventory implements StorageCell
     /** 是否存在任何“桶”未凑满 1 字节（sum % amountPerByte != 0） */
     private boolean hasAnyBucketPartial()
     {
-        for (Map.Entry<Long, Long> buket : bucketSums.entrySet())
+        for (Long2LongMap.Entry bucket : bucketSums.long2LongEntrySet())
         {
-            long apb = buket.getKey(), sum = buket.getValue();
+            long apb = bucket.getLongKey(), sum = bucket.getLongValue();
             if (sum > 0 && (sum % apb) != 0) return true;
         }
         return false;
@@ -330,7 +331,7 @@ public class AEUniversalCellInventory implements StorageCell
      */
     private long remainingUnitsIntoExistingFor(long amountPerByte, long freeBytes)
     {
-        long sum = bucketSums.getOrDefault(amountPerByte, 0L);
+        long sum = bucketSums.get(amountPerByte);
         long pad = (sum == 0) ? 0 : ((amountPerByte - (sum % amountPerByte)) % amountPerByte);
         if (freeBytes == Long.MAX_VALUE) return Long.MAX_VALUE;
         long extra = safeMul(freeBytes, amountPerByte);
@@ -435,7 +436,7 @@ public class AEUniversalCellInventory implements StorageCell
 
         if (unpartitioned && !canOpen)
         {
-            boolean exists = storage.getOrDefault(what, 0L) > 0;
+            boolean exists = storage.getLong(what) > 0;
             return exists ? amount : inserted;
         }
         return amount;
@@ -463,9 +464,9 @@ public class AEUniversalCellInventory implements StorageCell
         // 取迭代到的前 5 个 kv，对应数量>0 的条目，构造成 GenericStack 列表
         List<GenericStack> show = new ArrayList<>(5);
         int count = 0;
-        for (Map.Entry<AEKey, Long> e : storage.entrySet())
+        for (Object2LongMap.Entry<AEKey> e : storage.object2LongEntrySet())
         {
-            long v = (e.getValue() == null ? 0L : e.getValue());
+            long v = e.getLongValue();
             if (v <= 0L) continue;
             show.add(new GenericStack(e.getKey(), v));
             if (++count >= 5) break;
