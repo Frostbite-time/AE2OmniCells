@@ -6,6 +6,7 @@ import appeng.recipes.handlers.ChargerRecipeBuilder;
 import appeng.recipes.handlers.InscriberProcessType;
 import appeng.recipes.handlers.InscriberRecipeBuilder;
 import com.glodblock.github.extendedae.recipe.CircuitCutterRecipeBuilder;
+import com.glodblock.github.extendedae.recipe.CrystalAssemblerRecipeBuilder;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.init.OCBlocks;
 import com.wintercogs.ae2omnicells.common.init.OCItems;
@@ -18,9 +19,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 import net.neoforged.neoforge.registries.DeferredItem;
+import net.pedroksl.advanced_ae.recipes.ReactionChamberRecipeBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -161,20 +164,63 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         buildAllByTiers(recipeOutput);
 
         // EAE联动配方---------------------------------------------------------------------------------------------------------
+
+        // 电路切片
         CircuitCutterRecipeBuilder.cut(OCItems.OMNI_LINK_CIRCUIT_PRINT.get(), 9)
                 .input(OCBlocks.ENDER_INGOT_BLOCK.get())
                 .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
                         AE2OmniCells.makeId("cutter/omni_link_circuit_print"));
-
         CircuitCutterRecipeBuilder.cut(OCItems.COMPLEX_LINK_CIRCUIT_PRINT.get(), 9)
                 .input(OCBlocks.NETHERITE_SCRAP_BLOCK.get())
                 .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
                         AE2OmniCells.makeId("cutter/complex_link_circuit_print"));
-
         CircuitCutterRecipeBuilder.cut(OCItems.MULTIDIMENSIONAL_EXPANSION_CIRCUIT_PRINT.get(), 9)
                 .input(OCBlocks.SINGULARITY_BLOCK.get())
                 .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
                         AE2OmniCells.makeId("cutter/multidimensional_expansion_circuit_print"));
+
+        // 水晶装配
+        CrystalAssemblerRecipeBuilder.assemble(OCItems.OMNI_LINK_PROCESSOR, 4)
+                .input(OCItems.OMNI_LINK_CIRCUIT_PRINT, 4)
+                .input(AEItems.SILICON_PRINT, 4)
+                .input(Items.REDSTONE, 4)
+                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
+                        AE2OmniCells.makeId("assembler/omni_link_processor"));
+        CrystalAssemblerRecipeBuilder.assemble(OCItems.COMPLEX_LINK_PROCESSOR, 4)
+                .input(OCItems.COMPLEX_LINK_CIRCUIT_PRINT, 4)
+                .input(AEItems.SILICON_PRINT, 4)
+                .input(Items.REDSTONE, 4)
+                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
+                        AE2OmniCells.makeId("assembler/complex_link_processor"));
+        CrystalAssemblerRecipeBuilder.assemble(OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR, 4)
+                .input(OCItems.MULTIDIMENSIONAL_EXPANSION_CIRCUIT_PRINT, 4)
+                .input(AEItems.SILICON_PRINT, 4)
+                .input(Items.REDSTONE, 4)
+                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
+                        AE2OmniCells.makeId("assembler/multidimensional_expansion_processor"));
+
+        // 水晶装配器 -> 末影钢
+        CrystalAssemblerRecipeBuilder.assemble(OCItems.ENDER_INGOT, 4)
+                .input(AEItems.ENDER_DUST, 4)
+                .input(Items.IRON_INGOT, 4)
+                .input(AEItems.CERTUS_QUARTZ_CRYSTAL, 4)
+                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
+                        AE2OmniCells.makeId("assembler/ender_ingot"));
+
+        // AAE联动配方 -----------------------------------------------------------------------------------------------
+        // 反应仓 -> 末影钢 / 充能末影钢
+        ReactionChamberRecipeBuilder.react(OCItems.ENDER_INGOT, 64, 500000)
+                .input(AEItems.ENDER_DUST, 32)
+                .input(Items.IRON_INGOT, 32)
+                .input(AEItems.CERTUS_QUARTZ_CRYSTAL, 32)
+                .fluid(Fluids.WATER, 500)
+                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.AAE_MODID)),
+                        AE2OmniCells.makeId("reaction_chamber/ender_ingot"));
+        ReactionChamberRecipeBuilder.react(OCItems.CHARGED_ENDER_INGOT, 64, 1300000)
+                .input(OCItems.ENDER_INGOT, 64)
+                .fluid(Fluids.WATER, 1000)
+                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.AAE_MODID)),
+                        AE2OmniCells.makeId("reaction_chamber/charged_ender_ingot"));
 
     }
 

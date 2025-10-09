@@ -131,6 +131,12 @@ dependencies {
     compileOnly "maven.modrinth:glodium:1.21-2.2-neoforge"
     runtimeOnly "maven.modrinth:glodium:1.21-2.2-neoforge"
 
+    // AAE
+    compileOnly "maven.modrinth:geckolib:RVIo5f6E"
+    runtimeOnly "maven.modrinth:geckolib:RVIo5f6E"
+    compileOnly "maven.modrinth:advancedae:1.5.2-1.21.1"
+    runtimeOnly "maven.modrinth:advancedae:1.5.2-1.21.1"
+
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
