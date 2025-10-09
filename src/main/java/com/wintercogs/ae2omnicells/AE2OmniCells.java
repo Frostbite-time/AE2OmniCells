@@ -35,6 +35,9 @@ public class AE2OmniCells
     public static final String EAE_MODID = "expatternprovider";
     public static boolean EAE_LOADED = false;
 
+    public static final String AAE_MODID = "advanced_ae";
+    public static boolean AAE_LOADED = false;
+
 
     public AE2OmniCells()
     {
@@ -61,6 +64,10 @@ public class AE2OmniCells
     {
         if(ModList.get().isLoaded(MEGA_MODID))
             MEGA_LOADED = true;
+        if(ModList.get().isLoaded(EAE_MODID))
+            EAE_LOADED = true;
+        if(ModList.get().isLoaded(AAE_MODID))
+            AAE_LOADED = true;
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)

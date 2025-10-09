@@ -139,6 +139,12 @@ dependencies {
     modCompileOnly "maven.modrinth:glodium:1.20-1.5-forge"
     modLocalRuntime "maven.modrinth:glodium:1.20-1.5-forge"
 
+    // AAE
+    modCompileOnly "maven.modrinth:geckolib:aVW7Z5da"
+    modLocalRuntime "maven.modrinth:geckolib:aVW7Z5da"
+    modCompileOnly "maven.modrinth:advancedae:1.2.7-1.20.1"
+    modLocalRuntime "maven.modrinth:advancedae:1.2.7-1.20.1"
+
 
     modLocalRuntime "maven.modrinth:jei:zzpNSbJZ"
     // If you wish to declare dependencies against mods, make sure to use the 'mod*' configurations so that they're remapped.

@@ -20,6 +20,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import net.minecraftforge.registries.RegistryObject;
+import net.pedroksl.advanced_ae.recipes.ReactionChamberRecipeBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -185,6 +186,24 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                         .save(r, AE2OmniCells.makeId("cutter/multidimensional_expansion_circuit_print")))
                 .build(recipeOutput, AE2OmniCells.makeId("cutter/multidimensional_expansion_circuit_print"));
 
+        // AAE联动配方 -----------------------------------------------------------------------------------------------
+        // 反应仓 -> 末影钢 / 充能末影钢
+        ConditionalRecipe.builder()
+                .addCondition(modLoaded(AE2OmniCells.AAE_MODID))
+                .addRecipe(r -> ReactionChamberRecipeBuilder.react(OCItems.ENDER_INGOT.get(), 64, 500000)
+                        .input(AEItems.ENDER_DUST, 32)
+                        .input(Items.IRON_INGOT, 32)
+                        .input(AEItems.CERTUS_QUARTZ_CRYSTAL, 32)
+                        .fluid(Fluids.WATER, 500)
+                        .save(r, AE2OmniCells.makeId("reaction_chamber/ender_ingot")))
+                .build(recipeOutput, AE2OmniCells.makeId("reaction_chamber/ender_ingot"));
+        ConditionalRecipe.builder()
+                .addCondition(modLoaded(AE2OmniCells.AAE_MODID))
+                .addRecipe(r -> ReactionChamberRecipeBuilder.react(OCItems.CHARGED_ENDER_INGOT.get(), 64, 1300000)
+                        .input(OCItems.ENDER_INGOT.get(), 64)
+                        .fluid(Fluids.WATER, 1000)
+                        .save(r, AE2OmniCells.makeId("reaction_chamber/charged_ender_ingot")))
+                .build(recipeOutput, AE2OmniCells.makeId("reaction_chamber/charged_ender_ingot"));
     }
 
     // ---------- 统一ID工具 ----------
