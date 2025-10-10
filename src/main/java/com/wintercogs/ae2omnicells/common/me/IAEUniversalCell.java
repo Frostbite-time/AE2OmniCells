@@ -16,7 +16,8 @@ import java.util.List;
  * 是否无限容量、总字节数、待机功耗等信息
  * @author Frostbite
  */
-public interface IAEUniversalCell extends IUpgradeableItem {
+public interface IAEUniversalCell extends IUpgradeableItem
+{
 
     /** 约定：返回值小于等于0则视为不限制类型总数 */
     int getTotalBytes();
@@ -27,13 +28,13 @@ public interface IAEUniversalCell extends IUpgradeableItem {
     double getIdleDrain();
 
     // === 以下辅助方法：从 NBT 迁移为 Data Components，行为保持一致 ===
-    static int getUsedBytes(ItemStack stack)
+    static long getUsedBytes(ItemStack stack)
     {
-        Integer v = stack.get(OCDataComponents.CELL_BYTES_USAGE.get());
+        Long v = stack.get(OCDataComponents.CELL_BYTES_USAGE.get());
         return v == null ? 0 : v;
     }
 
-    static void setUsedBytes(ItemStack stack, int usedBytes)
+    static void setUsedBytes(ItemStack stack, long usedBytes)
     {
         stack.set(OCDataComponents.CELL_BYTES_USAGE.get(), Math.max(0, usedBytes));
     }
@@ -60,7 +61,7 @@ public interface IAEUniversalCell extends IUpgradeableItem {
         }
     }
 
-    static void setCellState(ItemStack stack, IAEUniversalCell cellType, int usedBytes, int usedTypes)
+    static void setCellState(ItemStack stack, IAEUniversalCell cellType, long usedBytes, int usedTypes)
     {
         final int totalBytes = cellType.getTotalBytes(); // <=0 视为无限
         final int totalTypes = cellType.getTotalTypes(); // <=0 视为无限

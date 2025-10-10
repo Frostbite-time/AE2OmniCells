@@ -7,7 +7,6 @@ import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.util.ExtraCodecs;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -27,18 +26,18 @@ public class OCDataComponents {
         return DATA_COMPONENTS.register(name, () -> builder.apply(DataComponentType.builder()).build());
     }
 
-    // 已用字节（非负 int）
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> CELL_BYTES_USAGE =
+    // 已用字节
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Long>> CELL_BYTES_USAGE =
             register("cell_bytes_usage", b -> b
-                    .persistent(ExtraCodecs.NON_NEGATIVE_INT)
-                    .networkSynchronized(ByteBufCodecs.VAR_INT) // 亦可省略，交给 builder 自动包装
+                    .persistent(Codec.LONG)
+                    .networkSynchronized(ByteBufCodecs.VAR_LONG)
                     .cacheEncoding()
             );
 
-    // 已用类型（非负 int）
+    // 已用类型
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> CELL_TYPES_USAGE =
             register("cell_types_usage", b -> b
-                    .persistent(ExtraCodecs.NON_NEGATIVE_INT)
+                    .persistent(Codec.INT)
                     .networkSynchronized(ByteBufCodecs.VAR_INT) // 亦可省略
                     .cacheEncoding()
             );
@@ -47,7 +46,7 @@ public class OCDataComponents {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> CELL_STATE =
             register("cell_state", b -> b
                     .persistent(Codec.STRING)
-                    .networkSynchronized(ByteBufCodecs.STRING_UTF8) // 亦可省略
+                    .networkSynchronized(ByteBufCodecs.STRING_UTF8)
                     .cacheEncoding()
             );
 
@@ -72,7 +71,8 @@ public class OCDataComponents {
                     .cacheEncoding()
             );
 
-    public static void register(IEventBus eventBus) {
+    public static void register(IEventBus eventBus)
+    {
         DATA_COMPONENTS.register(eventBus);
     }
 }

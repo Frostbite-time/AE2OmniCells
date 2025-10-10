@@ -27,7 +27,6 @@ public class AEUniversalCellHandler implements ICellHandler
     @Override
     public @Nullable StorageCell getCellInventory(ItemStack itemStack, @Nullable ISaveProvider iSaveProvider)
     {
-        // 我们无视ISaveProvider，因为这种元件仅由SavedData统一保存
         if(ServerLifecycleHooks.getCurrentServer() == null) return null;
         if(!(itemStack.getItem() instanceof IAEUniversalCell cellItem)) return null;
         if(itemStack.getCount() != 1) return null;
@@ -35,6 +34,6 @@ public class AEUniversalCellHandler implements ICellHandler
         AEUniversalCellData cellData = AEUniversalCellData.computeIfAbsentCellDataForItemStack(itemStack);
         if(cellData == null) return null;
 
-        return new AEUniversalCellInventory(cellData, itemStack, cellItem);
+        return new AEUniversalCellInventory(cellData, itemStack, cellItem, iSaveProvider);
     }
 }
