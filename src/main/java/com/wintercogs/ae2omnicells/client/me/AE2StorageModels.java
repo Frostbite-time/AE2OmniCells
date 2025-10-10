@@ -19,6 +19,9 @@ public class AE2StorageModels
     private static final String COMPLEX_MODEL_PREFIX = AE2OmniCells.makeId("drive/cells/complex/cell_").toString();
     private static final String QUANTUM_MODEL_PREFIX = AE2OmniCells.makeId("drive/cells/quantum/cell_").toString();
 
+    private static final ResourceLocation MODEL_CELL_CREATIVE = ResourceLocation.parse(
+            "ae2:block/drive/cells/creative_cell");
+
     // 统一的 Tier 后缀顺序
     private static final String[] SUFFIXES = {
             "1k", "4k", "16k", "64k", "256k",
@@ -27,6 +30,9 @@ public class AE2StorageModels
 
     public static void registerStorageModels()
     {
+        // 创造元件
+        StorageCellModels.registerModel(CREATIVE_AE_CELL_LONG, MODEL_CELL_CREATIVE);
+
         // 普通（非便携 + 便携）
         registerSeries(
                 OMNI_MODEL_PREFIX,
@@ -90,7 +96,9 @@ public class AE2StorageModels
                 QUANTUM_OMNI_CELL_4M.get(),
                 QUANTUM_OMNI_CELL_16M.get(),
                 QUANTUM_OMNI_CELL_64M.get(),
-                QUANTUM_OMNI_CELL_256M.get()
+                QUANTUM_OMNI_CELL_256M.get(),
+                // 创造
+                CREATIVE_AE_CELL_LONG.get()
         );
 
         event.register((itemStack, idx) -> FastColor.ARGB32.opaque(AEPortableUniversalCellItem.getColor(itemStack, idx)),

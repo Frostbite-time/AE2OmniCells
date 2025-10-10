@@ -24,6 +24,8 @@ public class OCItems
     private static final List<DeferredItem<AEUniversalCellItem>> CELLS = new ArrayList<>();
     /** 便携元件（= 便携通用盘：普通/复杂/量子 的所有便携盘） */
     private static final List<DeferredItem<AEPortableUniversalCellItem>> PORTABLE_CELLS = new ArrayList<>();
+    /** 创造存储元件 */
+    private static final List<DeferredItem<Item>> CREATIVE_CELLS = new ArrayList<>();
     /** 其他物品（= 元件外壳、各类组件、锭/处理器/压印模板等杂项） */
     private static final List<DeferredItem<Item>> OTHERS = new ArrayList<>();
 
@@ -153,6 +155,10 @@ public class OCItems
     public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_64M = registerPortableCell("portable_quantum_omni_cell_64m", 19683, -1, 65536);
     public static final DeferredItem<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_256M = registerPortableCell("portable_quantum_omni_cell_256m", 59049, -1, 262144);
 
+    // 创造物品 - LONG级存储元件
+    public static final DeferredItem<Item> CREATIVE_AE_CELL_LONG = registerCreativeCell("creative_ae_cell_long",
+            () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1), 64, -1, -1));
+
     public static void register(IEventBus eventBus)
     {
         ITEMS.register(eventBus);
@@ -178,6 +184,11 @@ public class OCItems
     {
         return Collections.unmodifiableList(OTHERS);
     }
+    /** 创造存储元件 */
+    public static List<DeferredItem<Item>> getCreativeCells()
+    {
+        return Collections.unmodifiableList(CREATIVE_CELLS);
+    }
 
     // ---------- 工具方法 ----------
     private static <T extends Item> DeferredItem<T> registerItem(String name, Supplier<T> supplier)
@@ -192,7 +203,7 @@ public class OCItems
 
     private static DeferredItem<Item> registerOtherItem(String name, Supplier<Item> sup)
     {
-        DeferredItem<Item> obj = registerItem(name, () -> new Item(new Item.Properties()));
+        DeferredItem<Item> obj = registerItem(name, sup);
         OTHERS.add(obj);
         return obj;
     }
@@ -250,6 +261,15 @@ public class OCItems
         );
         ALL.add(obj);
         PORTABLE_CELLS.add(obj);
+        return obj;
+    }
+
+    // 创造元件
+    private static DeferredItem<Item> registerCreativeCell(
+            String name, Supplier<Item> sup)
+    {
+        DeferredItem<Item> obj = registerItem(name, sup);
+        CREATIVE_CELLS.add(obj);
         return obj;
     }
 }
