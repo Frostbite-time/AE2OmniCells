@@ -16,8 +16,14 @@ public class AE2StorageModels
     private static final ResourceLocation COMPLEX_OMNI_MODEL = AE2OmniCells.makeId("block/drive/complex_omni_drive_cell");
     private static final ResourceLocation QUANTUM_OMNI_MODEL = AE2OmniCells.makeId("block/drive/quantum_omni_drive_cell");
 
+    private static final ResourceLocation MODEL_CELL_CREATIVE = new ResourceLocation("ae2:block/drive/cells/creative_cell");
+
     public static void registerStorageModels()
     {
+        // 创造元件
+        StorageCellModels.registerModel(CREATIVE_AE_CELL_LONG.get(), MODEL_CELL_CREATIVE);
+        StorageCellModels.registerModel(CREATIVE_AE_CELL_BIGINTEGER.get(), MODEL_CELL_CREATIVE);
+
         // 普通（非便携 + 便携）
         registerModels(OMNI_MODEL,
                 OMNI_CELL_1K, OMNI_CELL_4K, OMNI_CELL_16K, OMNI_CELL_64K, OMNI_CELL_256K,

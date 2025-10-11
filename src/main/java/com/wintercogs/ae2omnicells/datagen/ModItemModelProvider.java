@@ -33,6 +33,10 @@ public class ModItemModelProvider extends ItemModelProvider
         {
             cellWithOwnBaseAndAeLed(registryItem.get());
         }
+        for(RegistryObject<Item> registryItem : OCItems.getCreativeCells())
+        {
+            cellWithOwnBaseAndAeLed(registryItem.get());
+        }
 
         // 便携存储
         // —— 普通（omni） ——

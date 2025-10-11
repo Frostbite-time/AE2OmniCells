@@ -28,23 +28,23 @@ public class OCCreativeModeTabs
                     .title(Component.translatable("creativetab.ae2omnicells.items"))
                     .displayItems((params, output) -> {
                         // 其他物品
-                        for (RegistryObject<Item> ro : OCItems.getOthers()) {
+                        for (RegistryObject<Item> ro : OCItems.getOthers())
+                        {
                             output.accept(ro.get());
                         }
-
                         // 方块物品
                         for (RegistryObject<? extends Block> ro : OCBlocks.ALL)
                         {
                             output.accept(ro.get());
                         }
-
                         // 普通元件（非便携）
-                        for (RegistryObject<AEUniversalCellItem> ro : OCItems.getCells()) {
+                        for (RegistryObject<AEUniversalCellItem> ro : OCItems.getCells())
+                        {
                             output.accept(ro.get());
                         }
-
                         // 便携元件：每个展示两份（空电 + 满电），两件相邻
-                        for (RegistryObject<AEPortableUniversalCellItem> ro : OCItems.getPortableCells()) {
+                        for (RegistryObject<AEPortableUniversalCellItem> ro : OCItems.getPortableCells())
+                        {
                             AEPortableUniversalCellItem portable = ro.get();
 
                             // 空电
@@ -56,6 +56,11 @@ public class OCCreativeModeTabs
                             // 注：注入一个极大值，底层会按最大电量上限截断
                             portable.injectAEPower(full, Double.MAX_VALUE, Actionable.MODULATE);
                             output.accept(full);
+                        }
+                        // 创造元件
+                        for(RegistryObject<Item> ro : OCItems.getCreativeCells())
+                        {
+                            output.accept(ro.get());
                         }
                     })
                     .build()

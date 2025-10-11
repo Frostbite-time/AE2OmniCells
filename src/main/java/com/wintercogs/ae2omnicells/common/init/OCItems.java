@@ -1,6 +1,7 @@
 package com.wintercogs.ae2omnicells.common.init;
 
 import com.wintercogs.ae2omnicells.AE2OmniCells;
+import com.wintercogs.ae2omnicells.common.items.AEBigIntegerCellItem;
 import com.wintercogs.ae2omnicells.common.items.AEPortableUniversalCellItem;
 import com.wintercogs.ae2omnicells.common.items.AEUniversalCellItem;
 import net.minecraft.world.item.Item;
@@ -26,6 +27,8 @@ public class OCItems
     private static final List<RegistryObject<AEUniversalCellItem>> CELLS = new ArrayList<>();
     /** 便携元件（= 便携通用盘：普通/复杂/量子 的所有便携盘） */
     private static final List<RegistryObject<AEPortableUniversalCellItem>> PORTABLE_CELLS = new ArrayList<>();
+    /** 创造存储元件 */
+    private static final List<RegistryObject<Item>> CREATIVE_CELLS = new ArrayList<>();
     /** 其他物品（= 元件外壳、各类组件、锭/处理器/压印模板等杂项） */
     private static final List<RegistryObject<Item>> OTHERS = new ArrayList<>();
 
@@ -155,6 +158,14 @@ public class OCItems
     public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_64M = registerPortableCell("portable_quantum_omni_cell_64m", 19683, -1, 65536);
     public static final RegistryObject<AEPortableUniversalCellItem> PORTABLE_QUANTUM_OMNI_CELL_256M = registerPortableCell("portable_quantum_omni_cell_256m", 59049, -1, 262144);
 
+    // 创造物品 - LONG级存储元件
+    public static final RegistryObject<Item> CREATIVE_AE_CELL_LONG = registerCreativeCell("creative_ae_cell_long",
+            () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1), 64, -1, -1));
+
+    // 创造物品 - BigInteger级存储元件
+    public static final RegistryObject<Item> CREATIVE_AE_CELL_BIGINTEGER = registerCreativeCell("creative_ae_cell_biginteger",
+            () -> new AEBigIntegerCellItem(new Item.Properties().stacksTo(1), 64));
+
     public static void register(IEventBus eventBus)
     {
         ITEMS.register(eventBus);
@@ -179,6 +190,11 @@ public class OCItems
     public static List<RegistryObject<Item>> getOthers()
     {
         return Collections.unmodifiableList(OTHERS);
+    }
+    /** 创造存储元件 */
+    public static List<RegistryObject<Item>> getCreativeCells()
+    {
+        return Collections.unmodifiableList(CREATIVE_CELLS);
     }
 
     // ---------- 工具方法 ----------
@@ -252,6 +268,15 @@ public class OCItems
         );
         ALL.add(obj);
         PORTABLE_CELLS.add(obj);
+        return obj;
+    }
+
+    // 创造元件
+    private static RegistryObject<Item> registerCreativeCell(
+            String name, Supplier<Item> sup)
+    {
+        RegistryObject<Item> obj = registerItem(name, sup);
+        CREATIVE_CELLS.add(obj);
         return obj;
     }
 }
