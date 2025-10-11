@@ -108,8 +108,13 @@
   "item.ae2omnicells.portable_quantum_omni_cell_16m": "Celda de almacenamiento cuántica portátil de 16M",
   "item.ae2omnicells.portable_quantum_omni_cell_64m": "Celda de almacenamiento cuántica portátil de 64M",
   "item.ae2omnicells.portable_quantum_omni_cell_256m": "Celda de almacenamiento cuántica portátil de 256M",
+  "item.ae2omnicells.creative_ae_cell_long": "Celda de Almacenamiento Creativa (nivel LONG)",
+  "item.ae2omnicells.creative_ae_cell_biginteger": "Celda de Almacenamiento Creativa (nivel BIG-INTEGER)",
 
   "block.ae2omnicells.ender_ingot_block": "Bloque de acero de Ender",
   "block.ae2omnicells.netherite_scrap_block": "Bloque de restos de netherita",
-  "block.ae2omnicells.singularity_block": "Bloque de singularidad"
+  "block.ae2omnicells.singularity_block": "Bloque de singularidad",
+
+  "pack.ae2omnicells.optional_textures.title": "Celdas de Almacenamiento OMNI: Paquete de recursos opcional",
+  "pack.ae2omnicells.optional_textures": "Permite alternar las texturas entre estilos clásico y moderno; colócalo por encima de Mod Resources para activarlo."
 }

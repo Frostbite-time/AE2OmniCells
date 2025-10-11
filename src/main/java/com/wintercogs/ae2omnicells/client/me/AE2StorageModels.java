@@ -115,7 +115,10 @@ public class AE2StorageModels
                 PORTABLE_QUANTUM_OMNI_CELL_4M.get(),
                 PORTABLE_QUANTUM_OMNI_CELL_16M.get(),
                 PORTABLE_QUANTUM_OMNI_CELL_64M.get(),
-                PORTABLE_QUANTUM_OMNI_CELL_256M.get()
+                PORTABLE_QUANTUM_OMNI_CELL_256M.get(),
+                // 创造
+                CREATIVE_AE_CELL_LONG.get(),
+                CREATIVE_AE_CELL_BIGINTEGER.get()
         );
     }
 

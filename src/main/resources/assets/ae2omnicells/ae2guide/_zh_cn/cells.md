@@ -98,6 +98,8 @@ item_ids:
   - portable_quantum_omni_cell_16m
   - portable_quantum_omni_cell_64m
   - portable_quantum_omni_cell_256m
+  - creative_ae_cell_long
+  - creative_ae_cell_biginteger
 ---
 
 # 存储元件
@@ -183,6 +185,19 @@ item_ids:
 
 以上每个系列与容量，均提供**对应的便携版本**。   
 便携版与同系列磁盘行为一致，适合外出或离站访问网络使用场景。
+
+---
+
+## 创造存储元件
+<Row>
+  <ItemImage id="creative_ae_cell_long" scale="3" />
+  <ItemImage id="creative_ae_cell_biginteger" scale="3" />
+</Row>
+
+- **LONG 级创造存储元件**：可用字节为 **long** 最大值。
+- **BIG-INTEGER 级创造存储元件**：可用字节**无限**，但**性能较差**。可存储任意数量的资源；当存量超过 long 最大值时，**UI 不会显示超出部分**，但这些资源**实际存在且可用**。
+
+创造存储元件**不提供默认配方**，如需使用请自行添加。
 
 ---
 

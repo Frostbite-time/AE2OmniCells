@@ -108,8 +108,13 @@
   "item.ae2omnicells.portable_quantum_omni_cell_16m": "16M Portable Quantum Storage Cell",
   "item.ae2omnicells.portable_quantum_omni_cell_64m": "64M Portable Quantum Storage Cell",
   "item.ae2omnicells.portable_quantum_omni_cell_256m": "256M Portable Quantum Storage Cell",
+  "item.ae2omnicells.creative_ae_cell_long": "LONG-tier Creative Storage Cell",
+  "item.ae2omnicells.creative_ae_cell_biginteger": "BIG-INTEGER-tier Creative Storage Cell",
 
   "block.ae2omnicells.ender_ingot_block": "Ender Steel Block",
   "block.ae2omnicells.netherite_scrap_block": "Netherite Scrap Block",
-  "block.ae2omnicells.singularity_block": "Singularity Block"
+  "block.ae2omnicells.singularity_block": "Singularity Block",
+
+  "pack.ae2omnicells.optional_textures.title": "OMNI Cells: Optional Resource Pack",
+  "pack.ae2omnicells.optional_textures": "Allows textures to switch between classic and modern styles; place above Mod Resources to enable."
 }
