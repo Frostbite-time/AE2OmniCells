@@ -145,13 +145,11 @@ public class ModItemModelProvider extends ItemModelProvider
     {
         // 让 EFH 放行校验
         allowExternalTexture(housing);
-        allowExternalTexture("ae2:item/portable_cell_led");
-        allowExternalTexture("ae2:item/portable_cell_screen");
         allowExternalTexture(side);
 
         return withExistingParent(getItemName(item), mcLoc("item/generated"))
-                .texture("layer0", "ae2:item/portable_cell_screen")
-                .texture("layer1", "ae2:item/portable_cell_led")
+                .texture("layer0", "ae2omnicells:item/led/portable_cell_screen")
+                .texture("layer1", "ae2omnicells:item/led/portable_cell_led")
                 .texture("layer2", housing)
                 .texture("layer3", side);
     }
@@ -179,10 +177,9 @@ public class ModItemModelProvider extends ItemModelProvider
         ResourceLocation id = BuiltInRegistries.ITEM.getKey(item);
         var base = modLoc("item/" + id.getPath());
 
-        allowExternalTexture("ae2:item/storage_cell_led");
         return withExistingParent(id.getPath(), mcLoc("item/generated"))
                 .texture("layer0", base)
-                .texture("layer1", "ae2:item/storage_cell_led");
+                .texture("layer1", "ae2omnicells:item/led/storage_cell_led");
     }
 
 }

@@ -113,5 +113,8 @@
 
   "block.ae2omnicells.ender_ingot_block": "末影钢块",
   "block.ae2omnicells.netherite_scrap_block": "下界合金碎片块",
-  "block.ae2omnicells.singularity_block": "奇点块"
+  "block.ae2omnicells.singularity_block": "奇点块",
+
+  "pack.ae2omnicells.optional_textures.title": "OMNI 存储元件：可选资源包",
+  "pack.ae2omnicells.optional_textures": "让材质在经典和现代风之间切换，请置于Mod Resource上方以启用。"
 }

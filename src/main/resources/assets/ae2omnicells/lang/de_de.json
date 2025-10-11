@@ -113,5 +113,8 @@
 
   "block.ae2omnicells.ender_ingot_block": "Enderstahlblock",
   "block.ae2omnicells.netherite_scrap_block": "Netherit-Schrott-Block",
-  "block.ae2omnicells.singularity_block": "Singularitätsblock"
+  "block.ae2omnicells.singularity_block": "Singularitätsblock",
+
+  "pack.ae2omnicells.optional_textures.title": "OMNI-Speicherzellen: Optionales Ressourcenpaket",
+  "pack.ae2omnicells.optional_textures": "Ermöglicht das Umschalten der Texturen zwischen klassischem und modernem Stil; bitte oberhalb von Mod Resources platzieren, um zu aktivieren."
 }

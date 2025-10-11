@@ -113,5 +113,8 @@
 
   "block.ae2omnicells.ender_ingot_block": "エンダースチールブロック",
   "block.ae2omnicells.netherite_scrap_block": "ネザライトの欠片ブロック",
-  "block.ae2omnicells.singularity_block": "特異点ブロック"
+  "block.ae2omnicells.singularity_block": "特異点ブロック",
+
+  "pack.ae2omnicells.optional_textures.title": "OMNIストレージセル：オプションのリソースパック",
+  "pack.ae2omnicells.optional_textures": "テクスチャをクラシックとモダンのスタイル間で切り替えられます。有効にするには、Mod Resources より上に配置してください。"
 }

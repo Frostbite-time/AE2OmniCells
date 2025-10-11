@@ -113,5 +113,8 @@
 
   "block.ae2omnicells.ender_ingot_block": "Блок эндер-стали",
   "block.ae2omnicells.netherite_scrap_block": "Блок обломков незерита",
-  "block.ae2omnicells.singularity_block": "Блок сингулярности"
+  "block.ae2omnicells.singularity_block": "Блок сингулярности",
+
+  "pack.ae2omnicells.optional_textures.title": "Ячейки хранения OMNI: необязательный пакет ресурсов",
+  "pack.ae2omnicells.optional_textures": "Позволяет переключать текстуры между классическим и современным стилями; чтобы включить, разместите выше Mod Resources."
 }

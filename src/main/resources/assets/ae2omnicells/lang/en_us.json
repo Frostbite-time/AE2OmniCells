@@ -113,5 +113,8 @@
 
   "block.ae2omnicells.ender_ingot_block": "Ender Steel Block",
   "block.ae2omnicells.netherite_scrap_block": "Netherite Scrap Block",
-  "block.ae2omnicells.singularity_block": "Singularity Block"
+  "block.ae2omnicells.singularity_block": "Singularity Block",
+
+  "pack.ae2omnicells.optional_textures.title": "OMNI Cells: Optional Resource Pack",
+  "pack.ae2omnicells.optional_textures": "Allows textures to switch between classic and modern styles; place above Mod Resources to enable."
 }

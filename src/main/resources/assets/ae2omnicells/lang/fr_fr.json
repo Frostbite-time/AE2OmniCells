@@ -113,5 +113,8 @@
 
   "block.ae2omnicells.ender_ingot_block": "Bloc d’acier d’Ender",
   "block.ae2omnicells.netherite_scrap_block": "Bloc de débris de Netherite",
-  "block.ae2omnicells.singularity_block": "Bloc de singularité"
+  "block.ae2omnicells.singularity_block": "Bloc de singularité",
+
+  "pack.ae2omnicells.optional_textures.title": "Cellules de stockage OMNI : Pack de ressources optionnel",
+  "pack.ae2omnicells.optional_textures": "Permet de basculer les textures entre styles classique et moderne ; placez-le au-dessus de Mod Resources pour l’activer."
 }
