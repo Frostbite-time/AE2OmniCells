@@ -108,6 +108,8 @@
   "item.ae2omnicells.portable_quantum_omni_cell_16m": "16M 포터블 양자 스토리지 셀",
   "item.ae2omnicells.portable_quantum_omni_cell_64m": "64M 포터블 양자 스토리지 셀",
   "item.ae2omnicells.portable_quantum_omni_cell_256m": "256M 포터블 양자 스토리지 셀",
+  "item.ae2omnicells.creative_ae_cell_long": "크리에이티브 스토리지 셀 (LONG급)",
+  "item.ae2omnicells.creative_ae_cell_biginteger": "크리에이티브 스토리지 셀 (BIG-INTEGER급)",
 
   "block.ae2omnicells.ender_ingot_block": "엔더 스틸 블록",
   "block.ae2omnicells.netherite_scrap_block": "네더라이트 파편 블록",

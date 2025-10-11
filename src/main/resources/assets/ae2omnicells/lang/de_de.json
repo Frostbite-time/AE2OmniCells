@@ -108,6 +108,8 @@
   "item.ae2omnicells.portable_quantum_omni_cell_16m": "16M Tragbare Quanten-OMNI-Speicherzelle",
   "item.ae2omnicells.portable_quantum_omni_cell_64m": "64M Tragbare Quanten-OMNI-Speicherzelle",
   "item.ae2omnicells.portable_quantum_omni_cell_256m": "256M Tragbare Quanten-OMNI-Speicherzelle",
+  "item.ae2omnicells.creative_ae_cell_long": "Kreative Speicherzelle (Stufe LONG)",
+  "item.ae2omnicells.creative_ae_cell_biginteger": "Kreative Speicherzelle (Stufe BIG-INTEGER)",
 
   "block.ae2omnicells.ender_ingot_block": "Enderstahlblock",
   "block.ae2omnicells.netherite_scrap_block": "Netherit-Schrott-Block",

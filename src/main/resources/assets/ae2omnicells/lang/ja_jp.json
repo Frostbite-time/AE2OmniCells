@@ -108,6 +108,8 @@
   "item.ae2omnicells.portable_quantum_omni_cell_16m": "16M ポータブル量子OMNIストレージセル",
   "item.ae2omnicells.portable_quantum_omni_cell_64m": "64M ポータブル量子OMNIストレージセル",
   "item.ae2omnicells.portable_quantum_omni_cell_256m": "256M ポータブル量子OMNIストレージセル",
+  "item.ae2omnicells.creative_ae_cell_long": "クリエイティブストレージセル（LONG級）",
+  "item.ae2omnicells.creative_ae_cell_biginteger": "クリエイティブストレージセル（BIG-INTEGER級）",
 
   "block.ae2omnicells.ender_ingot_block": "エンダースチールブロック",
   "block.ae2omnicells.netherite_scrap_block": "ネザライトの欠片ブロック",

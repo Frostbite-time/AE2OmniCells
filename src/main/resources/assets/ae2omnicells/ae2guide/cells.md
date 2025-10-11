@@ -98,6 +98,8 @@ item_ids:
   - portable_quantum_omni_cell_16m
   - portable_quantum_omni_cell_64m
   - portable_quantum_omni_cell_256m
+  - creative_ae_cell_long
+  - creative_ae_cell_biginteger
 ---
 
 # Storage Cells
@@ -183,6 +185,19 @@ The only difference between series is the strategy for the **maximum number of d
 
 Every series and capacity above also has a **portable variant**.  
 Portable versions behave the same as their series counterparts and suit use cases like traveling or out-of-network access.
+
+---
+
+## Creative Storage Cells
+<Row>
+  <ItemImage id="creative_ae_cell_long" scale="3" />
+  <ItemImage id="creative_ae_cell_biginteger" scale="3" />
+</Row>
+
+- **LONG-tier Creative Storage Cell**: usable bytes equal to the **maximum value of `long`**.
+- **BIG-INTEGER–tier Creative Storage Cell**: **unlimited** usable bytes but **worse performance**. You can store any amount of resources; when the amount exceeds the `long` maximum, the **UI will not show the excess**, but those resources **do exist and remain usable**.
+
+Creative storage cells **do not provide default recipes**; add them yourself if needed.
 
 ---
 

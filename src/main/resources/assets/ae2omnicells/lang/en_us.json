@@ -108,6 +108,8 @@
   "item.ae2omnicells.portable_quantum_omni_cell_16m": "16M Portable Quantum Storage Cell",
   "item.ae2omnicells.portable_quantum_omni_cell_64m": "64M Portable Quantum Storage Cell",
   "item.ae2omnicells.portable_quantum_omni_cell_256m": "256M Portable Quantum Storage Cell",
+  "item.ae2omnicells.creative_ae_cell_long": "LONG-tier Creative Storage Cell",
+  "item.ae2omnicells.creative_ae_cell_biginteger": "BIG-INTEGER-tier Creative Storage Cell",
 
   "block.ae2omnicells.ender_ingot_block": "Ender Steel Block",
   "block.ae2omnicells.netherite_scrap_block": "Netherite Scrap Block",
