@@ -193,7 +193,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .addRecipe(r -> ReactionChamberRecipeBuilder.react(OCItems.ENDER_INGOT.get(), 64, 500000)
                         .input(AEItems.ENDER_DUST, 32)
                         .input(Items.IRON_INGOT, 32)
-                        .input(AEItems.CERTUS_QUARTZ_CRYSTAL, 32)
+                        .input(AEItems.CERTUS_QUARTZ_CRYSTAL_CHARGED, 32)
                         .fluid(Fluids.WATER, 500)
                         .save(r, AE2OmniCells.makeId("reaction_chamber/ender_ingot")))
                 .build(recipeOutput, AE2OmniCells.makeId("reaction_chamber/ender_ingot"));
