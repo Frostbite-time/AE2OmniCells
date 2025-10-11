@@ -108,6 +108,8 @@
   "item.ae2omnicells.portable_quantum_omni_cell_16m": "16M 便携量子存储元件",
   "item.ae2omnicells.portable_quantum_omni_cell_64m": "64M 便携量子存储元件",
   "item.ae2omnicells.portable_quantum_omni_cell_256m": "256M 便携量子存储元件",
+  "item.ae2omnicells.creative_ae_cell_long": "LONG级 创造存储元件",
+  "item.ae2omnicells.creative_ae_cell_biginteger": "BIG INTEGER级 创造存储元件",
 
   "block.ae2omnicells.ender_ingot_block": "末影钢块",
   "block.ae2omnicells.netherite_scrap_block": "下界合金碎片块",

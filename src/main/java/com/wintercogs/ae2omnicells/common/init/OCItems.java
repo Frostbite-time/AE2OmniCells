@@ -1,6 +1,7 @@
 package com.wintercogs.ae2omnicells.common.init;
 
 import com.wintercogs.ae2omnicells.AE2OmniCells;
+import com.wintercogs.ae2omnicells.common.items.AEBigIntegerCellItem;
 import com.wintercogs.ae2omnicells.common.items.AEPortableUniversalCellItem;
 import com.wintercogs.ae2omnicells.common.items.AEUniversalCellItem;
 import net.minecraft.world.item.Item;
@@ -158,6 +159,10 @@ public class OCItems
     // 创造物品 - LONG级存储元件
     public static final DeferredItem<Item> CREATIVE_AE_CELL_LONG = registerCreativeCell("creative_ae_cell_long",
             () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1), 64, -1, -1));
+
+    // 创造物品 - BigInteger级存储元件
+    public static final DeferredItem<Item> CREATIVE_AE_CELL_BIGINTEGER = registerCreativeCell("creative_ae_cell_biginteger",
+            () -> new AEBigIntegerCellItem(new Item.Properties().stacksTo(1), 64));
 
     public static void register(IEventBus eventBus)
     {

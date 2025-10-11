@@ -2,15 +2,19 @@ package com.wintercogs.ae2omnicells.common.init;
 
 import appeng.api.stacks.GenericStack;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +36,31 @@ public class OCDataComponents {
                     .persistent(Codec.LONG)
                     .networkSynchronized(ByteBufCodecs.VAR_LONG)
                     .cacheEncoding()
+            );
+
+    // 已用字节-BigInteger版
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<BigInteger>> CELL_BYTE_USAGE_BIG =
+            register("cell_byte_usage_big", b -> b
+                    .persistent(Codec.STRING.comapFlatMap(
+                            s -> {
+                                try {
+                                    return DataResult.success(new BigInteger(s));
+                                } catch (NumberFormatException e) {
+                                    return DataResult.error(() -> "Invalid BigInteger: " + s);
+                                }
+                            },
+                            BigInteger::toString
+                    ))
+                    .networkSynchronized(StreamCodec.of(
+                            (RegistryFriendlyByteBuf buf, BigInteger v) -> {
+                                byte[] arr = v.toByteArray();
+                                buf.writeByteArray(arr);
+                            },
+                            (RegistryFriendlyByteBuf buf) -> {
+                                byte[] arr = buf.readByteArray();
+                                return new BigInteger(arr);
+                            }
+                    ))
             );
 
     // 已用类型

@@ -282,10 +282,23 @@ public class AEUniversalCellInventory implements StorageCell
     {
         for (Object2LongMap.Entry<AEKey> entry : storage.object2LongEntrySet())
         {
-            long value = entry.getLongValue();
-            if (value > 0) out.add(entry.getKey(), value);
+            long v = entry.getLongValue();
+            if (v <= 0) continue;
+
+            // 已存在数量（KeyCounter 内部以 long 存）
+            long existing = out.get(entry.getKey());
+
+            // 可用余量（避免 Long.MAX_VALUE - 负数 的怪异情况）
+            long headroom = (existing <= 0) ? Long.MAX_VALUE : (Long.MAX_VALUE - existing);
+            if (headroom <= 0) continue;
+
+            long add = v;
+            if (add > headroom) add = headroom;
+
+            out.add(entry.getKey(), add);
         }
     }
+
 
     @Override
     public Component getDescription()

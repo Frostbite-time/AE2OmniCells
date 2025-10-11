@@ -30,8 +30,9 @@ public class AE2StorageModels
 
     public static void registerStorageModels()
     {
-        // 创造元件
+        // 创造元件 直接借用AE原版的模型
         StorageCellModels.registerModel(CREATIVE_AE_CELL_LONG, MODEL_CELL_CREATIVE);
+        StorageCellModels.registerModel(CREATIVE_AE_CELL_BIGINTEGER, MODEL_CELL_CREATIVE);
 
         // 普通（非便携 + 便携）
         registerSeries(
@@ -98,7 +99,8 @@ public class AE2StorageModels
                 QUANTUM_OMNI_CELL_64M.get(),
                 QUANTUM_OMNI_CELL_256M.get(),
                 // 创造
-                CREATIVE_AE_CELL_LONG.get()
+                CREATIVE_AE_CELL_LONG.get(),
+                CREATIVE_AE_CELL_BIGINTEGER.get()
         );
 
         event.register((itemStack, idx) -> FastColor.ARGB32.opaque(AEPortableUniversalCellItem.getColor(itemStack, idx)),
