@@ -136,7 +136,7 @@ public class AEBigIntegerCellData extends SavedData
         s.defaultReturnValue(BigInteger.ZERO);
         AEBigIntegerCellData newData = new AEBigIntegerCellData(s);
         dataStorage.set(makeKey(fresh), newData);
-        newData.setDirty(); // 标脏以便尽快保存
+        // 不为空数据标脏，直到有insert/extract操作后由它们标脏
 
         return newData;
     }
