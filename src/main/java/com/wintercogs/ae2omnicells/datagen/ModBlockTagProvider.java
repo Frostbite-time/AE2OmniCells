@@ -5,6 +5,7 @@ import com.wintercogs.ae2omnicells.common.init.OCBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -25,6 +26,11 @@ public class ModBlockTagProvider extends BlockTagsProvider
     {
         // 标记以下方块使用镐子挖掘更快
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                .add(OCBlocks.ENDER_INGOT_BLOCK.get())
+                .add(OCBlocks.NETHERITE_SCRAP_BLOCK.get())
+                .add(OCBlocks.SINGULARITY_BLOCK.get());
+
+        tag(Tags.Blocks.STORAGE_BLOCKS)
                 .add(OCBlocks.ENDER_INGOT_BLOCK.get())
                 .add(OCBlocks.NETHERITE_SCRAP_BLOCK.get())
                 .add(OCBlocks.SINGULARITY_BLOCK.get());

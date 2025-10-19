@@ -39,7 +39,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         // 末影钢锭
         InscriberRecipeBuilder.inscribe(Items.IRON_INGOT, OCItems.ENDER_INGOT.get(), 1)
                 .setTop(Ingredient.of(AEItems.ENDER_DUST.asItem()))
-                .setBottom(Ingredient.of(AEItems.CERTUS_QUARTZ_CRYSTAL))
+                .setBottom(Ingredient.of(AEItems.CERTUS_QUARTZ_DUST))
                 .setMode(InscriberProcessType.PRESS)
                 .save(recipeOutput, AE2OmniCells.makeId("ender_ingot"));
 
@@ -193,7 +193,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .addRecipe(r -> ReactionChamberRecipeBuilder.react(OCItems.ENDER_INGOT.get(), 64, 500000)
                         .input(AEItems.ENDER_DUST, 32)
                         .input(Items.IRON_INGOT, 32)
-                        .input(AEItems.CERTUS_QUARTZ_CRYSTAL_CHARGED, 32)
+                        .input(AEItems.CERTUS_QUARTZ_DUST, 32)
                         .fluid(Fluids.WATER, 500)
                         .save(r, AE2OmniCells.makeId("reaction_chamber/ender_ingot")))
                 .build(recipeOutput, AE2OmniCells.makeId("reaction_chamber/ender_ingot"));
@@ -204,6 +204,34 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                         .fluid(Fluids.WATER, 1000)
                         .save(r, AE2OmniCells.makeId("reaction_chamber/charged_ender_ingot")))
                 .build(recipeOutput, AE2OmniCells.makeId("reaction_chamber/charged_ender_ingot"));
+        // 处理器制作
+        ConditionalRecipe.builder()
+                .addCondition(modLoaded(AE2OmniCells.AAE_MODID))
+                .addRecipe(r -> ReactionChamberRecipeBuilder.react(OCItems.OMNI_LINK_PROCESSOR.get(), 4, 20000)
+                        .input(OCItems.OMNI_LINK_CIRCUIT_PRINT.get(), 4)
+                        .input(AEItems.SILICON_PRINT, 4)
+                        .input(Items.REDSTONE, 4)
+                        .fluid(Fluids.WATER, 100)
+                        .save(r, AE2OmniCells.makeId("reaction_chamber/omni_link_processor")))
+                .build(recipeOutput, AE2OmniCells.makeId("reaction_chamber/omni_link_processor"));
+        ConditionalRecipe.builder()
+                .addCondition(modLoaded(AE2OmniCells.AAE_MODID))
+                .addRecipe(r -> ReactionChamberRecipeBuilder.react(OCItems.COMPLEX_LINK_PROCESSOR.get(), 4, 20000)
+                        .input(OCItems.COMPLEX_LINK_CIRCUIT_PRINT.get(), 4)
+                        .input(AEItems.SILICON_PRINT, 4)
+                        .input(Items.REDSTONE, 4)
+                        .fluid(Fluids.WATER, 100)
+                        .save(r, AE2OmniCells.makeId("reaction_chamber/complex_link_processor")))
+                .build(recipeOutput, AE2OmniCells.makeId("reaction_chamber/complex_link_processor"));
+        ConditionalRecipe.builder()
+                .addCondition(modLoaded(AE2OmniCells.AAE_MODID))
+                .addRecipe(r -> ReactionChamberRecipeBuilder.react(OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR.get(), 4, 20000)
+                        .input(OCItems.MULTIDIMENSIONAL_EXPANSION_CIRCUIT_PRINT.get(), 4)
+                        .input(AEItems.SILICON_PRINT, 4)
+                        .input(Items.REDSTONE, 4)
+                        .fluid(Fluids.WATER, 100)
+                        .save(r, AE2OmniCells.makeId("reaction_chamber/multidimensional_expansion_processor")))
+                .build(recipeOutput, AE2OmniCells.makeId("reaction_chamber/multidimensional_expansion_processor"));
     }
 
     // ---------- 统一ID工具 ----------
