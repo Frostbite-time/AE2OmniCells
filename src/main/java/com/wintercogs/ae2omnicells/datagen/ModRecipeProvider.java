@@ -42,7 +42,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         // 末影钢锭
         InscriberRecipeBuilder.inscribe(Items.IRON_INGOT, OCItems.ENDER_INGOT.get(), 1)
                 .setTop(Ingredient.of(AEItems.ENDER_DUST.asItem()))
-                .setBottom(Ingredient.of(AEItems.CERTUS_QUARTZ_CRYSTAL))
+                .setBottom(Ingredient.of(AEItems.CERTUS_QUARTZ_DUST))
                 .setMode(InscriberProcessType.PRESS)
                 .save(recipeOutput, AE2OmniCells.makeId("ender_ingot"));
 
@@ -203,7 +203,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         CrystalAssemblerRecipeBuilder.assemble(OCItems.ENDER_INGOT, 4)
                 .input(AEItems.ENDER_DUST, 4)
                 .input(Items.IRON_INGOT, 4)
-                .input(AEItems.CERTUS_QUARTZ_CRYSTAL, 4)
+                .input(AEItems.CERTUS_QUARTZ_DUST, 4)
                 .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
                         AE2OmniCells.makeId("assembler/ender_ingot"));
 
@@ -212,7 +212,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         ReactionChamberRecipeBuilder.react(OCItems.ENDER_INGOT, 64, 500000)
                 .input(AEItems.ENDER_DUST, 32)
                 .input(Items.IRON_INGOT, 32)
-                .input(AEItems.CERTUS_QUARTZ_CRYSTAL_CHARGED, 32)
+                .input(AEItems.CERTUS_QUARTZ_DUST, 32)
                 .fluid(Fluids.WATER, 500)
                 .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.AAE_MODID)),
                         AE2OmniCells.makeId("reaction_chamber/ender_ingot"));

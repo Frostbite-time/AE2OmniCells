@@ -1,10 +1,13 @@
 package com.wintercogs.ae2omnicells.datagen;
 
 import com.wintercogs.ae2omnicells.AE2OmniCells;
+import com.wintercogs.ae2omnicells.common.init.OCBlocks;
+import com.wintercogs.ae2omnicells.common.init.OCItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
@@ -21,5 +24,13 @@ public class ModItemTagProvider extends ItemTagsProvider
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider)
     {
+        tag(Tags.Items.INGOTS)
+                .add(OCItems.ENDER_INGOT.get())
+                .add(OCItems.CHARGED_ENDER_INGOT.get());
+
+        tag(Tags.Items.STORAGE_BLOCKS)
+                .add(OCBlocks.ENDER_INGOT_BLOCK.asItem())
+                .add(OCBlocks.NETHERITE_SCRAP_BLOCK.asItem())
+                .add(OCBlocks.SINGULARITY_BLOCK.asItem());
     }
 }
