@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "com.wintercogs.ae2omnicells.mixins",
+  "mixins": [
+    "CraftingCPUClusterMixin"
+  ],
+  "client": [
+  ],
+  "server": [
+  ],
+  "compatibilityLevel": "JAVA_21",
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
