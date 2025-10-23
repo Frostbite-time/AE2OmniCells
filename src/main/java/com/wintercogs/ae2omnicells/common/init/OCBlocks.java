@@ -1,6 +1,8 @@
 package com.wintercogs.ae2omnicells.common.init;
 
 import com.wintercogs.ae2omnicells.AE2OmniCells;
+import com.wintercogs.ae2omnicells.common.blocks.OmniCraftingUnitBlock;
+import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingUnitType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -18,6 +20,7 @@ public class OCBlocks
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(AE2OmniCells.MODID);
 
     public static final List<DeferredBlock<? extends Block>> ALL = new ArrayList<>();
+    public static final List<DeferredBlock<? extends OmniCraftingUnitBlock>> CRAFTING_STORAGES = new ArrayList<>();
 
     // 末影钢块
     public static final DeferredBlock<Block> ENDER_INGOT_BLOCK = registerBlock("ender_ingot_block",
@@ -30,6 +33,52 @@ public class OCBlocks
     // 奇点块
     public static final DeferredBlock<Block> SINGULARITY_BLOCK = registerBlock("singularity_block",
             () -> new Block(BlockBehaviour.Properties.of().strength(2f)));
+    
+    // 三系合成存储器
+    public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_UNIT_BLOCK = registerCraftingStorageBlock("omni_crafting_unit_block", OmniCraftingUnitType.OMNI_UNIT);
+    public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_STORAGE_1K_BLOCK = registerCraftingStorageBlock("omni_crafting_storage_1k_block", OmniCraftingUnitType.OMNI_STORAGE_1K);
+    public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_STORAGE_4K_BLOCK = registerCraftingStorageBlock("omni_crafting_storage_4k_block", OmniCraftingUnitType.OMNI_STORAGE_4K);
+    public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_STORAGE_16K_BLOCK = registerCraftingStorageBlock("omni_crafting_storage_16k_block", OmniCraftingUnitType.OMNI_STORAGE_16K);
+    public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_STORAGE_64K_BLOCK = registerCraftingStorageBlock("omni_crafting_storage_64k_block", OmniCraftingUnitType.OMNI_STORAGE_64K);
+    public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_STORAGE_256K_BLOCK = registerCraftingStorageBlock("omni_crafting_storage_256k_block", OmniCraftingUnitType.OMNI_STORAGE_256K);
+    public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_STORAGE_1M_BLOCK = registerCraftingStorageBlock("omni_crafting_storage_1m_block", OmniCraftingUnitType.OMNI_STORAGE_1M);
+    public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_STORAGE_4M_BLOCK = registerCraftingStorageBlock("omni_crafting_storage_4m_block", OmniCraftingUnitType.OMNI_STORAGE_4M);
+    public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_STORAGE_16M_BLOCK = registerCraftingStorageBlock("omni_crafting_storage_16m_block", OmniCraftingUnitType.OMNI_STORAGE_16M);
+    public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_STORAGE_64M_BLOCK = registerCraftingStorageBlock("omni_crafting_storage_64m_block", OmniCraftingUnitType.OMNI_STORAGE_64M);
+    public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_STORAGE_256M_BLOCK = registerCraftingStorageBlock("omni_crafting_storage_256m_block", OmniCraftingUnitType.OMNI_STORAGE_256M);
+
+    public static final DeferredBlock<OmniCraftingUnitBlock> COMPLEX_CRAFTING_UNIT_BLOCK = registerCraftingStorageBlock("complex_crafting_unit_block", OmniCraftingUnitType.COMPLEX_UNIT);
+    public static final DeferredBlock<OmniCraftingUnitBlock> COMPLEX_CRAFTING_STORAGE_1K_BLOCK = registerCraftingStorageBlock("complex_crafting_storage_1k_block", OmniCraftingUnitType.COMPLEX_STORAGE_1K);
+    public static final DeferredBlock<OmniCraftingUnitBlock> COMPLEX_CRAFTING_STORAGE_4K_BLOCK = registerCraftingStorageBlock("complex_crafting_storage_4k_block", OmniCraftingUnitType.COMPLEX_STORAGE_4K);
+    public static final DeferredBlock<OmniCraftingUnitBlock> COMPLEX_CRAFTING_STORAGE_16K_BLOCK = registerCraftingStorageBlock("complex_crafting_storage_16k_block", OmniCraftingUnitType.COMPLEX_STORAGE_16K);
+    public static final DeferredBlock<OmniCraftingUnitBlock> COMPLEX_CRAFTING_STORAGE_64K_BLOCK = registerCraftingStorageBlock("complex_crafting_storage_64k_block", OmniCraftingUnitType.COMPLEX_STORAGE_64K);
+    public static final DeferredBlock<OmniCraftingUnitBlock> COMPLEX_CRAFTING_STORAGE_256K_BLOCK = registerCraftingStorageBlock("complex_crafting_storage_256k_block", OmniCraftingUnitType.COMPLEX_STORAGE_256K);
+    public static final DeferredBlock<OmniCraftingUnitBlock> COMPLEX_CRAFTING_STORAGE_1M_BLOCK = registerCraftingStorageBlock("complex_crafting_storage_1m_block", OmniCraftingUnitType.COMPLEX_STORAGE_1M);
+    public static final DeferredBlock<OmniCraftingUnitBlock> COMPLEX_CRAFTING_STORAGE_4M_BLOCK = registerCraftingStorageBlock("complex_crafting_storage_4m_block", OmniCraftingUnitType.COMPLEX_STORAGE_4M);
+    public static final DeferredBlock<OmniCraftingUnitBlock> COMPLEX_CRAFTING_STORAGE_16M_BLOCK = registerCraftingStorageBlock("complex_crafting_storage_16m_block", OmniCraftingUnitType.COMPLEX_STORAGE_16M);
+    public static final DeferredBlock<OmniCraftingUnitBlock> COMPLEX_CRAFTING_STORAGE_64M_BLOCK = registerCraftingStorageBlock("complex_crafting_storage_64m_block", OmniCraftingUnitType.COMPLEX_STORAGE_64M);
+    public static final DeferredBlock<OmniCraftingUnitBlock> COMPLEX_CRAFTING_STORAGE_256M_BLOCK = registerCraftingStorageBlock("complex_crafting_storage_256m_block", OmniCraftingUnitType.COMPLEX_STORAGE_256M);
+
+    public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_UNIT_BLOCK = registerCraftingStorageBlock("quantum_crafting_unit_block", OmniCraftingUnitType.QUANTUM_UNIT);
+    public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_STORAGE_1K_BLOCK = registerCraftingStorageBlock("quantum_crafting_storage_1k_block", OmniCraftingUnitType.QUANTUM_STORAGE_1K);
+    public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_STORAGE_4K_BLOCK = registerCraftingStorageBlock("quantum_crafting_storage_4k_block", OmniCraftingUnitType.QUANTUM_STORAGE_4K);
+    public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_STORAGE_16K_BLOCK = registerCraftingStorageBlock("quantum_crafting_storage_16k_block", OmniCraftingUnitType.QUANTUM_STORAGE_16K);
+    public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_STORAGE_64K_BLOCK = registerCraftingStorageBlock("quantum_crafting_storage_64k_block", OmniCraftingUnitType.QUANTUM_STORAGE_64K);
+    public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_STORAGE_256K_BLOCK = registerCraftingStorageBlock("quantum_crafting_storage_256k_block", OmniCraftingUnitType.QUANTUM_STORAGE_256K);
+    public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_STORAGE_1M_BLOCK = registerCraftingStorageBlock("quantum_crafting_storage_1m_block", OmniCraftingUnitType.QUANTUM_STORAGE_1M);
+    public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_STORAGE_4M_BLOCK = registerCraftingStorageBlock("quantum_crafting_storage_4m_block", OmniCraftingUnitType.QUANTUM_STORAGE_4M);
+    public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_STORAGE_16M_BLOCK = registerCraftingStorageBlock("quantum_crafting_storage_16m_block", OmniCraftingUnitType.QUANTUM_STORAGE_16M);
+    public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_STORAGE_64M_BLOCK = registerCraftingStorageBlock("quantum_crafting_storage_64m_block", OmniCraftingUnitType.QUANTUM_STORAGE_64M);
+    public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_STORAGE_256M_BLOCK = registerCraftingStorageBlock("quantum_crafting_storage_256m_block", OmniCraftingUnitType.QUANTUM_STORAGE_256M);
+
+    private static DeferredBlock<OmniCraftingUnitBlock> registerCraftingStorageBlock(String name, OmniCraftingUnitType type)
+    {
+        DeferredBlock<OmniCraftingUnitBlock> toReturn = 
+                registerBlock(name, () -> new OmniCraftingUnitBlock(BlockBehaviour.Properties.of(), type));
+        
+        CRAFTING_STORAGES.add(toReturn);
+        return toReturn;
+    }
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block)
     {
