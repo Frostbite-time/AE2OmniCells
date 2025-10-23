@@ -45,6 +45,7 @@ public class AE2OmniCells
         OCDataComponents.register(modEventBus);
         OCItems.register(modEventBus);
         OCBlocks.register(modEventBus);
+        OCBlockEntities.register(modEventBus);
         OCCreativeModeTabs.register(modEventBus);
         OCMenus.registerMenus(modEventBus);
     }

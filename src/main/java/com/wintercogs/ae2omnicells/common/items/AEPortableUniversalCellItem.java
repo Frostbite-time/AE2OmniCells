@@ -12,9 +12,11 @@ import appeng.items.contents.CellConfig;
 import appeng.items.storage.StorageCellTooltipComponent;
 import appeng.items.tools.powered.AbstractPortableCell;
 import appeng.items.tools.powered.PoweredContainerItem;
+import appeng.items.tools.powered.powersink.PoweredItemCapabilities;
 import appeng.util.ConfigInventory;
 import appeng.util.Platform;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
+import com.wintercogs.ae2omnicells.common.init.OCItems;
 import com.wintercogs.ae2omnicells.common.me.IAEUniversalCell;
 import com.wintercogs.ae2omnicells.common.me.localization.AEUniversalTooltips;
 import net.minecraft.network.chat.Component;
@@ -24,6 +26,9 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -61,6 +66,15 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
         this.idleDrain = idleDrain;
         this.totalBytes = kiloBytes > 0 ? kiloBytes * 1024 : -1;
         this.totalTypes = totalTypes;
+    }
+
+    public static void onRegisterCaps(RegisterCapabilitiesEvent event)
+    {
+        for(DeferredItem<AEPortableUniversalCellItem> item : OCItems.getPortableCells())
+        {
+            event.registerItem(Capabilities.EnergyStorage.ITEM,
+                    (stack, unused) -> new PoweredItemCapabilities(stack, item.get()), item);
+        }
     }
 
     public static int getColor(ItemStack stack, int tintIndex)
