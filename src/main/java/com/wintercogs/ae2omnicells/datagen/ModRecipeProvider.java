@@ -2,6 +2,8 @@ package com.wintercogs.ae2omnicells.datagen;
 
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
+import appeng.core.definitions.AEParts;
+import appeng.recipes.game.CraftingUnitTransformRecipe;
 import appeng.recipes.handlers.ChargerRecipeBuilder;
 import appeng.recipes.handlers.InscriberProcessType;
 import appeng.recipes.handlers.InscriberRecipeBuilder;
@@ -22,10 +24,13 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.pedroksl.advanced_ae.recipes.ReactionChamberRecipeBuilder;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ModRecipeProvider extends RecipeProvider implements IConditionBuilder
@@ -162,6 +167,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         // 统一生成所有外壳、组件、元件配方
         buildAllByTiers(recipeOutput);
+        // 统一生成所有合成存储器的升级配方
+        buildAllCraftingUnitTransforms(recipeOutput);
 
         // EAE联动配方---------------------------------------------------------------------------------------------------------
 
@@ -240,6 +247,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     private static ResourceLocation disassemblyId(String series, DeferredItem<? extends Item> idLike, boolean portable) {
         String base = (portable ? "disassembly/portable/" : "disassembly/") + series + "/" + idLike.getId().getPath();
         return AE2OmniCells.makeId(base);
+    }
+    private static ResourceLocation craftingUnitUpgradeId(DeferredBlock<?> craftingUnit)
+    {
+        return AE2OmniCells.makeId("crafting_unit_upgrade/" + craftingUnit.getId().getPath());
     }
 
     // 这是什么系列的硬盘？
@@ -497,6 +508,60 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                     .add(AEBlocks.ME_CHEST.asItem())
                     .add(AEBlocks.ENERGY_CELL.asItem())
                     .save(out, disassemblyId(mats.seriesFolder(), row.portableCell(), true));
+        }
+    }
+
+
+    // 合成存储器升级配方构建
+    record UnitTransformTier(DeferredBlock<?> baseBlock, ItemLike upgradeItem) {}
+
+    private void buildAllCraftingUnitTransforms(RecipeOutput output)
+    {
+        List<UnitTransformTier> tiers = new ArrayList<>();
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_MONITOR_BLOCK, AEParts.STORAGE_MONITOR));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_1K_BLOCK, OCItems.OMNI_CELL_COMPONENT_1K));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_4K_BLOCK, OCItems.OMNI_CELL_COMPONENT_4K));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_16K_BLOCK, OCItems.OMNI_CELL_COMPONENT_16K));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_64K_BLOCK, OCItems.OMNI_CELL_COMPONENT_64K));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_256K_BLOCK, OCItems.OMNI_CELL_COMPONENT_256K));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_1M_BLOCK, OCItems.OMNI_CELL_COMPONENT_1M));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_4M_BLOCK, OCItems.OMNI_CELL_COMPONENT_4M));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_16M_BLOCK, OCItems.OMNI_CELL_COMPONENT_16M));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_64M_BLOCK, OCItems.OMNI_CELL_COMPONENT_64M));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_256M_BLOCK, OCItems.OMNI_CELL_COMPONENT_256M));
+
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_MONITOR_BLOCK, AEParts.STORAGE_MONITOR));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_1K_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_1K));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_4K_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_4K));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_16K_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_16K));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_64K_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_64K));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_256K_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_256K));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_1M_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_1M));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_4M_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_4M));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_16M_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_16M));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_64M_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_64M));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_256M_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_256M));
+
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_MONITOR_BLOCK, AEParts.STORAGE_MONITOR));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_1K_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_1K));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_4K_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_4K));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_16K_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_16K));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_64K_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_64K));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_256K_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_256K));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_1M_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_1M));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_4M_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_4M));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_16M_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_16M));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_64M_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_64M));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_256M_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_256M));
+
+        for(UnitTransformTier tier : tiers)
+        {
+            output.accept(
+                    craftingUnitUpgradeId(tier.baseBlock),
+                    new CraftingUnitTransformRecipe(
+                            tier.baseBlock.get(),
+                            tier.upgradeItem.asItem()),
+                    null);
         }
     }
 

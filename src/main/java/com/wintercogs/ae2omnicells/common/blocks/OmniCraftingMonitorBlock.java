@@ -1,6 +1,7 @@
 package com.wintercogs.ae2omnicells.common.blocks;
 
 import appeng.block.crafting.AbstractCraftingUnitBlock;
+import appeng.block.crafting.CraftingMonitorBlock;
 import appeng.blockentity.crafting.CraftingBlockEntity;
 import appeng.core.localization.PlayerMessages;
 import appeng.menu.MenuOpener;
@@ -8,7 +9,6 @@ import appeng.menu.locator.MenuLocators;
 import appeng.menu.me.crafting.CraftingCPUMenu;
 import appeng.recipes.game.CraftingUnitTransformRecipe;
 import appeng.util.InteractionUtil;
-import com.wintercogs.ae2omnicells.common.blocks.entities.OmniCraftingBlockEntity;
 import com.wintercogs.ae2omnicells.common.init.OCBlocks;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingStorageType;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingUnitType;
@@ -25,14 +25,14 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
-public class OmniCraftingUnitBlock extends AbstractCraftingUnitBlock<OmniCraftingBlockEntity>
+public class OmniCraftingMonitorBlock extends CraftingMonitorBlock
 {
     /** 与type变量一致，但是这里保留了更多类型信息 */
     private final OmniCraftingUnitType omniCraftingType;
 
-    public OmniCraftingUnitBlock(Properties props, OmniCraftingUnitType type)
+    public OmniCraftingMonitorBlock(OmniCraftingUnitType type)
     {
-        super(props, type);
+        super(type);
         this.omniCraftingType = type;
     }
 
@@ -86,8 +86,8 @@ public class OmniCraftingUnitBlock extends AbstractCraftingUnitBlock<OmniCraftin
 
         Block nowBlock = state.getBlock();
         boolean isUnitBlock = nowBlock == OCBlocks.OMNI_CRAFTING_UNIT_BLOCK.get()
-                        || nowBlock == OCBlocks.COMPLEX_CRAFTING_UNIT_BLOCK.get()
-                        || nowBlock == OCBlocks.QUANTUM_CRAFTING_UNIT_BLOCK.get();
+                || nowBlock == OCBlocks.COMPLEX_CRAFTING_UNIT_BLOCK.get()
+                || nowBlock == OCBlocks.QUANTUM_CRAFTING_UNIT_BLOCK.get();
         InteractionResult result = isUnitBlock
                 ? this.transform(level, pos, newState) ? InteractionResult.SUCCESS : InteractionResult.FAIL
                 : this.removeUpgrade(level, player, pos, newState);
