@@ -1,5 +1,6 @@
 package com.wintercogs.ae2omnicells.common.init;
 
+import appeng.api.AECapabilities;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.blocks.entities.OmniCraftingBlockEntity;
 import com.wintercogs.ae2omnicells.common.items.AEPortableUniversalCellItem;
@@ -15,5 +16,10 @@ public class OCCapabilities
     {
         OmniCraftingBlockEntity.onRegisterCaps(event);
         AEPortableUniversalCellItem.onRegisterCaps(event);
+        event.registerBlockEntity(
+                AECapabilities.IN_WORLD_GRID_NODE_HOST,
+                OCBlockEntities.OMNI_CRAFTING_MONITOR_BLOCK_ENTITY.get(),
+                (be, unused) -> be
+        );
     }
 }

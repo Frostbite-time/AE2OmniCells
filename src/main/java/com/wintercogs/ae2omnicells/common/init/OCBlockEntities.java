@@ -4,6 +4,7 @@ import appeng.block.AEBaseEntityBlock;
 import appeng.blockentity.AEBaseBlockEntity;
 import appeng.blockentity.ClientTickingBlockEntity;
 import appeng.blockentity.ServerTickingBlockEntity;
+import appeng.blockentity.crafting.CraftingMonitorBlockEntity;
 import com.google.common.base.Preconditions;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.blocks.entities.OmniCraftingBlockEntity;
@@ -39,6 +40,14 @@ public class OCBlockEntities
             OmniCraftingBlockEntity.class,
             OmniCraftingBlockEntity::new,
             OCBlocks.CRAFTING_STORAGES.toArray(new Supplier[0]) // 这里我们自己清楚很安全
+    );
+
+    @SuppressWarnings("unchecked")
+    public static final DeferredBlockEntityType<CraftingMonitorBlockEntity> OMNI_CRAFTING_MONITOR_BLOCK_ENTITY = create(
+            "omni_crating_monitor_block_entity",
+            CraftingMonitorBlockEntity.class,
+            CraftingMonitorBlockEntity::new,
+            OCBlocks.CRAFTING_MONITORS.toArray(new Supplier[0]) // 此处安全
     );
 
     public static void register(IEventBus eventBus)

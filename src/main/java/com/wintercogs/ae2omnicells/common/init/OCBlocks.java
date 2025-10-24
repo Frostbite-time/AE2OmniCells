@@ -1,5 +1,7 @@
 package com.wintercogs.ae2omnicells.common.init;
 
+import appeng.block.AEBaseBlock;
+import appeng.block.crafting.CraftingMonitorBlock;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.blocks.OmniCraftingUnitBlock;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingUnitType;
@@ -21,6 +23,7 @@ public class OCBlocks
 
     public static final List<DeferredBlock<? extends Block>> ALL = new ArrayList<>();
     public static final List<DeferredBlock<? extends OmniCraftingUnitBlock>> CRAFTING_STORAGES = new ArrayList<>();
+    public static final List<DeferredBlock<? extends CraftingMonitorBlock>> CRAFTING_MONITORS = new ArrayList<>();
 
     // 末影钢块
     public static final DeferredBlock<Block> ENDER_INGOT_BLOCK = registerBlock("ender_ingot_block",
@@ -36,6 +39,7 @@ public class OCBlocks
     
     // 三系合成存储器
     public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_UNIT_BLOCK = registerCraftingStorageBlock("omni_crafting_unit_block", OmniCraftingUnitType.OMNI_UNIT);
+    public static final DeferredBlock<CraftingMonitorBlock> OMNI_CRAFTING_MONITOR_BLOCK = registerCraftingMonitorBlock("omni_crafting_monitor_block", OmniCraftingUnitType.OMNI_MONITOR);
     public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_STORAGE_1K_BLOCK = registerCraftingStorageBlock("omni_crafting_storage_1k_block", OmniCraftingUnitType.OMNI_STORAGE_1K);
     public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_STORAGE_4K_BLOCK = registerCraftingStorageBlock("omni_crafting_storage_4k_block", OmniCraftingUnitType.OMNI_STORAGE_4K);
     public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_STORAGE_16K_BLOCK = registerCraftingStorageBlock("omni_crafting_storage_16k_block", OmniCraftingUnitType.OMNI_STORAGE_16K);
@@ -48,6 +52,7 @@ public class OCBlocks
     public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_STORAGE_256M_BLOCK = registerCraftingStorageBlock("omni_crafting_storage_256m_block", OmniCraftingUnitType.OMNI_STORAGE_256M);
 
     public static final DeferredBlock<OmniCraftingUnitBlock> COMPLEX_CRAFTING_UNIT_BLOCK = registerCraftingStorageBlock("complex_crafting_unit_block", OmniCraftingUnitType.COMPLEX_UNIT);
+    public static final DeferredBlock<CraftingMonitorBlock> COMPLEX_CRAFTING_MONITOR_BLOCK = registerCraftingMonitorBlock("complex_crafting_monitor_block", OmniCraftingUnitType.COMPLEX_MONITOR);
     public static final DeferredBlock<OmniCraftingUnitBlock> COMPLEX_CRAFTING_STORAGE_1K_BLOCK = registerCraftingStorageBlock("complex_crafting_storage_1k_block", OmniCraftingUnitType.COMPLEX_STORAGE_1K);
     public static final DeferredBlock<OmniCraftingUnitBlock> COMPLEX_CRAFTING_STORAGE_4K_BLOCK = registerCraftingStorageBlock("complex_crafting_storage_4k_block", OmniCraftingUnitType.COMPLEX_STORAGE_4K);
     public static final DeferredBlock<OmniCraftingUnitBlock> COMPLEX_CRAFTING_STORAGE_16K_BLOCK = registerCraftingStorageBlock("complex_crafting_storage_16k_block", OmniCraftingUnitType.COMPLEX_STORAGE_16K);
@@ -60,6 +65,7 @@ public class OCBlocks
     public static final DeferredBlock<OmniCraftingUnitBlock> COMPLEX_CRAFTING_STORAGE_256M_BLOCK = registerCraftingStorageBlock("complex_crafting_storage_256m_block", OmniCraftingUnitType.COMPLEX_STORAGE_256M);
 
     public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_UNIT_BLOCK = registerCraftingStorageBlock("quantum_crafting_unit_block", OmniCraftingUnitType.QUANTUM_UNIT);
+    public static final DeferredBlock<CraftingMonitorBlock> QUANTUM_CRAFTING_MONITOR_BLOCK = registerCraftingMonitorBlock("quantum_crafting_monitor_block", OmniCraftingUnitType.QUANTUM_MONITOR);
     public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_STORAGE_1K_BLOCK = registerCraftingStorageBlock("quantum_crafting_storage_1k_block", OmniCraftingUnitType.QUANTUM_STORAGE_1K);
     public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_STORAGE_4K_BLOCK = registerCraftingStorageBlock("quantum_crafting_storage_4k_block", OmniCraftingUnitType.QUANTUM_STORAGE_4K);
     public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_STORAGE_16K_BLOCK = registerCraftingStorageBlock("quantum_crafting_storage_16k_block", OmniCraftingUnitType.QUANTUM_STORAGE_16K);
@@ -71,10 +77,19 @@ public class OCBlocks
     public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_STORAGE_64M_BLOCK = registerCraftingStorageBlock("quantum_crafting_storage_64m_block", OmniCraftingUnitType.QUANTUM_STORAGE_64M);
     public static final DeferredBlock<OmniCraftingUnitBlock> QUANTUM_CRAFTING_STORAGE_256M_BLOCK = registerCraftingStorageBlock("quantum_crafting_storage_256m_block", OmniCraftingUnitType.QUANTUM_STORAGE_256M);
 
+    private static DeferredBlock<CraftingMonitorBlock> registerCraftingMonitorBlock(String name, OmniCraftingUnitType type)
+    {
+        DeferredBlock<CraftingMonitorBlock> toReturn =
+                registerBlock(name, () -> new CraftingMonitorBlock(type));
+
+        CRAFTING_MONITORS.add(toReturn);
+        return toReturn;
+    }
+
     private static DeferredBlock<OmniCraftingUnitBlock> registerCraftingStorageBlock(String name, OmniCraftingUnitType type)
     {
         DeferredBlock<OmniCraftingUnitBlock> toReturn = 
-                registerBlock(name, () -> new OmniCraftingUnitBlock(BlockBehaviour.Properties.of(), type));
+                registerBlock(name, () -> new OmniCraftingUnitBlock(AEBaseBlock.metalProps(), type));
         
         CRAFTING_STORAGES.add(toReturn);
         return toReturn;

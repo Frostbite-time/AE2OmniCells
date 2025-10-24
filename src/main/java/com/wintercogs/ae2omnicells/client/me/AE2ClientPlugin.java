@@ -1,14 +1,18 @@
 package com.wintercogs.ae2omnicells.client.me;
 
 
+import appeng.block.crafting.CraftingMonitorBlock;
 import appeng.client.render.crafting.CraftingCubeModel;
+import appeng.client.render.crafting.CraftingMonitorRenderer;
 import appeng.core.AppEng;
 import appeng.hooks.BuiltInModelHooks;
 import com.wintercogs.ae2omnicells.client.render.OmniCraftingUnitModelProvider;
 import com.wintercogs.ae2omnicells.common.blocks.OmniCraftingUnitBlock;
+import com.wintercogs.ae2omnicells.common.init.OCBlockEntities;
 import com.wintercogs.ae2omnicells.common.init.OCBlocks;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingUnitType;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
 public class AE2ClientPlugin
@@ -18,6 +22,11 @@ public class AE2ClientPlugin
     {
         // 注册存储合成器模型
         for(DeferredBlock<? extends OmniCraftingUnitBlock> block : OCBlocks.CRAFTING_STORAGES)
+        {
+            if(block.get().type instanceof OmniCraftingUnitType omniCraftingUnitType)
+                BuiltInModelHooks.addBuiltInModel(AppEng.makeId("block/crafting/" + block.getId().getPath() + "_formed"), new CraftingCubeModel(new OmniCraftingUnitModelProvider(omniCraftingUnitType)));
+        }
+        for(DeferredBlock<? extends CraftingMonitorBlock> block : OCBlocks.CRAFTING_MONITORS)
         {
             if(block.get().type instanceof OmniCraftingUnitType omniCraftingUnitType)
                 BuiltInModelHooks.addBuiltInModel(AppEng.makeId("block/crafting/" + block.getId().getPath() + "_formed"), new CraftingCubeModel(new OmniCraftingUnitModelProvider(omniCraftingUnitType)));
@@ -32,5 +41,10 @@ public class AE2ClientPlugin
     public static void registerStorageLED(IEventBus modEventBus)
     {
         modEventBus.addListener(AE2StorageModels::registerItemColors);
+    }
+
+    public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event)
+    {
+        event.registerBlockEntityRenderer(OCBlockEntities.OMNI_CRAFTING_MONITOR_BLOCK_ENTITY.get(), CraftingMonitorRenderer::new);
     }
 }

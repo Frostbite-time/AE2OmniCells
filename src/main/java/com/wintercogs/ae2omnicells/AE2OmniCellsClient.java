@@ -27,6 +27,7 @@ public class AE2OmniCellsClient
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
 
         AE2ClientPlugin.registerStorageLED(modEventBus);
+        modEventBus.addListener(AE2ClientPlugin::registerEntityRenderers);
     }
 
     @SubscribeEvent

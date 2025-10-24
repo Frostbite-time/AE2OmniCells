@@ -1,15 +1,18 @@
 package com.wintercogs.ae2omnicells.common.me.crafting;
 
+import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.block.crafting.ICraftingUnitType;
-import com.wintercogs.ae2omnicells.common.blocks.OmniCraftingUnitBlock;
 import com.wintercogs.ae2omnicells.common.init.OCBlocks;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
 public enum OmniCraftingUnitType implements ICraftingUnitType
 {
-    /** 三系存储均给予对应合成存储器 */
+    /**
+     * 三系存储均给予对应合成存储器
+     */
     OMNI_UNIT(0, 0, OmniCraftingFamily.OMNI, OmniCraftingStorageType.UNIT),
+    OMNI_MONITOR(0, 0, OmniCraftingFamily.OMNI, OmniCraftingStorageType.MONITOR),
     OMNI_STORAGE_1K(1, 4, OmniCraftingFamily.OMNI, OmniCraftingStorageType.STORAGE_1K),
     OMNI_STORAGE_4K(4, 4, OmniCraftingFamily.OMNI, OmniCraftingStorageType.STORAGE_4K),
     OMNI_STORAGE_16K(16, 4, OmniCraftingFamily.OMNI, OmniCraftingStorageType.STORAGE_16K),
@@ -20,8 +23,9 @@ public enum OmniCraftingUnitType implements ICraftingUnitType
     OMNI_STORAGE_16M(16384, 4, OmniCraftingFamily.OMNI, OmniCraftingStorageType.STORAGE_16M),
     OMNI_STORAGE_64M(65536, 4, OmniCraftingFamily.OMNI, OmniCraftingStorageType.STORAGE_64M),
     OMNI_STORAGE_256M(262144, 4, OmniCraftingFamily.OMNI, OmniCraftingStorageType.STORAGE_256M),
-    
+
     COMPLEX_UNIT(0, 0, OmniCraftingFamily.COMPLEX, OmniCraftingStorageType.UNIT),
+    COMPLEX_MONITOR(0, 0, OmniCraftingFamily.COMPLEX, OmniCraftingStorageType.MONITOR),
     COMPLEX_STORAGE_1K(1, 0, OmniCraftingFamily.COMPLEX, OmniCraftingStorageType.STORAGE_1K),
     COMPLEX_STORAGE_4K(4, 1, OmniCraftingFamily.COMPLEX, OmniCraftingStorageType.STORAGE_4K),
     COMPLEX_STORAGE_16K(16, 2, OmniCraftingFamily.COMPLEX, OmniCraftingStorageType.STORAGE_16K),
@@ -34,6 +38,7 @@ public enum OmniCraftingUnitType implements ICraftingUnitType
     COMPLEX_STORAGE_256M(262144, 256, OmniCraftingFamily.COMPLEX, OmniCraftingStorageType.STORAGE_256M),
 
     QUANTUM_UNIT(0, 0, OmniCraftingFamily.QUANTUM, OmniCraftingStorageType.UNIT),
+    QUANTUM_MONITOR(0, 0, OmniCraftingFamily.QUANTUM, OmniCraftingStorageType.MONITOR),
     QUANTUM_STORAGE_1K(1, 8192, OmniCraftingFamily.QUANTUM, OmniCraftingStorageType.STORAGE_1K),
     QUANTUM_STORAGE_4K(4, 8192, OmniCraftingFamily.QUANTUM, OmniCraftingStorageType.STORAGE_4K),
     QUANTUM_STORAGE_16K(16, 8192, OmniCraftingFamily.QUANTUM, OmniCraftingStorageType.STORAGE_16K),
@@ -45,16 +50,24 @@ public enum OmniCraftingUnitType implements ICraftingUnitType
     QUANTUM_STORAGE_64M(65536, 8192, OmniCraftingFamily.QUANTUM, OmniCraftingStorageType.STORAGE_64M),
     QUANTUM_STORAGE_256M(262144, 8192, OmniCraftingFamily.QUANTUM, OmniCraftingStorageType.STORAGE_256M);
 
-    /** 千字节 */
+    /**
+     * 千字节
+     */
     private final long storageKb;
 
-    /** 处理器数量 */
+    /**
+     * 处理器数量
+     */
     private final int processors;
 
     // 这两个额外定义，用于写自定义模型时少写两行代码~
-    /** 元件系列 */
+    /**
+     * 元件系列
+     */
     public final OmniCraftingFamily family;
-    /** 存储类型 */
+    /**
+     * 存储类型
+     */
     public final OmniCraftingStorageType storageType;
 
     OmniCraftingUnitType(long storageKb, int processors, OmniCraftingFamily family, OmniCraftingStorageType storageType)
@@ -80,9 +93,10 @@ public enum OmniCraftingUnitType implements ICraftingUnitType
     @Override
     public Item getItemFromType()
     {
-        DeferredBlock<OmniCraftingUnitBlock> definition = switch(this)
+        DeferredBlock<? extends AbstractCraftingUnitBlock<?>> definition = switch (this)
         {
             case OMNI_UNIT -> OCBlocks.OMNI_CRAFTING_UNIT_BLOCK;
+            case OMNI_MONITOR -> OCBlocks.OMNI_CRAFTING_MONITOR_BLOCK;
             case OMNI_STORAGE_1K -> OCBlocks.OMNI_CRAFTING_STORAGE_1K_BLOCK;
             case OMNI_STORAGE_4K -> OCBlocks.OMNI_CRAFTING_STORAGE_4K_BLOCK;
             case OMNI_STORAGE_16K -> OCBlocks.OMNI_CRAFTING_STORAGE_16K_BLOCK;
@@ -95,6 +109,7 @@ public enum OmniCraftingUnitType implements ICraftingUnitType
             case OMNI_STORAGE_256M -> OCBlocks.OMNI_CRAFTING_STORAGE_256M_BLOCK;
 
             case COMPLEX_UNIT -> OCBlocks.COMPLEX_CRAFTING_UNIT_BLOCK;
+            case COMPLEX_MONITOR -> OCBlocks.COMPLEX_CRAFTING_MONITOR_BLOCK;
             case COMPLEX_STORAGE_1K -> OCBlocks.COMPLEX_CRAFTING_STORAGE_1K_BLOCK;
             case COMPLEX_STORAGE_4K -> OCBlocks.COMPLEX_CRAFTING_STORAGE_4K_BLOCK;
             case COMPLEX_STORAGE_16K -> OCBlocks.COMPLEX_CRAFTING_STORAGE_16K_BLOCK;
@@ -107,6 +122,7 @@ public enum OmniCraftingUnitType implements ICraftingUnitType
             case COMPLEX_STORAGE_256M -> OCBlocks.COMPLEX_CRAFTING_STORAGE_256M_BLOCK;
 
             case QUANTUM_UNIT -> OCBlocks.QUANTUM_CRAFTING_UNIT_BLOCK;
+            case QUANTUM_MONITOR -> OCBlocks.QUANTUM_CRAFTING_MONITOR_BLOCK;
             case QUANTUM_STORAGE_1K -> OCBlocks.QUANTUM_CRAFTING_STORAGE_1K_BLOCK;
             case QUANTUM_STORAGE_4K -> OCBlocks.QUANTUM_CRAFTING_STORAGE_4K_BLOCK;
             case QUANTUM_STORAGE_16K -> OCBlocks.QUANTUM_CRAFTING_STORAGE_16K_BLOCK;

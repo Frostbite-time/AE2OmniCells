@@ -25,6 +25,8 @@ public class AE2OmniCells
     public static final String MODID = "ae2omnicells";
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    public static final String AE2_MODID = "ae2";
+
     public static final String MEGA_MODID = "megacells";
     public static boolean MEGA_LOADED = false;
 

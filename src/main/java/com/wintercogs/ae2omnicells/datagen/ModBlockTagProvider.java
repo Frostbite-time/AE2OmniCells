@@ -40,6 +40,7 @@ public class ModBlockTagProvider extends BlockTagsProvider
 
         // 与AE保持一致行为，将其添加到此tag
         tag(AETags.FACADE_BLOCK_WHITELIST)
-                .add(OCBlocks.CRAFTING_STORAGES.stream().map(DeferredBlock::get).toArray(Block[]::new));
+                .add(OCBlocks.CRAFTING_STORAGES.stream().map(DeferredBlock::get).toArray(Block[]::new))
+                .add(OCBlocks.CRAFTING_MONITORS.stream().map(DeferredBlock::get).toArray(Block[]::new));
     }
 }
