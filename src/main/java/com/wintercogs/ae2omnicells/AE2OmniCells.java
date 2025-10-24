@@ -11,7 +11,6 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
@@ -36,13 +35,17 @@ public class AE2OmniCells
     public static final String AAE_MODID = "advanced_ae";
     public static boolean AAE_LOADED = false;
 
+    public static final String AEMEK_MODID = "appmek";
+    public static boolean AEMEK_LOADED = false;
+
 
     public AE2OmniCells(IEventBus modEventBus, ModContainer modContainer)
     {
         modEventBus.addListener(this::constructMod);
         modEventBus.addListener(this::commonSetup);
         NeoForge.EVENT_BUS.register(this);
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        Config.register(modContainer);
 
         OCDataComponents.register(modEventBus);
         OCItems.register(modEventBus);
@@ -60,6 +63,8 @@ public class AE2OmniCells
             EAE_LOADED = true;
         if(ModList.get().isLoaded(AAE_MODID))
             AAE_LOADED = true;
+        if(ModList.get().isLoaded(AEMEK_MODID))
+            AEMEK_LOADED = true;
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)

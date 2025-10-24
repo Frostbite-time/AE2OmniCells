@@ -26,6 +26,7 @@ public class AEPlugin
             Upgrades.add(AEItems.VOID_CARD, registryItem.get(), 1, CELL_GROUP_NAME);
             Upgrades.add(AEItems.INVERTER_CARD, registryItem.get(), 1, CELL_GROUP_NAME);
             Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, registryItem.get(), 1, CELL_GROUP_NAME);
+            Upgrades.add(OCItems.TYPE_FUZZY_CARD, registryItem.get(), 1, CELL_GROUP_NAME);
         }
         for(DeferredItem<AEPortableUniversalCellItem> registryItem : OCItems.getPortableCells())
         {
@@ -34,12 +35,14 @@ public class AEPlugin
             Upgrades.add(AEItems.INVERTER_CARD, registryItem.get(), 1, PORTABLE_CELL_GROUP_NAME);
             Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, registryItem.get(), 1, PORTABLE_CELL_GROUP_NAME);
             Upgrades.add(AEItems.ENERGY_CARD, registryItem.get(), 2, PORTABLE_CELL_GROUP_NAME);
+            Upgrades.add(OCItems.TYPE_FUZZY_CARD, registryItem.get(), 1, PORTABLE_CELL_GROUP_NAME);
         }
         // 为两个创造元件添加升级卡，再单独为long级别添加溢出销毁和均分卡
         for(DeferredItem<Item> registryItem : OCItems.getCreativeCells())
         {
             Upgrades.add(AEItems.FUZZY_CARD, registryItem.get(), 1, CELL_GROUP_NAME);
             Upgrades.add(AEItems.INVERTER_CARD, registryItem.get(), 1, CELL_GROUP_NAME);
+            Upgrades.add(OCItems.TYPE_FUZZY_CARD, registryItem.get(), 1, CELL_GROUP_NAME);
         }
         Upgrades.add(AEItems.VOID_CARD, OCItems.CREATIVE_AE_CELL_LONG.get(), 1, CELL_GROUP_NAME);
         Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, OCItems.CREATIVE_AE_CELL_LONG.get(), 1, CELL_GROUP_NAME);

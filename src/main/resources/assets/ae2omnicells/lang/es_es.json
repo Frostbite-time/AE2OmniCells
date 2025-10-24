@@ -110,6 +110,7 @@
   "item.ae2omnicells.portable_quantum_omni_cell_256m": "Celda de almacenamiento cuántica portátil de 256M",
   "item.ae2omnicells.creative_ae_cell_long": "Celda de Almacenamiento Creativa (nivel LONG)",
   "item.ae2omnicells.creative_ae_cell_biginteger": "Celda de Almacenamiento Creativa (nivel BIG-INTEGER)",
+  "item.ae2omnicells.type_fuzzy_card": "Tarjeta difusa por tipo",
 
   "block.ae2omnicells.ender_ingot_block": "Bloque de acero de Ender",
   "block.ae2omnicells.netherite_scrap_block": "Bloque de restos de netherita",

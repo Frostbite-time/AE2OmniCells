@@ -137,6 +137,12 @@ dependencies {
     compileOnly "maven.modrinth:advancedae:1.5.2-1.21.1"
     runtimeOnly "maven.modrinth:advancedae:1.5.2-1.21.1"
 
+    // AE MEK
+    compileOnly "maven.modrinth:applied-mekanistics:1.6.2"
+    runtimeOnly "maven.modrinth:applied-mekanistics:1.6.2"
+    compileOnly "maven.modrinth:mekanism:10.7.13.78"
+    runtimeOnly "maven.modrinth:mekanism:10.7.13.78"
+
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"

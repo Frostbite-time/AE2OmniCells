@@ -4,10 +4,7 @@ import appeng.api.config.Actionable;
 import appeng.api.config.FuzzyMode;
 import appeng.api.config.IncludeExclude;
 import appeng.api.networking.security.IActionSource;
-import appeng.api.stacks.AEItemKey;
-import appeng.api.stacks.AEKey;
-import appeng.api.stacks.GenericStack;
-import appeng.api.stacks.KeyCounter;
+import appeng.api.stacks.*;
 import appeng.api.storage.StorageCells;
 import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.ICellWorkbenchItem;
@@ -17,9 +14,15 @@ import appeng.api.upgrades.IUpgradeInventory;
 import appeng.core.definitions.AEItems;
 import appeng.util.ConfigInventory;
 import appeng.util.prioritylist.IPartitionList;
+import com.wintercogs.ae2omnicells.AE2OmniCells;
+import com.wintercogs.ae2omnicells.common.config.MekRadialChemicalCheck;
+import com.wintercogs.ae2omnicells.common.config.MekRadialChemicalCheckConfig;
+import com.wintercogs.ae2omnicells.common.init.OCItems;
 import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import me.ramidzkh.mekae2.ae2.MekanismKey;
+import mekanism.common.registries.MekanismChemicals;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -168,6 +171,17 @@ public class AEUniversalCellInventory implements StorageCell
     public long insert(AEKey what, long amount, Actionable mode, IActionSource source)
     {
         if (amount <= 0) return 0;
+
+        // 放射性化学品保护
+        if(AE2OmniCells.AEMEK_LOADED && what instanceof MekanismKey mekanismKey)
+        {
+            if(MekRadialChemicalCheckConfig.checkMode == MekRadialChemicalCheck.DENY_SPENT &&
+                    mekanismKey.getStack().getChemical() == MekanismChemicals.SPENT_NUCLEAR_WASTE.get())
+                return 0;
+            else if(MekRadialChemicalCheckConfig.checkMode == MekRadialChemicalCheck.DENY_ALL
+                    && mekanismKey.getStack().getChemical().isRadioactive())
+                return 0;
+        }
 
         // 分区/模糊/黑白名单 与 递归盘保护
         if (!matchesPartitionAndUpgrades(what)) return 0;
@@ -368,6 +382,7 @@ public class AEUniversalCellInventory implements StorageCell
         final IUpgradeInventory upgrades = cellType.getUpgrades(itemStack);
         final boolean hasInverter = upgrades.isInstalled(AEItems.INVERTER_CARD);
         final boolean hasFuzzy = upgrades.isInstalled(AEItems.FUZZY_CARD);
+        final boolean hasTypeFuzzy = upgrades.isInstalled(OCItems.TYPE_FUZZY_CARD);
 
         // 分区配置
         ConfigInventory config = null;
@@ -382,15 +397,30 @@ public class AEUniversalCellInventory implements StorageCell
             return true; // 未配置视为不过滤
         }
 
-        // 构建分区列表
-        IPartitionList.Builder builder = IPartitionList.builder();
-        if (hasFuzzy) builder.fuzzyMode(fuzzyMode);
-        builder.addAll(config.keySet());
-        IPartitionList list = builder.build();
-
         IncludeExclude mode = hasInverter ? IncludeExclude.BLACKLIST : IncludeExclude.WHITELIST;
 
-        return list.matchesFilter(what, mode);
+        if(hasTypeFuzzy) // 如果有类型模糊卡，只根据其进行分区筛选
+        {
+            AEKeyType targetType = what.getType();
+            boolean typeMatched = false;
+            for (AEKey key : config.keySet())
+            {
+                if (key != null && key.getType() == targetType)
+                {
+                    typeMatched = true;
+                    break;
+                }
+            }
+            return (mode == IncludeExclude.WHITELIST) ? typeMatched : !typeMatched;
+        }
+        else // 原逻辑
+        {
+            IPartitionList.Builder builder = IPartitionList.builder();
+            if (hasFuzzy) builder.fuzzyMode(fuzzyMode);
+            builder.addAll(config.keySet());
+            IPartitionList list = builder.build();
+            return list.matchesFilter(what, mode);
+        }
     }
 
     /**

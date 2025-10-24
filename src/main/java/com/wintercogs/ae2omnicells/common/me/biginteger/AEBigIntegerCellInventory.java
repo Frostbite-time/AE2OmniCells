@@ -4,10 +4,7 @@ import appeng.api.config.Actionable;
 import appeng.api.config.FuzzyMode;
 import appeng.api.config.IncludeExclude;
 import appeng.api.networking.security.IActionSource;
-import appeng.api.stacks.AEItemKey;
-import appeng.api.stacks.AEKey;
-import appeng.api.stacks.GenericStack;
-import appeng.api.stacks.KeyCounter;
+import appeng.api.stacks.*;
 import appeng.api.storage.StorageCells;
 import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.ICellWorkbenchItem;
@@ -17,6 +14,7 @@ import appeng.api.upgrades.IUpgradeInventory;
 import appeng.core.definitions.AEItems;
 import appeng.util.ConfigInventory;
 import appeng.util.prioritylist.IPartitionList;
+import com.wintercogs.ae2omnicells.common.init.OCItems;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
@@ -266,6 +264,7 @@ public class AEBigIntegerCellInventory implements StorageCell
         final IUpgradeInventory upgrades = cellType.getUpgrades(itemStack);
         final boolean hasInverter = upgrades.isInstalled(AEItems.INVERTER_CARD);
         final boolean hasFuzzy = upgrades.isInstalled(AEItems.FUZZY_CARD);
+        final boolean hasTypeFuzzy = upgrades.isInstalled(OCItems.TYPE_FUZZY_CARD);
 
         // 分区配置
         ConfigInventory config = null;
@@ -280,15 +279,30 @@ public class AEBigIntegerCellInventory implements StorageCell
             return true; // 未配置视为不过滤
         }
 
-        // 构建分区列表
-        IPartitionList.Builder builder = IPartitionList.builder();
-        if (hasFuzzy) builder.fuzzyMode(fuzzyMode);
-        builder.addAll(config.keySet());
-        IPartitionList list = builder.build();
-
         IncludeExclude mode = hasInverter ? IncludeExclude.BLACKLIST : IncludeExclude.WHITELIST;
 
-        return list.matchesFilter(what, mode);
+        if(hasTypeFuzzy) // 如果有类型模糊卡，只根据其进行分区筛选
+        {
+            AEKeyType targetType = what.getType();
+            boolean typeMatched = false;
+            for (AEKey key : config.keySet())
+            {
+                if (key != null && key.getType() == targetType)
+                {
+                    typeMatched = true;
+                    break;
+                }
+            }
+            return (mode == IncludeExclude.WHITELIST) ? typeMatched : !typeMatched;
+        }
+        else // 原逻辑
+        {
+            IPartitionList.Builder builder = IPartitionList.builder();
+            if (hasFuzzy) builder.fuzzyMode(fuzzyMode);
+            builder.addAll(config.keySet());
+            IPartitionList list = builder.build();
+            return list.matchesFilter(what, mode);
+        }
     }
 
     /**

@@ -77,6 +77,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         // 充能末影钢锭
         ChargerRecipeBuilder.charge(recipeOutput, AE2OmniCells.makeId("charged_ender_ingot"), OCItems.ENDER_INGOT.get(), OCItems.CHARGED_ENDER_INGOT.get());
 
+        // 类型模糊卡
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.TYPE_FUZZY_CARD.get())
+                .requires(AEItems.ADVANCED_CARD)
+                .requires(OCItems.ENDER_INGOT)
+                .unlockedBy("has_ender_ingot", has(OCItems.ENDER_INGOT.get()))
+                .save(recipeOutput);
+
         // 全能链路压印模板
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_LINK_PRINT_PRESS.get())
                 .pattern("EAE")
