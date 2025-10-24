@@ -159,6 +159,7 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag advancedTooltips)
     {
         // 仅客户端做纯展示文本（不影响服务端逻辑）
+        super.appendHoverText(stack, context, lines, advancedTooltips);
         if (Platform.isClient())
         {
             long usedBytes = IAEUniversalCell.getUsedBytes(stack);

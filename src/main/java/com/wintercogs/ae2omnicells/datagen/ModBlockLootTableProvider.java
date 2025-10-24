@@ -6,6 +6,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -20,9 +21,10 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider
     @Override
     protected void generate()
     {
-        dropSelf(OCBlocks.ENDER_INGOT_BLOCK.get());
-        dropSelf(OCBlocks.NETHERITE_SCRAP_BLOCK.get());
-        dropSelf(OCBlocks.SINGULARITY_BLOCK.get());
+        for(DeferredBlock<? extends Block> block : OCBlocks.ALL)
+        {
+            dropSelf(block.get());
+        }
     }
 
     @Override

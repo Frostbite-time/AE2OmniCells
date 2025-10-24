@@ -32,6 +32,7 @@ public class AE2OmniCellsClient
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event)
     {
+        AE2ClientPlugin.init();
         AE2ClientPlugin.register();
     }
 
