@@ -2,6 +2,7 @@ package com.wintercogs.ae2omnicells.common.blocks;
 
 import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.blockentity.crafting.CraftingBlockEntity;
+import appeng.core.definitions.AEParts;
 import appeng.core.localization.PlayerMessages;
 import appeng.menu.MenuOpener;
 import appeng.menu.locator.MenuLocators;
@@ -28,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 public class OmniCraftingUnitBlock extends AbstractCraftingUnitBlock<OmniCraftingBlockEntity>
 {
     /** 与type变量一致，但是这里保留了更多类型信息 */
-    private final OmniCraftingUnitType omniCraftingType;
+    public final OmniCraftingUnitType omniCraftingType;
 
     public OmniCraftingUnitBlock(Properties props, OmniCraftingUnitType type)
     {
@@ -69,8 +70,23 @@ public class OmniCraftingUnitBlock extends AbstractCraftingUnitBlock<OmniCraftin
     {
         if (heldItem.isEmpty()) return false;
 
-        Block upgradedBlock = CraftingUnitTransformRecipe.getUpgradedBlock(level, heldItem);
-        if (upgradedBlock == null) return false;
+        Block upgradedBlock;
+        // 这里我们自己加一段逻辑，用于特判合成监控器
+        if(heldItem.getItem() == AEParts.STORAGE_MONITOR.get())
+        {
+            upgradedBlock = switch(this.omniCraftingType.family)
+            {
+                case OMNI -> OCBlocks.OMNI_CRAFTING_MONITOR_BLOCK.get();
+                case COMPLEX -> OCBlocks.COMPLEX_CRAFTING_MONITOR_BLOCK.get();
+                case QUANTUM -> OCBlocks.QUANTUM_CRAFTING_MONITOR_BLOCK.get();
+            };
+        }
+        else
+        {
+            upgradedBlock = CraftingUnitTransformRecipe.getUpgradedBlock(level, heldItem);
+        }
+
+        if(upgradedBlock == null) return false;
 
         if (!(upgradedBlock instanceof AbstractCraftingUnitBlock<?>)) return false;
 
@@ -107,9 +123,17 @@ public class OmniCraftingUnitBlock extends AbstractCraftingUnitBlock<OmniCraftin
         if (this.omniCraftingType.storageType == OmniCraftingStorageType.UNIT || level.isClientSide())
             return InteractionResult.FAIL;
 
-        ItemStack removedUpgrade = CraftingUnitTransformRecipe.getRemovedUpgrade(level, this);
-        if (removedUpgrade.isEmpty())
-            return InteractionResult.FAIL;
+        ItemStack removedUpgrade;
+        if(this.omniCraftingType.storageType == OmniCraftingStorageType.MONITOR)
+        {
+            removedUpgrade = AEParts.STORAGE_MONITOR.stack();
+        }
+        else
+        {
+            removedUpgrade = CraftingUnitTransformRecipe.getRemovedUpgrade(level, this);
+        }
+        if (removedUpgrade.isEmpty()) return InteractionResult.FAIL;
+
 
         var cb = this.getBlockEntity(level, pos);
         if (cb != null && cb.getCluster() != null && cb.getCluster().isBusy())

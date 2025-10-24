@@ -1,8 +1,10 @@
 package com.wintercogs.ae2omnicells.common.items;
 
 import appeng.block.crafting.CraftingBlockItem;
+import appeng.core.definitions.AEParts;
 import appeng.recipes.game.CraftingUnitTransformRecipe;
 import appeng.util.InteractionUtil;
+import com.wintercogs.ae2omnicells.common.blocks.OmniCraftingMonitorBlock;
 import com.wintercogs.ae2omnicells.common.init.OCBlocks;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingFamily;
 import net.minecraft.world.InteractionHand;
@@ -31,11 +33,16 @@ public class OmniCraftingBlockItem extends CraftingBlockItem
         {
             ItemStack stack = player.getItemInHand(hand);
 
-            ItemStack removedUpgrade = CraftingUnitTransformRecipe.getRemovedUpgrade(level, getBlock());
-            if (removedUpgrade.isEmpty())
+            ItemStack removedUpgrade;
+            if(getBlock() instanceof OmniCraftingMonitorBlock)
             {
-                return super.use(level, player, hand);
+                removedUpgrade = AEParts.STORAGE_MONITOR.stack();
             }
+            else
+            {
+                removedUpgrade = CraftingUnitTransformRecipe.getRemovedUpgrade(level, getBlock());
+            }
+            if (removedUpgrade.isEmpty()) return super.use(level, player, hand);
 
             int itemCount = stack.getCount();
             player.setItemInHand(hand, ItemStack.EMPTY);
