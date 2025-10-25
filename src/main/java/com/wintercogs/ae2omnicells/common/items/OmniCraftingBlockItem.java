@@ -5,13 +5,13 @@ import appeng.core.definitions.AEParts;
 import appeng.recipes.game.CraftingUnitTransformRecipe;
 import appeng.util.InteractionUtil;
 import com.wintercogs.ae2omnicells.common.blocks.OmniCraftingMonitorBlock;
-import com.wintercogs.ae2omnicells.common.init.OCBlocks;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingFamily;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -51,12 +51,7 @@ public class OmniCraftingBlockItem extends CraftingBlockItem
             inv.placeItemBackInInventory(removedUpgrade.copyWithCount(removedUpgrade.getCount() * itemCount));
 
             // 这里，将我们自己的方块物品写进去
-            var unitBlock = switch(this.family)
-            {
-                case OMNI -> OCBlocks.OMNI_CRAFTING_UNIT_BLOCK;
-                case COMPLEX -> OCBlocks.COMPLEX_CRAFTING_UNIT_BLOCK;
-                case QUANTUM -> OCBlocks.QUANTUM_CRAFTING_UNIT_BLOCK;
-            };
+            ItemLike unitBlock = this.family.getUnitBaseBlock();
             inv.placeItemBackInInventory(new ItemStack(unitBlock, itemCount));
 
             return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());
