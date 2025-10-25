@@ -1,15 +1,12 @@
 package com.wintercogs.ae2omnicells.datagen;
 
 import appeng.block.crafting.AbstractCraftingUnitBlock;
-import com.google.gson.JsonPrimitive;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.blocks.OmniCraftingUnitBlock;
 import com.wintercogs.ae2omnicells.common.init.OCBlocks;
 import com.wintercogs.ae2omnicells.datagen.provider.CustomizableBlockModelProvider;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.models.blockstates.VariantProperties;
-import net.minecraft.data.models.blockstates.VariantProperty;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
@@ -22,9 +19,6 @@ import java.util.concurrent.CompletableFuture;
 
 public class ModBlockStateProvider extends BlockStateProvider
 {
-    // 用于AE2的方块旋转
-    private static final VariantProperty<VariantProperties.Rotation> Z_ROT = new VariantProperty<>("ae2:z",
-            r -> new JsonPrimitive(r.ordinal() * 90));
     // 内嵌一个AE2命名空间的模型provider，以便于注册合成存储器的模型
     private final CustomizableBlockModelProvider ae2Models;
 

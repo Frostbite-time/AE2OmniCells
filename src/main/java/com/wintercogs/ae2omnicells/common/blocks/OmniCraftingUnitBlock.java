@@ -10,7 +10,6 @@ import appeng.menu.me.crafting.CraftingCPUMenu;
 import appeng.recipes.game.CraftingUnitTransformRecipe;
 import appeng.util.InteractionUtil;
 import com.wintercogs.ae2omnicells.common.blocks.entities.OmniCraftingBlockEntity;
-import com.wintercogs.ae2omnicells.common.init.OCBlocks;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingStorageType;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingUnitType;
 import net.minecraft.core.BlockPos;
@@ -42,12 +41,7 @@ public class OmniCraftingUnitBlock extends AbstractCraftingUnitBlock<OmniCraftin
     {
         if (InteractionUtil.isInAlternateUseMode(player))
         {
-            Block unitBlock = switch(this.omniCraftingType.family)
-            {
-                case OMNI -> OCBlocks.OMNI_CRAFTING_UNIT_BLOCK.get();
-                case COMPLEX -> OCBlocks.COMPLEX_CRAFTING_UNIT_BLOCK.get();
-                case QUANTUM -> OCBlocks.QUANTUM_CRAFTING_UNIT_BLOCK.get();
-            };
+            Block unitBlock = this.omniCraftingType.family.getUnitBaseBlock();
             var result = this.removeUpgrade(level, player, pos, unitBlock.defaultBlockState());
             if (result != InteractionResult.FAIL)
                 return result;
@@ -71,20 +65,11 @@ public class OmniCraftingUnitBlock extends AbstractCraftingUnitBlock<OmniCraftin
         if (heldItem.isEmpty()) return false;
 
         Block upgradedBlock;
-        // 这里我们自己加一段逻辑，用于特判合成监控器
+        // 用于特判合成监控器
         if(heldItem.getItem() == AEParts.STORAGE_MONITOR.get())
-        {
-            upgradedBlock = switch(this.omniCraftingType.family)
-            {
-                case OMNI -> OCBlocks.OMNI_CRAFTING_MONITOR_BLOCK.get();
-                case COMPLEX -> OCBlocks.COMPLEX_CRAFTING_MONITOR_BLOCK.get();
-                case QUANTUM -> OCBlocks.QUANTUM_CRAFTING_MONITOR_BLOCK.get();
-            };
-        }
+            upgradedBlock = this.omniCraftingType.family.getMonitorBlock();
         else
-        {
             upgradedBlock = CraftingUnitTransformRecipe.getUpgradedBlock(level, heldItem);
-        }
 
         if(upgradedBlock == null) return false;
 
@@ -100,10 +85,7 @@ public class OmniCraftingUnitBlock extends AbstractCraftingUnitBlock<OmniCraftin
         // 确保合成监视器指向玩家
         newState = newState.trySetValue(BlockStateProperties.FACING, hit.getDirection());
 
-        Block nowBlock = state.getBlock();
-        boolean isUnitBlock = nowBlock == OCBlocks.OMNI_CRAFTING_UNIT_BLOCK.get()
-                        || nowBlock == OCBlocks.COMPLEX_CRAFTING_UNIT_BLOCK.get()
-                        || nowBlock == OCBlocks.QUANTUM_CRAFTING_UNIT_BLOCK.get();
+        boolean isUnitBlock = this.omniCraftingType.storageType == OmniCraftingStorageType.UNIT;
         InteractionResult result = isUnitBlock
                 ? this.transform(level, pos, newState) ? InteractionResult.SUCCESS : InteractionResult.FAIL
                 : this.removeUpgrade(level, player, pos, newState);

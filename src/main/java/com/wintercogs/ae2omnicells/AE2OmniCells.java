@@ -53,6 +53,9 @@ public class AE2OmniCells
         OCBlockEntities.register(modEventBus);
         OCCreativeModeTabs.register(modEventBus);
         OCMenus.registerMenus(modEventBus);
+
+        AEPlugin.onInit();
+        AEPlugin.onRegister(modEventBus, NeoForge.EVENT_BUS);
     }
 
     private void constructMod(FMLConstructModEvent event)
@@ -69,7 +72,7 @@ public class AE2OmniCells
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-        AEPlugin.register();
+        AEPlugin.onCommonSetup();
     }
 
     @SubscribeEvent

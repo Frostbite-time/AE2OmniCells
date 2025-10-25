@@ -81,8 +81,7 @@ public class OCBlocks
 
     private static DeferredBlock<OmniCraftingMonitorBlock> registerCraftingMonitorBlock(String name, OmniCraftingUnitType type)
     {
-        DeferredBlock<OmniCraftingMonitorBlock> toReturn =
-                registerOnlyBlock(name, () -> new OmniCraftingMonitorBlock(type));
+        DeferredBlock<OmniCraftingMonitorBlock> toReturn = registerOnlyBlock(name, () -> new OmniCraftingMonitorBlock(type));
         OCItems.ITEMS.register(name, () -> new OmniCraftingBlockItem(toReturn.get(), new Item.Properties(), type.family));
 
         CRAFTING_MONITORS.add(toReturn);
@@ -91,8 +90,7 @@ public class OCBlocks
 
     private static DeferredBlock<OmniCraftingUnitBlock> registerCraftingStorageBlock(String name, OmniCraftingUnitType type)
     {
-        DeferredBlock<OmniCraftingUnitBlock> toReturn =
-                registerOnlyBlock(name, () -> new OmniCraftingUnitBlock(AEBaseBlock.metalProps(), type));
+        DeferredBlock<OmniCraftingUnitBlock> toReturn = registerOnlyBlock(name, () -> new OmniCraftingUnitBlock(AEBaseBlock.metalProps(), type));
         OCItems.ITEMS.register(name, () -> new OmniCraftingBlockItem(toReturn.get(), new Item.Properties(), type.family));
         
         CRAFTING_STORAGES.add(toReturn);

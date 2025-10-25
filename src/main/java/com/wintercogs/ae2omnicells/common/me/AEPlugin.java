@@ -8,6 +8,7 @@ import com.wintercogs.ae2omnicells.common.items.AEPortableUniversalCellItem;
 import com.wintercogs.ae2omnicells.common.items.AEUniversalCellItem;
 import com.wintercogs.ae2omnicells.common.me.biginteger.AEBigIntegerCellHandler;
 import net.minecraft.world.item.Item;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 public class AEPlugin
@@ -15,7 +16,20 @@ public class AEPlugin
     private static final String CELL_GROUP_NAME = "ae2omnicells.cell.upgrades.group";
     private static final String PORTABLE_CELL_GROUP_NAME = "ae2omnicells.cell.portable.upgrades.group";
 
-    public static void register()
+    /** 在mod入口点调用 */
+    public static void onInit()
+    {
+
+    }
+
+    /** init后立刻运行此段代码，在这里进行注册相关内容 */
+    public static void onRegister(IEventBus modEventBus, IEventBus gameEventBus)
+    {
+
+    }
+
+    /** 在FMLCommonSetupEvent阶段调用 */
+    public static void onCommonSetup()
     {
         StorageCells.addCellHandler(AEUniversalCellHandler.INSTANCE);
         StorageCells.addCellHandler(AEBigIntegerCellHandler.INSTANCE);

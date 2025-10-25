@@ -10,6 +10,7 @@ import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
+/** 这个类我们在1.20.1版本使用，1.21.1版本中无用，此处仅留存文件，以便随时启用 */
 public class ModBlockModelProvider extends BlockModelProvider
 {
     public ModBlockModelProvider(PackOutput output, ExistingFileHelper existingFileHelper)

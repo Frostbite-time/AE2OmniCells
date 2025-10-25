@@ -15,6 +15,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 
 @Mod(value = AE2OmniCells.MODID, dist = Dist.CLIENT)
@@ -26,15 +27,15 @@ public class AE2OmniCellsClient
     {
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
 
-        AE2ClientPlugin.registerStorageLED(modEventBus);
-        modEventBus.addListener(AE2ClientPlugin::registerEntityRenderers);
+        AE2ClientPlugin.onInit();
+        AE2ClientPlugin.onRegister(modEventBus, NeoForge.EVENT_BUS);
+
     }
 
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event)
     {
-        AE2ClientPlugin.init();
-        AE2ClientPlugin.register();
+        AE2ClientPlugin.onCommonSetup();
     }
 
     @SubscribeEvent
