@@ -9,5 +9,5 @@ public class OCTags
 {
     // 通用的末影珍珠粉标签
     public static final TagKey<Item> ENDER_PEARL_DUST =
-            TagKey.create(Registries.ITEM, new ResourceLocation("c", "dusts/ender_pearl"));
+            TagKey.create(Registries.ITEM, new ResourceLocation("forge", "dusts/ender_pearl"));
 }
