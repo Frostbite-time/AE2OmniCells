@@ -8,6 +8,7 @@ import com.wintercogs.ae2omnicells.common.blocks.IOmniCraftingBlock;
 import com.wintercogs.ae2omnicells.common.blocks.OmniCraftingMonitorBlock;
 import com.wintercogs.ae2omnicells.common.init.OCItems;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingFamily;
+import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingStorageType;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Inventory;
@@ -36,6 +37,10 @@ public class OmniCraftingBlockItem extends CraftingBlockItem
     {
         if (InteractionUtil.isInAlternateUseMode(player))
         {
+            // 对空单元不执行操作
+            if(getBlock() instanceof IOmniCraftingBlock omniCraftingBlock && omniCraftingBlock.getOmniCraftingUnitType().storageType == OmniCraftingStorageType.UNIT)
+                return InteractionResultHolder.pass(player.getItemInHand(hand));
+
             ItemStack stack = player.getItemInHand(hand);
 
             ItemStack removedUpgrade;
