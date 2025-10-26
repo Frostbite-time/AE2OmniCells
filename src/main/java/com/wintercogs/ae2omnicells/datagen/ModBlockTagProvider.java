@@ -1,13 +1,16 @@
 package com.wintercogs.ae2omnicells.datagen;
 
+import appeng.api.ids.AETags;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.init.OCBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.RegistryObject;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,5 +37,10 @@ public class ModBlockTagProvider extends BlockTagsProvider
                 .add(OCBlocks.ENDER_INGOT_BLOCK.get())
                 .add(OCBlocks.NETHERITE_SCRAP_BLOCK.get())
                 .add(OCBlocks.SINGULARITY_BLOCK.get());
+
+        // 与AE保持一致行为，将其添加到此tag
+        tag(AETags.FACADE_BLOCK_WHITELIST)
+                .add(OCBlocks.CRAFTING_STORAGES.stream().map(RegistryObject::get).toArray(Block[]::new))
+                .add(OCBlocks.CRAFTING_MONITORS.stream().map(RegistryObject::get).toArray(Block[]::new));
     }
 }

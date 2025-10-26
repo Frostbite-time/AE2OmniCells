@@ -19,9 +19,10 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider
     @Override
     protected void generate()
     {
-        dropSelf(OCBlocks.ENDER_INGOT_BLOCK.get());
-        dropSelf(OCBlocks.NETHERITE_SCRAP_BLOCK.get());
-        dropSelf(OCBlocks.SINGULARITY_BLOCK.get());
+        for(RegistryObject<? extends Block> block : OCBlocks.ALL)
+        {
+            dropSelf(block.get());
+        }
     }
 
     @Override

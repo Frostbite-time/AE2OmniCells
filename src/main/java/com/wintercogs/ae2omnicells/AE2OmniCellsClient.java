@@ -16,17 +16,17 @@ public class AE2OmniCellsClient
 {
     public static void clientInit()
     {
-
+        AE2ClientPlugin.onInit();
     }
 
     public static void clientCommonSetup()
     {
-        AE2ClientPlugin.register();
+        AE2ClientPlugin.onCommonSetup();
     }
 
     public static void clientRegister(IEventBus modBus, IEventBus gameBus)
     {
-        AE2ClientPlugin.registerStorageLED(modBus);
+        AE2ClientPlugin.onRegister(modBus, gameBus);
         modBus.addListener(AE2OmniCellsClient::onAddPackFinders);
     }
 

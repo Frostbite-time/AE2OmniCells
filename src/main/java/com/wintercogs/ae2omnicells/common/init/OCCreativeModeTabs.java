@@ -32,11 +32,6 @@ public class OCCreativeModeTabs
                         {
                             output.accept(ro.get());
                         }
-                        // 方块物品
-                        for (RegistryObject<? extends Block> ro : OCBlocks.ALL)
-                        {
-                            output.accept(ro.get());
-                        }
                         // 普通元件（非便携）
                         for (RegistryObject<AEUniversalCellItem> ro : OCItems.getCells())
                         {
@@ -56,6 +51,11 @@ public class OCCreativeModeTabs
                             // 注：注入一个极大值，底层会按最大电量上限截断
                             portable.injectAEPower(full, Double.MAX_VALUE, Actionable.MODULATE);
                             output.accept(full);
+                        }
+                        // 方块物品
+                        for (RegistryObject<? extends Block> ro : OCBlocks.ALL)
+                        {
+                            output.accept(ro.get());
                         }
                         // 创造元件
                         for(RegistryObject<Item> ro : OCItems.getCreativeCells())

@@ -142,6 +142,7 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
                                 @NotNull List<Component> lines,
                                 @NotNull TooltipFlag isAdvanced)
     {
+        super.appendHoverText(stack, level, lines, isAdvanced);
         // 仅客户端做纯展示文本（不影响服务端逻辑）
         if (Platform.isClient())
         {

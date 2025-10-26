@@ -18,7 +18,8 @@ public class ModFluidTagsProvider extends FluidTagsProvider
     }
 
     @Override
-    protected void addTags(HolderLookup.@NotNull Provider provider) {
+    protected void addTags(HolderLookup.@NotNull Provider provider)
+    {
     }
 
     @Override

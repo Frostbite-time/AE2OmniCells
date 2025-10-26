@@ -1,10 +1,7 @@
 package com.wintercogs.ae2omnicells;
 
 import com.mojang.logging.LogUtils;
-import com.wintercogs.ae2omnicells.common.init.OCBlocks;
-import com.wintercogs.ae2omnicells.common.init.OCCreativeModeTabs;
-import com.wintercogs.ae2omnicells.common.init.OCItems;
-import com.wintercogs.ae2omnicells.common.init.OCMenus;
+import com.wintercogs.ae2omnicells.common.init.*;
 import com.wintercogs.ae2omnicells.common.me.AEPlugin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -29,6 +26,8 @@ public class AE2OmniCells
     public static final String MODID = "ae2omnicells";
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    public static final String AE2_MODID = "ae2";
+
     public static final String MEGA_MODID = "megacells";
     public static boolean MEGA_LOADED = false;
 
@@ -38,6 +37,9 @@ public class AE2OmniCells
     public static final String AAE_MODID = "advanced_ae";
     public static boolean AAE_LOADED = false;
 
+    public static final String AEMEK_MODID = "appmek";
+    public static boolean AEMEK_LOADED = false;
+
 
     public AE2OmniCells()
     {
@@ -45,19 +47,22 @@ public class AE2OmniCells
         modEventBus.addListener(this::constructMod);
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        Config.register(ModLoadingContext.get());
 
         OCItems.register(modEventBus);
         OCBlocks.register(modEventBus);
+        OCBlockEntities.register(modEventBus);
         OCCreativeModeTabs.register(modEventBus);
         OCMenus.registerMenus(modEventBus);
+
+        AEPlugin.onInit();
+        AEPlugin.onRegister(modEventBus, MinecraftForge.EVENT_BUS);
 
         if(FMLEnvironment.dist == Dist.CLIENT)
         {
             AE2OmniCellsClient.clientInit();
             AE2OmniCellsClient.clientRegister(modEventBus, MinecraftForge.EVENT_BUS);
         }
-
     }
 
     private void constructMod(FMLConstructModEvent event)
@@ -68,11 +73,13 @@ public class AE2OmniCells
             EAE_LOADED = true;
         if(ModList.get().isLoaded(AAE_MODID))
             AAE_LOADED = true;
+        if(ModList.get().isLoaded(AEMEK_MODID))
+            AEMEK_LOADED = true;
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-        AEPlugin.register();
+        AEPlugin.onCommonSetup();
 
         if(FMLEnvironment.dist == Dist.CLIENT)
             AE2OmniCellsClient.clientCommonSetup();

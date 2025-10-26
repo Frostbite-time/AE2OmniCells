@@ -1,5 +1,6 @@
 package com.wintercogs.ae2omnicells.common.init;
 
+import appeng.api.upgrades.Upgrades;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.items.AEBigIntegerCellItem;
 import com.wintercogs.ae2omnicells.common.items.AEPortableUniversalCellItem;
@@ -165,6 +166,11 @@ public class OCItems
     // 创造物品 - BigInteger级存储元件
     public static final RegistryObject<Item> CREATIVE_AE_CELL_BIGINTEGER = registerCreativeCell("creative_ae_cell_biginteger",
             () -> new AEBigIntegerCellItem(new Item.Properties().stacksTo(1), 64));
+
+    // 升级卡 - 类型模糊卡
+    public static final RegistryObject<Item> TYPE_FUZZY_CARD = registerOtherItem("type_fuzzy_card",
+            () -> Upgrades.createUpgradeCardItem(new Item.Properties()));
+
 
     public static void register(IEventBus eventBus)
     {

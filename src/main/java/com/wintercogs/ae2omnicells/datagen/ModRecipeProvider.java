@@ -1,7 +1,10 @@
 package com.wintercogs.ae2omnicells.datagen;
 
+import appeng.api.util.AEColor;
+import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
+import appeng.core.definitions.AEParts;
 import appeng.recipes.handlers.ChargerRecipeBuilder;
 import appeng.recipes.handlers.InscriberProcessType;
 import appeng.recipes.handlers.InscriberRecipeBuilder;
@@ -9,13 +12,17 @@ import com.glodblock.github.extendedae.recipe.CircuitCutterRecipeBuilder;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.init.OCBlocks;
 import com.wintercogs.ae2omnicells.common.init.OCItems;
+import com.wintercogs.ae2omnicells.common.init.OCTags;
+import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingUnitType;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
@@ -23,6 +30,8 @@ import net.minecraftforge.registries.RegistryObject;
 import net.pedroksl.advanced_ae.recipes.ReactionChamberRecipeBuilder;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class ModRecipeProvider extends RecipeProvider implements IConditionBuilder
@@ -38,7 +47,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     {
         // 末影钢锭
         InscriberRecipeBuilder.inscribe(Items.IRON_INGOT, OCItems.ENDER_INGOT.get(), 1)
-                .setTop(Ingredient.of(AEItems.ENDER_DUST.asItem()))
+                .setTop(Ingredient.of(OCTags.ENDER_PEARL_DUST))
                 .setBottom(Ingredient.of(AEItems.CERTUS_QUARTZ_DUST))
                 .setMode(InscriberProcessType.PRESS)
                 .save(recipeOutput, AE2OmniCells.makeId("ender_ingot"));
@@ -63,6 +72,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         // 充能末影钢锭
         ChargerRecipeBuilder.charge(recipeOutput, AE2OmniCells.makeId("charged_ender_ingot"), OCItems.ENDER_INGOT.get(), OCItems.CHARGED_ENDER_INGOT.get());
+
+        // 类型模糊卡
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.TYPE_FUZZY_CARD.get())
+                .requires(AEItems.ADVANCED_CARD)
+                .requires(OCItems.ENDER_INGOT.get())
+                .unlockedBy("has_ender_ingot", has(OCItems.ENDER_INGOT.get()))
+                .save(recipeOutput);
 
         // 全能链路压印模板
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_LINK_PRINT_PRESS.get())
@@ -160,6 +176,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         // 统一生成所有存储外壳、组件、元件配方
         buildAllByTiers(recipeOutput);
+        // 统一生成所有合成存储器的升级配方
+        buildAllCraftingUnitTransforms(recipeOutput);
 
         // EAE联动配方---------------------------------------------------------------------------------------------------------
         ConditionalRecipe.builder()
@@ -191,7 +209,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         ConditionalRecipe.builder()
                 .addCondition(modLoaded(AE2OmniCells.AAE_MODID))
                 .addRecipe(r -> ReactionChamberRecipeBuilder.react(OCItems.ENDER_INGOT.get(), 64, 500000)
-                        .input(AEItems.ENDER_DUST, 32)
+                        .input(OCTags.ENDER_PEARL_DUST, 32)
                         .input(Items.IRON_INGOT, 32)
                         .input(AEItems.CERTUS_QUARTZ_DUST, 32)
                         .fluid(Fluids.WATER, 500)
@@ -251,6 +269,18 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         String base = (portable ? "disassembly/portable/" : "disassembly/") + series + "/" + idLike.getId().getPath();
         return AE2OmniCells.makeId(base);
     }
+    private static ResourceLocation craftingUnitUpgradeId(RegistryObject<?> craftingUnit)
+    {
+        return AE2OmniCells.makeId("crafting_unit/upgrade/" + craftingUnit.getId().getPath());
+    }
+    private static ResourceLocation craftingUnitShapelessId(RegistryObject<?> craftingUnit)
+    {
+        return AE2OmniCells.makeId("crafting_unit/shapeless" + craftingUnit.getId().getPath());
+    }
+    private static ResourceLocation craftingUnitShapedId(RegistryObject<?> craftingUnit)
+    {
+        return AE2OmniCells.makeId("crafting_unit/shaped" + craftingUnit.getId().getPath());
+    }
 
     // 这是什么系列的硬盘？
     private enum Series { OMNI, COMPLEX, QUANTUM }
@@ -276,7 +306,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     {
         // --------- 公共材料（A、B）---------
         ItemLike A_GLASS = AEBlocks.QUARTZ_GLASS.asItem();
-        ItemLike B_ENDER_DUST = AEItems.ENDER_DUST.asItem();
+        TagKey<Item> B_ENDER_DUST = OCTags.ENDER_PEARL_DUST;
 
         // --------- 三系材料定义 ---------
         SeriesMaterials OMNI_MATS = new SeriesMaterials(
@@ -379,7 +409,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                                    SeriesMaterials mats,
                                    TierRow[] rows,
                                    ItemLike A_GLASS,
-                                   ItemLike B_ENDER_DUST) {
+                                   TagKey<Item> B_ENDER_DUST) {
         // 组件（1K 基础式 + 其余套娃）
         for (int i = 0; i < rows.length; i++) {
             var comp = rows[i].component().get();
@@ -423,7 +453,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                                 .pattern("NPN")
                                 .pattern("ECE")
                                 .pattern("NEN")
-                                .define('N', AEItems.ENDER_DUST.asItem())
+                                .define('N', OCTags.ENDER_PEARL_DUST)
                                 .define('P', mats.componentProcessorP())
                                 .define('E', OCItems.CHARGED_ENDER_INGOT.get())
                                 .define('C', AEItems.CELL_COMPONENT_1K.asItem())
@@ -491,5 +521,104 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                     .unlockedBy("has_component", has(comp))
                     .save(out, cellShapelessId(row.portableCell()));
         }
+    }
+
+
+
+    // 合成存储器升级配方构建
+    record UnitTransformTier(RegistryObject<? extends Block> baseBlock, ItemLike upgradeItem) {}
+
+    private void buildAllCraftingUnitTransforms(Consumer<FinishedRecipe> output)
+    {
+        List<UnitTransformTier> tiers = new ArrayList<>();
+
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_1K_BLOCK, OCItems.OMNI_CELL_COMPONENT_1K.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_4K_BLOCK, OCItems.OMNI_CELL_COMPONENT_4K.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_16K_BLOCK, OCItems.OMNI_CELL_COMPONENT_16K.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_64K_BLOCK, OCItems.OMNI_CELL_COMPONENT_64K.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_256K_BLOCK, OCItems.OMNI_CELL_COMPONENT_256K.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_1M_BLOCK, OCItems.OMNI_CELL_COMPONENT_1M.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_4M_BLOCK, OCItems.OMNI_CELL_COMPONENT_4M.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_16M_BLOCK, OCItems.OMNI_CELL_COMPONENT_16M.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_64M_BLOCK, OCItems.OMNI_CELL_COMPONENT_64M.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_STORAGE_256M_BLOCK, OCItems.OMNI_CELL_COMPONENT_256M.get()));
+
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_1K_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_1K.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_4K_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_4K.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_16K_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_16K.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_64K_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_64K.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_256K_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_256K.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_1M_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_1M.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_4M_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_4M.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_16M_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_16M.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_64M_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_64M.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_STORAGE_256M_BLOCK, OCItems.COMPLEX_OMNI_CELL_COMPONENT_256M.get()));
+
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_1K_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_1K.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_4K_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_4K.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_16K_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_16K.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_64K_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_64K.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_256K_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_256K.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_1M_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_1M.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_4M_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_4M.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_16M_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_16M.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_64M_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_64M.get()));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_STORAGE_256M_BLOCK, OCItems.QUANTUM_OMNI_CELL_COMPONENT_256M.get()));
+
+        // 接下来添加配方，此时提前把存储监控器加回来
+        tiers.add(new UnitTransformTier(OCBlocks.OMNI_CRAFTING_MONITOR_BLOCK, AEParts.STORAGE_MONITOR));
+        tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_MONITOR_BLOCK, AEParts.STORAGE_MONITOR));
+        tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_MONITOR_BLOCK, AEParts.STORAGE_MONITOR));
+
+        for(UnitTransformTier tier : tiers)
+        {
+            if(!(tier.baseBlock.get() instanceof AbstractCraftingUnitBlock<?> craftingUnitBlock)) continue;
+            if(!(craftingUnitBlock.type instanceof OmniCraftingUnitType craftingUnitType)) continue;
+
+            ItemLike inputUnit = switch(craftingUnitType.family)
+            {
+                case OMNI -> OCBlocks.OMNI_CRAFTING_UNIT_BLOCK.get();
+                case COMPLEX -> OCBlocks.COMPLEX_CRAFTING_UNIT_BLOCK.get();
+                case QUANTUM -> OCBlocks.QUANTUM_CRAFTING_UNIT_BLOCK.get();
+            };
+            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, tier.baseBlock.get())
+                    .requires(tier.upgradeItem.asItem())
+                    .requires(inputUnit)
+                    .unlockedBy("has_correct_unit", has(inputUnit))
+                    .save(output, craftingUnitShapelessId(tier.baseBlock));
+        }
+
+        // 三个基本空单元的配方
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCBlocks.OMNI_CRAFTING_UNIT_BLOCK.get())
+                .pattern("ABA")
+                .pattern("CDC")
+                .pattern("ABA")
+                .define('A', OCItems.ENDER_INGOT.get())
+                .define('B', OCItems.OMNI_LINK_PROCESSOR.get())
+                .define('C', AEParts.GLASS_CABLE.item(AEColor.TRANSPARENT))
+                .define('D', AEItems.LOGIC_PROCESSOR)
+                .unlockedBy("has_ender_ingot", has(OCItems.ENDER_INGOT.get()))
+                .save(output, craftingUnitShapedId(OCBlocks.OMNI_CRAFTING_UNIT_BLOCK));
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCBlocks.COMPLEX_CRAFTING_UNIT_BLOCK.get())
+                .pattern("ABA")
+                .pattern("CDC")
+                .pattern("ABA")
+                .define('A', OCItems.CHARGED_ENDER_INGOT.get())
+                .define('B', OCItems.COMPLEX_LINK_PROCESSOR.get())
+                .define('C', AEParts.GLASS_CABLE.item(AEColor.TRANSPARENT))
+                .define('D', AEItems.LOGIC_PROCESSOR)
+                .unlockedBy("has_charged_ender_ingot", has(OCItems.CHARGED_ENDER_INGOT.get()))
+                .save(output, craftingUnitShapedId(OCBlocks.COMPLEX_CRAFTING_UNIT_BLOCK));
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCBlocks.QUANTUM_CRAFTING_UNIT_BLOCK.get())
+                .pattern("ABA")
+                .pattern("CDC")
+                .pattern("ABA")
+                .define('A', OCItems.CHARGED_ENDER_INGOT.get())
+                .define('B', OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR.get())
+                .define('C', AEParts.GLASS_CABLE.item(AEColor.TRANSPARENT))
+                .define('D', AEItems.LOGIC_PROCESSOR)
+                .unlockedBy("has_charged_ender_ingot", has(OCItems.CHARGED_ENDER_INGOT.get()))
+                .save(output, craftingUnitShapedId(OCBlocks.QUANTUM_CRAFTING_UNIT_BLOCK));
+
     }
 }
