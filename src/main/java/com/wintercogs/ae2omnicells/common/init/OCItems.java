@@ -216,7 +216,7 @@ public class OCItems
 
     private static RegistryObject<Item> registerOtherItem(String name, Supplier<Item> sup)
     {
-        RegistryObject<Item> obj = registerItem(name, () -> new Item(new Item.Properties()));
+        RegistryObject<Item> obj = registerItem(name, sup);
         OTHERS.add(obj);
         return obj;
     }
