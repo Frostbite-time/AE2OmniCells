@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "ae2omnicells:block/crafting/monitor/complex_crafting_monitor_block",
+    "north": "ae2omnicells:block/crafting/monitor/complex_crafting_monitor_block",
+    "east": "ae2omnicells:block/crafting/complex_crafting_unit_block",
+    "west": "ae2omnicells:block/crafting/complex_crafting_unit_block",
+    "south": "ae2omnicells:block/crafting/complex_crafting_unit_block",
+    "up": "ae2omnicells:block/crafting/complex_crafting_unit_block",
+    "down": "ae2omnicells:block/crafting/complex_crafting_unit_block"
+  }
+}

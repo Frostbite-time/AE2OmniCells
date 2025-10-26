@@ -10,6 +10,8 @@ import com.wintercogs.ae2omnicells.common.blocks.OmniCraftingUnitBlock;
 import com.wintercogs.ae2omnicells.common.init.OCBlockEntities;
 import com.wintercogs.ae2omnicells.common.init.OCBlocks;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingUnitType;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.RegistryObject;
@@ -43,11 +45,13 @@ public class AE2ClientPlugin
         {
             if(block.get().type instanceof OmniCraftingUnitType omniCraftingUnitType)
                 BuiltInModelHooks.addBuiltInModel(AppEng.makeId("block/crafting/" + block.getId().getPath() + "_formed"), new CraftingCubeModel(new OmniCraftingUnitModelProvider(omniCraftingUnitType)));
+            ItemBlockRenderTypes.setRenderLayer(block.get(), RenderType.cutout());
         }
         for(RegistryObject<? extends CraftingMonitorBlock> block : OCBlocks.CRAFTING_MONITORS)
         {
             if(block.get().type instanceof OmniCraftingUnitType omniCraftingUnitType)
                 BuiltInModelHooks.addBuiltInModel(AppEng.makeId("block/crafting/" + block.getId().getPath() + "_formed"), new CraftingCubeModel(new OmniCraftingUnitModelProvider(omniCraftingUnitType)));
+            ItemBlockRenderTypes.setRenderLayer(block.get(), RenderType.cutout());
         }
     }
 
