@@ -2,8 +2,9 @@ package com.wintercogs.ae2omnicells;
 
 import com.wintercogs.ae2omnicells.common.config.MekRadialChemicalCheck;
 import com.wintercogs.ae2omnicells.common.config.MekRadialChemicalCheckConfig;
+import com.wintercogs.ae2omnicells.common.config.OmniCoProcessorConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -15,28 +16,28 @@ public class Config
 
     public static Config INSTANCE;
 
-    private Config(ModLoadingContext container)
+    private Config(ModLoadingContext container, IEventBus modEventBus)
     {
         container.registerConfig(ModConfig.Type.COMMON, commonConfig.spec);
-        MinecraftForge.EVENT_BUS.addListener((ModConfigEvent.Loading evt) ->
+        modEventBus.addListener((ModConfigEvent.Loading evt) ->
         {
             if (evt.getConfig().getSpec() == commonConfig.spec)
             {
                 commonConfig.onLoaded();
             }
         });
-        MinecraftForge.EVENT_BUS.addListener((ModConfigEvent.Reloading evt) ->
+        modEventBus.addListener((ModConfigEvent.Reloading evt) ->
         {
             if (evt.getConfig().getSpec() == commonConfig.spec)
             {
-                commonConfig.onLoaded();
+                commonConfig.onReloaded();
             }
         });
     }
 
-    public static void register(ModLoadingContext container)
+    public static void register(ModLoadingContext container, IEventBus modEventBus)
     {
-        INSTANCE = new Config(container);
+        INSTANCE = new Config(container, modEventBus);
     }
 
     public static class CommonConfig
@@ -123,6 +124,42 @@ public class Config
         }
 
         public void onLoaded()
+        {
+            MekRadialChemicalCheckConfig.checkMode = checkMode.get();
+
+            OmniCoProcessorConfig.omni_1k = omniCoProcessor_1k.get();
+            OmniCoProcessorConfig.omni_4k = omniCoProcessor_4k.get();
+            OmniCoProcessorConfig.omni_16k = omniCoProcessor_16k.get();
+            OmniCoProcessorConfig.omni_64k = omniCoProcessor_64k.get();
+            OmniCoProcessorConfig.omni_256k = omniCoProcessor_256k.get();
+            OmniCoProcessorConfig.omni_1m = omniCoProcessor_1m.get();
+            OmniCoProcessorConfig.omni_4m = omniCoProcessor_4m.get();
+            OmniCoProcessorConfig.omni_16m = omniCoProcessor_16m.get();
+            OmniCoProcessorConfig.omni_64m = omniCoProcessor_64m.get();
+            OmniCoProcessorConfig.omni_256m = omniCoProcessor_256m.get();
+            OmniCoProcessorConfig.complex_1k = complexCoProcessor_1k.get();
+            OmniCoProcessorConfig.complex_4k = complexCoProcessor_4k.get();
+            OmniCoProcessorConfig.complex_16k = complexCoProcessor_16k.get();
+            OmniCoProcessorConfig.complex_64k = complexCoProcessor_64k.get();
+            OmniCoProcessorConfig.complex_256k = complexCoProcessor_256k.get();
+            OmniCoProcessorConfig.complex_1m = complexCoProcessor_1m.get();
+            OmniCoProcessorConfig.complex_4m = complexCoProcessor_4m.get();
+            OmniCoProcessorConfig.complex_16m = complexCoProcessor_16m.get();
+            OmniCoProcessorConfig.complex_64m = complexCoProcessor_64m.get();
+            OmniCoProcessorConfig.complex_256m = complexCoProcessor_256m.get();
+            OmniCoProcessorConfig.quantum_1k = quantumCoProcessor_1k.get();
+            OmniCoProcessorConfig.quantum_4k = quantumCoProcessor_4k.get();
+            OmniCoProcessorConfig.quantum_16k = quantumCoProcessor_16k.get();
+            OmniCoProcessorConfig.quantum_64k = quantumCoProcessor_64k.get();
+            OmniCoProcessorConfig.quantum_256k = quantumCoProcessor_256k.get();
+            OmniCoProcessorConfig.quantum_1m = quantumCoProcessor_1m.get();
+            OmniCoProcessorConfig.quantum_4m = quantumCoProcessor_4m.get();
+            OmniCoProcessorConfig.quantum_16m = quantumCoProcessor_16m.get();
+            OmniCoProcessorConfig.quantum_64m = quantumCoProcessor_64m.get();
+            OmniCoProcessorConfig.quantum_256m = quantumCoProcessor_256m.get();
+        }
+
+        public void onReloaded()
         {
             MekRadialChemicalCheckConfig.checkMode = checkMode.get();
         }
