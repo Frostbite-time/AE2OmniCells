@@ -279,7 +279,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         PressurizedReactionRecipeBuilder.reaction(
                 IngredientCreatorAccess.item().from(AEItems.SINGULARITY),
                 IngredientCreatorAccess.fluid().from(MekanismFluids.LITHIUM.asStack(1000)),
-                IngredientCreatorAccess.chemicalStack().fromHolder(MekanismChemicals.ANTIMATTER, 1000),
+                IngredientCreatorAccess.chemicalStack().fromHolder(MekanismChemicals.POLONIUM, 1000),
                 900,
                 new ItemStack(OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY.get()))
                 .addCondition(new ModLoadedCondition(AE2OmniCells.AEMEK_MODID))
