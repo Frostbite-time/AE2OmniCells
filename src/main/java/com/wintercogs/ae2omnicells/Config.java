@@ -129,7 +129,7 @@ public class Config
 
             checkMode = builder
                     .comment("是否允许OMNI系列元件存入MEK的放射性化学品，DENY_SPENT代表仅阻止用尽的核废料，其余为字面意思")
-                    .defineEnum("mek_radial_chemical_check", MekRadialChemicalCheck.ALLOW);
+                    .defineEnum("mek_radial_chemical_check", MekRadialChemicalCheck.DENY_SPENT);
 
             this.spec = builder.build();
         }
