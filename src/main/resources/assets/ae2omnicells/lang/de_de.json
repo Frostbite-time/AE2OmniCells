@@ -111,6 +111,9 @@
   "item.ae2omnicells.creative_ae_cell_long": "Kreative Speicherzelle (Stufe LONG)",
   "item.ae2omnicells.creative_ae_cell_biginteger": "Kreative Speicherzelle (Stufe BIG-INTEGER)",
   "item.ae2omnicells.type_fuzzy_card": "Typ-Fuzzy-Karte",
+  "item.ae2omnicells.spent_nuclear_waste_cell": "Speicherzelle für abgebrannten Nuklearabfall",
+  "item.ae2omnicells.spent_nuclear_waste_singularity": "Singularität (abgebrannter Nuklearabfall)",
+  "item.ae2omnicells.spent_nuclear_waste_component": "Speicherkomponente für abgebrannten Nuklearabfall",
 
   "block.ae2omnicells.ender_ingot_block": "Enderstahlblock",
   "block.ae2omnicells.netherite_scrap_block": "Netherit-Schrott-Block",

@@ -22,6 +22,7 @@ import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import me.ramidzkh.mekae2.ae2.MekanismKey;
+import mekanism.api.chemical.Chemical;
 import mekanism.api.chemical.gas.attribute.GasAttributes;
 import mekanism.common.registries.MekanismGases;
 import net.minecraft.network.chat.Component;
@@ -173,15 +174,15 @@ public class AEUniversalCellInventory implements StorageCell
     {
         if (amount <= 0) return 0;
 
-        // 放射性化学品保护
-        if(AE2OmniCells.AEMEK_LOADED && what instanceof MekanismKey mekanismKey)
+        // AE Mek联动
+        if (AE2OmniCells.AEMEK_LOADED)
         {
-            if(MekRadialChemicalCheckConfig.checkMode == MekRadialChemicalCheck.DENY_SPENT &&
-                    mekanismKey.getStack().getType().getChemical() == MekanismGases.SPENT_NUCLEAR_WASTE.getChemical())
-                return 0;
-            else if(MekRadialChemicalCheckConfig.checkMode == MekRadialChemicalCheck.DENY_ALL
-                    && mekanismKey.getStack().has(GasAttributes.Radiation.class))
-                return 0;
+            if (!MekIntegration.allowInsert(itemStack, what)) return 0;
+        }
+        else
+        {
+            // 未装 AE MEK：废核磁盘不接受任何内容
+            if (itemStack.getItem() == OCItems.SPENT_NUCLEAR_WASTE_CELL.get()) return 0;
         }
 
         // 分区/模糊/黑白名单 与 递归盘保护
@@ -555,5 +556,27 @@ public class AEUniversalCellInventory implements StorageCell
         if (a == 0 || b == 0) return 0;
         if (a > Long.MAX_VALUE / b) return Long.MAX_VALUE;
         return a * b;
+    }
+
+    /** 用来做mek化学品判断 */
+    private static final class MekIntegration
+    {
+        static boolean allowInsert(ItemStack hostCell, AEKey what)
+        {
+            final boolean isWasteCell = hostCell.getItem() == OCItems.SPENT_NUCLEAR_WASTE_CELL.get();
+
+            // 非 Mek 化学：废核盘一律拒，普通盘不干预
+            if (!(what instanceof MekanismKey mekanismKey))
+            {
+                return !isWasteCell;
+            }
+
+            final boolean isSpent = mekanismKey.getStack().getType().getChemical() == MekanismGases.SPENT_NUCLEAR_WASTE.getChemical();
+            final boolean isRadio = mekanismKey.getStack().has(GasAttributes.Radiation.class);
+
+            // 交给策略枚举做最终判定
+            return MekRadialChemicalCheckConfig.checkMode
+                    .allow(isWasteCell, isSpent, isRadio);
+        }
     }
 }

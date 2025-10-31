@@ -133,6 +133,11 @@ public class ModItemModelProvider extends ItemModelProvider
                 "ae2omnicells:item/portable_cell_quantum_housing",
                 "ae2omnicells:item/portable_cell_side_256m");
 
+        // 废核系列
+        cellWithOwnBaseAndAeLed(OCItems.SPENT_NUCLEAR_WASTE_CELL.get());
+        basicItem(OCItems.SPENT_NUCLEAR_WASTE_COMPONENT.get());
+        basicItem(OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY.get());
+
     }
 
     /**

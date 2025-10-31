@@ -23,6 +23,7 @@ public class ModBlockModelProvider extends BlockModelProvider
         driveBlockModel("block/drive/omni_drive_cell", "block/drive/cells/omni_cell_drive");
         driveBlockModel("block/drive/complex_omni_drive_cell", "block/drive/cells/complex_omni_cell_drive");
         driveBlockModel("block/drive/quantum_omni_drive_cell", "block/drive/cells/quantum_omni_cell_drive");
+        driveBlockModel("block/drive/spent_nuclear_waste_drive_cell", "block/drive/cells/spent_nuclear_waste_drive_cell");
     }
 
     /**

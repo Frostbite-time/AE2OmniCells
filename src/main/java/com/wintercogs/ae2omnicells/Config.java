@@ -84,7 +84,7 @@ public class Config
 
             checkMode = builder
                     .comment("是否允许OMNI系列元件存入MEK的放射性化学品，DENY_SPENT代表仅阻止用尽的核废料，其余为字面意思")
-                    .defineEnum("mek_radial_chemical_check", MekRadialChemicalCheck.ALLOW);
+                    .defineEnum("mek_radial_chemical_check", MekRadialChemicalCheck.DENY_SPENT);
 
             // 这部分不会做热重载支持，因为很难预测运行时变化的cpu并行数会造成什么后果
             builder.push("CPU Processors Config (Must restart your game after changed)");

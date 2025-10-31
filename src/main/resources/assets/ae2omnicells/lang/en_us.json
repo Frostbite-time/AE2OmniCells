@@ -111,6 +111,9 @@
   "item.ae2omnicells.creative_ae_cell_long": "LONG-tier Creative Storage Cell",
   "item.ae2omnicells.creative_ae_cell_biginteger": "BIG-INTEGER-tier Creative Storage Cell",
   "item.ae2omnicells.type_fuzzy_card": "Type Fuzzy Card",
+  "item.ae2omnicells.spent_nuclear_waste_cell": "Spent Nuclear Storage Cell",
+  "item.ae2omnicells.spent_nuclear_waste_singularity": "Spent Nuclear Singularity",
+  "item.ae2omnicells.spent_nuclear_waste_component": "Spent Nuclear Storage Component",
 
   "block.ae2omnicells.ender_ingot_block": "Ender Steel Block",
   "block.ae2omnicells.netherite_scrap_block": "Netherite Scrap Block",

@@ -60,5 +60,10 @@ public class AEPlugin
         }
         Upgrades.add(AEItems.VOID_CARD, OCItems.CREATIVE_AE_CELL_LONG.get(), 1, CELL_GROUP_NAME);
         Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, OCItems.CREATIVE_AE_CELL_LONG.get(), 1, CELL_GROUP_NAME);
+
+        // 废辐元件
+        Upgrades.add(AEItems.FUZZY_CARD, OCItems.SPENT_NUCLEAR_WASTE_CELL.get(), 1);
+        Upgrades.add(AEItems.INVERTER_CARD, OCItems.SPENT_NUCLEAR_WASTE_CELL.get(), 1);
+        Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, OCItems.SPENT_NUCLEAR_WASTE_CELL.get(), 1);
     }
 }

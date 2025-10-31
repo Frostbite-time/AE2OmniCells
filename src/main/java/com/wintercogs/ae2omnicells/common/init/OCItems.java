@@ -32,6 +32,8 @@ public class OCItems
     private static final List<RegistryObject<Item>> CREATIVE_CELLS = new ArrayList<>();
     /** 其他物品（= 元件外壳、各类组件、锭/处理器/压印模板等杂项） */
     private static final List<RegistryObject<Item>> OTHERS = new ArrayList<>();
+    /** 联动物品系列 */
+    private static final List<RegistryObject<? extends Item>> MEK_INTEGRATIONS = new ArrayList<>();
 
     // ---- 杂项 / 其他物品 ----
     public static final RegistryObject<Item> ENDER_INGOT = registerOtherItem("ender_ingot", () -> new Item(new Item.Properties()));
@@ -171,6 +173,17 @@ public class OCItems
     public static final RegistryObject<Item> TYPE_FUZZY_CARD = registerOtherItem("type_fuzzy_card",
             () -> Upgrades.createUpgradeCardItem(new Item.Properties()));
 
+    // 废辐系列 - 元件
+    @SuppressWarnings("unchecked")
+    public static final RegistryObject<AEUniversalCellItem> SPENT_NUCLEAR_WASTE_CELL = (RegistryObject<AEUniversalCellItem>)registerMekIntegration("spent_nuclear_waste_cell",
+            () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1), 59049, 1, 256));
+    // 废辐系列 - 组件
+    public static final RegistryObject<? extends Item> SPENT_NUCLEAR_WASTE_SINGULARITY = registerMekIntegration("spent_nuclear_waste_singularity",
+            () -> new Item(new Item.Properties()));
+    // 废辐系列 - 奇点
+    public static final RegistryObject<? extends Item> SPENT_NUCLEAR_WASTE_COMPONENT = registerMekIntegration("spent_nuclear_waste_component",
+            () -> new Item(new Item.Properties()));
+
 
     public static void register(IEventBus eventBus)
     {
@@ -201,6 +214,10 @@ public class OCItems
     public static List<RegistryObject<Item>> getCreativeCells()
     {
         return Collections.unmodifiableList(CREATIVE_CELLS);
+    }
+    public static List<RegistryObject<? extends Item>> getMekIntegrations()
+    {
+        return MEK_INTEGRATIONS;
     }
 
     // ---------- 工具方法 ----------
@@ -283,6 +300,13 @@ public class OCItems
     {
         RegistryObject<Item> obj = registerItem(name, sup);
         CREATIVE_CELLS.add(obj);
+        return obj;
+    }
+
+    private static RegistryObject<? extends Item> registerMekIntegration(String name, Supplier<Item> sup)
+    {
+        RegistryObject<Item> obj = registerItem(name, sup);
+        MEK_INTEGRATIONS.add(obj);
         return obj;
     }
 }

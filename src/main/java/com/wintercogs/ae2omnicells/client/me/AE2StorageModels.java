@@ -18,11 +18,16 @@ public class AE2StorageModels
 
     private static final ResourceLocation MODEL_CELL_CREATIVE = new ResourceLocation("ae2:block/drive/cells/creative_cell");
 
+    private static final ResourceLocation MODEL_SPENT_NUCLEAR_WASTE_CELL = AE2OmniCells.makeId("block/drive/spent_nuclear_waste_drive_cell");
+
     public static void registerStorageModels()
     {
         // 创造元件
         StorageCellModels.registerModel(CREATIVE_AE_CELL_LONG.get(), MODEL_CELL_CREATIVE);
         StorageCellModels.registerModel(CREATIVE_AE_CELL_BIGINTEGER.get(), MODEL_CELL_CREATIVE);
+
+        // 废核元件
+        StorageCellModels.registerModel(SPENT_NUCLEAR_WASTE_CELL.get(), MODEL_SPENT_NUCLEAR_WASTE_CELL);
 
         // 普通（非便携 + 便携）
         registerModels(OMNI_MODEL,
@@ -118,7 +123,9 @@ public class AE2StorageModels
                 PORTABLE_QUANTUM_OMNI_CELL_256M.get(),
                 // 创造
                 CREATIVE_AE_CELL_LONG.get(),
-                CREATIVE_AE_CELL_BIGINTEGER.get()
+                CREATIVE_AE_CELL_BIGINTEGER.get(),
+                // 废核
+                SPENT_NUCLEAR_WASTE_CELL.get()
         );
     }
 
