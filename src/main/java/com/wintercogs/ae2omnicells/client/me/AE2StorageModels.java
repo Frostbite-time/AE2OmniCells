@@ -22,6 +22,8 @@ public class AE2StorageModels
     private static final ResourceLocation MODEL_CELL_CREATIVE = ResourceLocation.parse(
             "ae2:block/drive/cells/creative_cell");
 
+    private static final ResourceLocation MODEL_SPENT_NUCLEAR_WASTE_CELL = AE2OmniCells.makeId("drive/cells/spent_nuclear_waste_cell");
+
     // 统一的 Tier 后缀顺序
     private static final String[] SUFFIXES = {
             "1k", "4k", "16k", "64k", "256k",
@@ -33,6 +35,9 @@ public class AE2StorageModels
         // 创造元件 直接借用AE原版的模型
         StorageCellModels.registerModel(CREATIVE_AE_CELL_LONG, MODEL_CELL_CREATIVE);
         StorageCellModels.registerModel(CREATIVE_AE_CELL_BIGINTEGER, MODEL_CELL_CREATIVE);
+
+        // 废核元件
+        StorageCellModels.registerModel(SPENT_NUCLEAR_WASTE_CELL, MODEL_SPENT_NUCLEAR_WASTE_CELL);
 
         // 普通（非便携 + 便携）
         registerSeries(
@@ -100,7 +105,9 @@ public class AE2StorageModels
                 QUANTUM_OMNI_CELL_256M.get(),
                 // 创造
                 CREATIVE_AE_CELL_LONG.get(),
-                CREATIVE_AE_CELL_BIGINTEGER.get()
+                CREATIVE_AE_CELL_BIGINTEGER.get(),
+                // 废核
+                SPENT_NUCLEAR_WASTE_CELL.get()
         );
 
         event.register((itemStack, idx) -> FastColor.ARGB32.opaque(AEPortableUniversalCellItem.getColor(itemStack, idx)),

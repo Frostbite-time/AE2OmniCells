@@ -111,6 +111,9 @@
   "item.ae2omnicells.creative_ae_cell_long": "クリエイティブストレージセル（LONG級）",
   "item.ae2omnicells.creative_ae_cell_biginteger": "クリエイティブストレージセル（BIG-INTEGER級）",
   "item.ae2omnicells.type_fuzzy_card": "タイプファジーカード",
+  "item.ae2omnicells.spent_nuclear_waste_cell": "使用済み核廃棄物ストレージセル",
+  "item.ae2omnicells.spent_nuclear_waste_singularity": "特異点（使用済み核廃棄物）",
+  "item.ae2omnicells.spent_nuclear_waste_component": "使用済み核廃棄物ストレージコンポーネント",
 
   "block.ae2omnicells.ender_ingot_block": "エンダースチールブロック",
   "block.ae2omnicells.netherite_scrap_block": "ネザライトの欠片ブロック",

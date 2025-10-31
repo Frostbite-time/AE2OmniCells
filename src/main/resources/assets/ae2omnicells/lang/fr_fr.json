@@ -111,6 +111,9 @@
   "item.ae2omnicells.creative_ae_cell_long": "Cellule de stockage créative (niveau LONG)",
   "item.ae2omnicells.creative_ae_cell_biginteger": "Cellule de stockage créative (niveau BIG-INTEGER)",
   "item.ae2omnicells.type_fuzzy_card": "Carte floue par type",
+  "item.ae2omnicells.spent_nuclear_waste_cell": "Cellule de stockage de déchets nucléaires usés",
+  "item.ae2omnicells.spent_nuclear_waste_singularity": "Singularité de déchets nucléaires usés",
+  "item.ae2omnicells.spent_nuclear_waste_component": "Composant de stockage de déchets nucléaires usés",
 
   "block.ae2omnicells.ender_ingot_block": "Bloc d’acier d’Ender",
   "block.ae2omnicells.netherite_scrap_block": "Bloc de débris de Netherite",

@@ -111,6 +111,9 @@
   "item.ae2omnicells.creative_ae_cell_long": "Творческая ячейка хранения уровня LONG",
   "item.ae2omnicells.creative_ae_cell_biginteger": "Творческая ячейка хранения уровня BIG-INTEGER",
   "item.ae2omnicells.type_fuzzy_card": "Нечёткая карта по типу",
+  "item.ae2omnicells.spent_nuclear_waste_cell": "Ячейка хранения отработанных ядерных отходов",
+  "item.ae2omnicells.spent_nuclear_waste_singularity": "Сингулярность отработанных ядерных отходов",
+  "item.ae2omnicells.spent_nuclear_waste_component": "Компонент хранения отработанных ядерных отходов",
 
   "block.ae2omnicells.ender_ingot_block": "Блок эндер-стали",
   "block.ae2omnicells.netherite_scrap_block": "Блок обломков незерита",

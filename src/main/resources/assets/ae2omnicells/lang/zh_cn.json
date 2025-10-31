@@ -111,6 +111,9 @@
   "item.ae2omnicells.creative_ae_cell_long": "LONG级 创造存储元件",
   "item.ae2omnicells.creative_ae_cell_biginteger": "BIG-INTEGER级 创造存储元件",
   "item.ae2omnicells.type_fuzzy_card": "类型模糊卡",
+  "item.ae2omnicells.spent_nuclear_waste_cell": "废核存储元件",
+  "item.ae2omnicells.spent_nuclear_waste_singularity": "废核奇点",
+  "item.ae2omnicells.spent_nuclear_waste_component": "废核存储组件",
 
   "block.ae2omnicells.ender_ingot_block": "末影钢块",
   "block.ae2omnicells.netherite_scrap_block": "下界合金碎片块",

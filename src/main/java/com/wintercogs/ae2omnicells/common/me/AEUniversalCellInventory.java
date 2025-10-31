@@ -15,13 +15,13 @@ import appeng.core.definitions.AEItems;
 import appeng.util.ConfigInventory;
 import appeng.util.prioritylist.IPartitionList;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
-import com.wintercogs.ae2omnicells.common.config.MekRadialChemicalCheck;
 import com.wintercogs.ae2omnicells.common.config.MekRadialChemicalCheckConfig;
 import com.wintercogs.ae2omnicells.common.init.OCItems;
 import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import me.ramidzkh.mekae2.ae2.MekanismKey;
+import mekanism.api.chemical.Chemical;
 import mekanism.common.registries.MekanismChemicals;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -172,16 +172,17 @@ public class AEUniversalCellInventory implements StorageCell
     {
         if (amount <= 0) return 0;
 
-        // 放射性化学品保护
-        if(AE2OmniCells.AEMEK_LOADED && what instanceof MekanismKey mekanismKey)
+        // AE Mek联动
+        if (AE2OmniCells.AEMEK_LOADED)
         {
-            if(MekRadialChemicalCheckConfig.checkMode == MekRadialChemicalCheck.DENY_SPENT &&
-                    mekanismKey.getStack().getChemical() == MekanismChemicals.SPENT_NUCLEAR_WASTE.get())
-                return 0;
-            else if(MekRadialChemicalCheckConfig.checkMode == MekRadialChemicalCheck.DENY_ALL
-                    && mekanismKey.getStack().getChemical().isRadioactive())
-                return 0;
+            if (!MekIntegration.allowInsert(itemStack, what)) return 0;
         }
+        else
+        {
+            // 未装 AE MEK：废核磁盘不接受任何内容
+            if (itemStack.getItem() == OCItems.SPENT_NUCLEAR_WASTE_CELL.get()) return 0;
+        }
+
 
         // 分区/模糊/黑白名单 与 递归盘保护
         if (!matchesPartitionAndUpgrades(what)) return 0;
@@ -554,5 +555,28 @@ public class AEUniversalCellInventory implements StorageCell
         if (a == 0 || b == 0) return 0;
         if (a > Long.MAX_VALUE / b) return Long.MAX_VALUE;
         return a * b;
+    }
+
+    /** 用来做mek化学品判断 */
+    private static final class MekIntegration
+    {
+        static boolean allowInsert(ItemStack hostCell, AEKey what)
+        {
+            final boolean isWasteCell = hostCell.getItem() == OCItems.SPENT_NUCLEAR_WASTE_CELL.get();
+
+            // 非 Mek 化学：废核盘一律拒，普通盘不干预
+            if (!(what instanceof MekanismKey mekanismKey))
+            {
+                return !isWasteCell;
+            }
+
+            final Chemical chemical = mekanismKey.getStack().getChemical();
+            final boolean isSpent = chemical == MekanismChemicals.SPENT_NUCLEAR_WASTE.get();
+            final boolean isRadio = chemical.isRadioactive();
+
+            // 交给策略枚举做最终判定
+            return MekRadialChemicalCheckConfig.checkMode
+                    .allow(isWasteCell, isSpent, isRadio);
+        }
     }
 }

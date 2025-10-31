@@ -17,12 +17,20 @@ import com.wintercogs.ae2omnicells.common.init.OCItems;
 import com.wintercogs.ae2omnicells.common.init.OCTags;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingUnitType;
 import com.wintercogs.ae2omnicells.datagen.builder.CellDisassemblyRecipeBuilder;
+import mekanism.api.datagen.recipe.builder.PressurizedReactionRecipeBuilder;
+import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
+import mekanism.common.Mekanism;
+import mekanism.common.registries.MekanismBlocks;
+import mekanism.common.registries.MekanismChemicals;
+import mekanism.common.registries.MekanismFluids;
+import mekanism.common.registries.MekanismItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -240,6 +248,56 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .fluid(Fluids.WATER, 1000)
                 .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.AAE_MODID)),
                         AE2OmniCells.makeId("reaction_chamber/charged_ender_ingot"));
+
+        // MEK联动配方 ------------------------------------------------------------------------------------------------
+        // 元件
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.SPENT_NUCLEAR_WASTE_CELL)
+                .pattern("ABA")
+                .pattern("BCB")
+                .pattern("DED")
+                .define('A', AEBlocks.QUARTZ_GLASS.asItem())
+                .define('B', OCTags.ENDER_PEARL_DUST)
+                .define('C', OCItems.SPENT_NUCLEAR_WASTE_COMPONENT)
+                .define('D', OCItems.CHARGED_ENDER_INGOT)
+                .define('E', OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR)
+                .unlockedBy("has_spent_nuclear_waste_component", has(OCItems.SPENT_NUCLEAR_WASTE_COMPONENT))
+                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.AEMEK_MODID)),
+                        cellShapedId(OCItems.SPENT_NUCLEAR_WASTE_CELL));
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.SPENT_NUCLEAR_WASTE_CELL)
+                .requires(OCItems.SPENT_NUCLEAR_WASTE_COMPONENT)
+                .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING)
+                .unlockedBy("has_spent_nuclear_waste_component", has(OCItems.SPENT_NUCLEAR_WASTE_COMPONENT))
+                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.AEMEK_MODID)),
+                        cellShapelessId(OCItems.SPENT_NUCLEAR_WASTE_CELL));
+        CellDisassemblyRecipeBuilder.cell(OCItems.SPENT_NUCLEAR_WASTE_CELL)
+                .add(OCItems.SPENT_NUCLEAR_WASTE_COMPONENT)
+                .add(OCItems.QUANTUM_OMNI_CELL_HOUSING)
+                .whenModLoaded(AE2OmniCells.AEMEK_MODID)
+                .save(recipeOutput, disassemblyId("spent_nuclear_waste_cell", OCItems.SPENT_NUCLEAR_WASTE_CELL, false));
+
+        // 奇点
+        PressurizedReactionRecipeBuilder.reaction(
+                IngredientCreatorAccess.item().from(AEItems.SINGULARITY),
+                IngredientCreatorAccess.fluid().from(MekanismFluids.LITHIUM.asStack(1000)),
+                IngredientCreatorAccess.chemicalStack().fromHolder(MekanismChemicals.ANTIMATTER, 1000),
+                900,
+                new ItemStack(OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY.get()))
+                .addCondition(new ModLoadedCondition(AE2OmniCells.AEMEK_MODID))
+                .build(recipeOutput, AE2OmniCells.makeId(OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY.getId().getPath()));
+
+        // 组件
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.SPENT_NUCLEAR_WASTE_COMPONENT)
+                .pattern("ABA")
+                .pattern("CDC")
+                .pattern("AEA")
+                .define('A', MekanismItems.HDPE_SHEET)
+                .define('B', MekanismItems.ANTIMATTER_PELLET)
+                .define('C', MekanismBlocks.RADIOACTIVE_WASTE_BARREL)
+                .define('D', OCItems.QUANTUM_OMNI_CELL_COMPONENT_256M)
+                .define('E', OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY)
+                .unlockedBy("has_spent_nuclear_waste_singularity", has(OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY))
+                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.AEMEK_MODID)),
+                        componentShapedId(OCItems.SPENT_NUCLEAR_WASTE_COMPONENT));
 
     }
 
