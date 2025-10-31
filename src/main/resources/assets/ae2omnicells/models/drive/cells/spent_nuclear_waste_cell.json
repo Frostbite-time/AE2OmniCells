@@ -3,8 +3,8 @@
   "credit": "Made with Blockbench",
   "ambientocclusion": false,
   "textures": {
-    "particle": "ae2omnicells:block/drive/cells/quantum_omni_cell_drive",
-    "cell": "ae2omnicells:block/drive/cells/quantum_omni_cell_drive"
+    "particle": "ae2omnicells:block/drive/cells/spent_nuclear_waste_cell_drive",
+    "cell": "ae2omnicells:block/drive/cells/spent_nuclear_waste_cell_drive"
   },
   "elements": [
     {
