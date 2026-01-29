@@ -21,6 +21,9 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven {
+        url = "https://cursemaven.com"
+    }
+    maven {
         name = "Modrinth"
         url = "https://api.modrinth.com/maven"
     }
@@ -121,27 +124,20 @@ dependencies {
     // EMI仅运行，方便看配方
     localRuntime "maven.modrinth:emi:1.1.22+1.21.1+neoforge"
     // AE依赖
-    implementation "org.appliedenergistics:appliedenergistics2:${ae_version}"
+    implementation "org.appliedenergistics:appliedenergistics2:${ae2_version}"
     // Mage存储元件
-    compileOnly "maven.modrinth:mega:4.10.1"
-    runtimeOnly "maven.modrinth:mega:4.10.1"
+    implementation "curse.maven:mega-cells-622112:6853076"
     // EAE联动
-    compileOnly "maven.modrinth:extended-ae:1.21-2.2.12-neoforge"
-    runtimeOnly "maven.modrinth:extended-ae:1.21-2.2.12-neoforge"
-    compileOnly "maven.modrinth:glodium:1.21-2.2-neoforge"
-    runtimeOnly "maven.modrinth:glodium:1.21-2.2-neoforge"
+    implementation "curse.maven:ex-pattern-provider-892005:7356474"
+    implementation "curse.maven:glodium-957920:5821676"
 
     // AAE
-    compileOnly "maven.modrinth:geckolib:RVIo5f6E"
-    runtimeOnly "maven.modrinth:geckolib:RVIo5f6E"
-    compileOnly "maven.modrinth:advancedae:1.5.2-1.21.1"
-    runtimeOnly "maven.modrinth:advancedae:1.5.2-1.21.1"
+    implementation "curse.maven:geckolib-388172:7415496"
+    implementation "curse.maven:advancedae-1084104:7374386"
 
     // AE MEK
-    compileOnly "maven.modrinth:applied-mekanistics:1.6.2"
-    runtimeOnly "maven.modrinth:applied-mekanistics:1.6.2"
-    compileOnly "maven.modrinth:mekanism:10.7.13.78"
-    runtimeOnly "maven.modrinth:mekanism:10.7.13.78"
+    implementation "curse.maven:applied-mekanistics-574300:7096962"
+    implementation "maven.modrinth:mekanism:10.7.13.78"
 
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
@@ -173,6 +169,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             minecraft_version      : minecraft_version,
             minecraft_version_range: minecraft_version_range,
             neo_version            : neo_version,
+            neo_version_range      : neo_version_range,
             loader_version_range   : loader_version_range,
             mod_id                 : mod_id,
             mod_name               : mod_name,

@@ -19,7 +19,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 
 @Mod(value = AE2OmniCells.MODID, dist = Dist.CLIENT)
-@EventBusSubscriber(modid = AE2OmniCells.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = AE2OmniCells.MODID, value = Dist.CLIENT)
 public class AE2OmniCellsClient
 {
 

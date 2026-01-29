@@ -8,7 +8,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
-@EventBusSubscriber(modid = AE2OmniCells.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = AE2OmniCells.MODID)
 public class OCCapabilities
 {
     @SubscribeEvent
