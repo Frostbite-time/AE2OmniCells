@@ -1,0 +1,38 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "appmek"
+    }
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_spent_nuclear_waste_singularity": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ae2omnicells:spent_nuclear_waste_singularity"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ae2omnicells:components/shaped/spent_nuclear_waste_component"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_spent_nuclear_waste_singularity"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ae2omnicells:components/shaped/spent_nuclear_waste_component"
+    ]
+  }
+}

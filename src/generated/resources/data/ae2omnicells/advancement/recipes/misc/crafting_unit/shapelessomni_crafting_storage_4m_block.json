@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_correct_unit": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ae2omnicells:omni_crafting_unit_block"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ae2omnicells:crafting_unit/shapelessomni_crafting_storage_4m_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_correct_unit"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ae2omnicells:crafting_unit/shapelessomni_crafting_storage_4m_block"
+    ]
+  }
+}

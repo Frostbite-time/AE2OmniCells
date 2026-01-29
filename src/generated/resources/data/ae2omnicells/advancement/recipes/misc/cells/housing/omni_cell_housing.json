@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_ender_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ae2omnicells:ender_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ae2omnicells:cells/housing/omni_cell_housing"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_ender_ingot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ae2omnicells:cells/housing/omni_cell_housing"
+    ]
+  }
+}

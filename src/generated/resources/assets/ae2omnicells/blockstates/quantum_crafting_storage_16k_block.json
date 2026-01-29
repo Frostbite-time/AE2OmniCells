@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "formed=false": {
+      "model": "ae2omnicells:block/crafting/quantum_crafting_storage_16k_block"
+    },
+    "formed=true": {
+      "model": "ae2:block/crafting/quantum_crafting_storage_16k_block_formed"
+    }
+  }
+}
