@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "ae2:advanced_card"
+    },
+    {
+      "item": "ae2omnicells:ender_ingot"
+    }
+  ],
+  "result": {
+    "item": "ae2omnicells:type_fuzzy_card"
+  }
+}

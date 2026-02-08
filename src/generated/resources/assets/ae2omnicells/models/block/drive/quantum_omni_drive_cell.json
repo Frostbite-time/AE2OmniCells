@@ -1,0 +1,6 @@
+{
+  "parent": "ae2:block/drive/drive_cell",
+  "textures": {
+    "cell": "ae2omnicells:block/drive/cells/quantum_omni_cell_drive"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "advanced_ae"
+        }
+      ],
+      "recipe": {
+        "type": "advanced_ae:reaction",
+        "energy": 500000,
+        "fluid": {
+          "fluidStack": {
+            "Amount": 500,
+            "FluidName": "minecraft:water"
+          }
+        },
+        "input_items": [
+          {
+            "amount": 32,
+            "ingredient": {
+              "tag": "forge:dusts/ender_pearl"
+            }
+          },
+          {
+            "amount": 32,
+            "ingredient": {
+              "item": "minecraft:iron_ingot"
+            }
+          },
+          {
+            "amount": 32,
+            "ingredient": {
+              "item": "ae2:certus_quartz_dust"
+            }
+          }
+        ],
+        "output": {
+          "#": 64,
+          "#c": "ae2:i",
+          "id": "ae2omnicells:ender_ingot"
+        }
+      }
+    }
+  ]
+}

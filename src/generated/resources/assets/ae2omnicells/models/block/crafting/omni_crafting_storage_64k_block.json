@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "ae2omnicells:block/crafting/omni_crafting_storage_64k_block"
+  }
+}

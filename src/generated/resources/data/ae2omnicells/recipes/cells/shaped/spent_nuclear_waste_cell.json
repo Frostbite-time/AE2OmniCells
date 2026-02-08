@@ -1,0 +1,43 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "appmek"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "A": {
+            "item": "ae2:quartz_glass"
+          },
+          "B": {
+            "tag": "forge:dusts/ender_pearl"
+          },
+          "C": {
+            "item": "ae2omnicells:spent_nuclear_waste_component"
+          },
+          "D": {
+            "item": "ae2omnicells:charged_ender_ingot"
+          },
+          "E": {
+            "item": "ae2omnicells:multidimensional_expansion_processor"
+          }
+        },
+        "pattern": [
+          "ABA",
+          "BCB",
+          "DED"
+        ],
+        "result": {
+          "item": "ae2omnicells:spent_nuclear_waste_cell"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

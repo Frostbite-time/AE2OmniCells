@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "ae2omnicells:components/complex",
+  "key": {
+    "C": {
+      "item": "ae2:cell_component_1k"
+    },
+    "E": {
+      "item": "ae2omnicells:charged_ender_ingot"
+    },
+    "G": {
+      "item": "minecraft:glowstone_dust"
+    },
+    "P": {
+      "item": "ae2omnicells:complex_link_processor"
+    }
+  },
+  "pattern": [
+    "GPG",
+    "ECE",
+    "GEG"
+  ],
+  "result": {
+    "item": "ae2omnicells:complex_omni_cell_component_1k"
+  },
+  "show_notification": true
+}

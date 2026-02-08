@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "ae2omnicells:omni_cell_component_4k"
+    },
+    {
+      "item": "ae2omnicells:omni_crafting_unit_block"
+    }
+  ],
+  "result": {
+    "item": "ae2omnicells:omni_crafting_storage_4k_block"
+  }
+}

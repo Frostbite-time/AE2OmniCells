@@ -1,0 +1,18 @@
+{
+  "type": "ae2:inscriber",
+  "ingredients": {
+    "bottom": {
+      "item": "ae2:certus_quartz_dust"
+    },
+    "middle": {
+      "item": "minecraft:iron_ingot"
+    },
+    "top": {
+      "tag": "forge:dusts/ender_pearl"
+    }
+  },
+  "mode": "press",
+  "result": {
+    "item": "ae2omnicells:ender_ingot"
+  }
+}

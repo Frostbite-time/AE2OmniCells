@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "ae2omnicells:complex_omni_cell_housing"
+    },
+    {
+      "item": "ae2omnicells:complex_omni_cell_component_64k"
+    }
+  ],
+  "result": {
+    "item": "ae2omnicells:complex_omni_cell_64k"
+  }
+}

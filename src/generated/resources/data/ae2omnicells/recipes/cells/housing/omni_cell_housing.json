@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "ae2omnicells:cells/housing",
+  "key": {
+    "A": {
+      "item": "ae2:quartz_glass"
+    },
+    "B": {
+      "tag": "forge:dusts/ender_pearl"
+    },
+    "C": {
+      "item": "ae2omnicells:ender_ingot"
+    }
+  },
+  "pattern": [
+    "ABA",
+    "B B",
+    "CCC"
+  ],
+  "result": {
+    "item": "ae2omnicells:omni_cell_housing"
+  },
+  "show_notification": true
+}

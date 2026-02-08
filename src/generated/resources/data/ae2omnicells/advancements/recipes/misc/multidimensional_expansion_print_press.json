@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_charged_ender_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "ae2omnicells:charged_ender_ingot"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ae2omnicells:multidimensional_expansion_print_press"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_charged_ender_ingot",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ae2omnicells:multidimensional_expansion_print_press"
+    ]
+  },
+  "sends_telemetry_event": false
+}

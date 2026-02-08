@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "ae2:quartz_glass"
+    },
+    "B": {
+      "tag": "forge:dusts/ender_pearl"
+    },
+    "C": {
+      "item": "ae2omnicells:charged_ender_ingot"
+    },
+    "D": {
+      "item": "ae2omnicells:complex_link_processor"
+    },
+    "M": {
+      "item": "ae2omnicells:complex_omni_cell_component_64m"
+    }
+  },
+  "pattern": [
+    "ABA",
+    "BMB",
+    "CDC"
+  ],
+  "result": {
+    "item": "ae2omnicells:complex_omni_cell_64m"
+  },
+  "show_notification": true
+}

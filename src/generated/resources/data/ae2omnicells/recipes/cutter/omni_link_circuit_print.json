@@ -1,0 +1,32 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "expatternprovider"
+        }
+      ],
+      "recipe": {
+        "type": "expatternprovider:circuit_cutter",
+        "fluid_input": {
+          "amount": 100,
+          "ingredient": {
+            "fluid": "minecraft:water"
+          }
+        },
+        "item_input": {
+          "amount": 1,
+          "ingredient": {
+            "item": "ae2omnicells:ender_ingot_block"
+          }
+        },
+        "output": {
+          "count": 9,
+          "item": "ae2omnicells:omni_link_circuit_print"
+        }
+      }
+    }
+  ]
+}

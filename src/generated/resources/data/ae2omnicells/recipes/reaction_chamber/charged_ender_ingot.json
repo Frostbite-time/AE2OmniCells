@@ -1,0 +1,36 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "advanced_ae"
+        }
+      ],
+      "recipe": {
+        "type": "advanced_ae:reaction",
+        "energy": 1300000,
+        "fluid": {
+          "fluidStack": {
+            "Amount": 1000,
+            "FluidName": "minecraft:water"
+          }
+        },
+        "input_items": [
+          {
+            "amount": 64,
+            "ingredient": {
+              "item": "ae2omnicells:ender_ingot"
+            }
+          }
+        ],
+        "output": {
+          "#": 64,
+          "#c": "ae2:i",
+          "id": "ae2omnicells:charged_ender_ingot"
+        }
+      }
+    }
+  ]
+}

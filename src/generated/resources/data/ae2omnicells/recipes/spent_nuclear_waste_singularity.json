@@ -1,0 +1,26 @@
+{
+  "type": "mekanism:reaction",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "appmek"
+    }
+  ],
+  "duration": 900,
+  "fluidInput": {
+    "amount": 1000,
+    "fluid": "mekanism:lithium"
+  },
+  "gasInput": {
+    "amount": 1000,
+    "gas": "mekanism:polonium"
+  },
+  "itemInput": {
+    "ingredient": {
+      "item": "ae2:singularity"
+    }
+  },
+  "itemOutput": {
+    "item": "ae2omnicells:spent_nuclear_waste_singularity"
+  }
+}

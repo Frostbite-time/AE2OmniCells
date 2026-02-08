@@ -1,0 +1,43 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "appmek"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "A": {
+            "item": "mekanism:hdpe_sheet"
+          },
+          "B": {
+            "item": "mekanism:pellet_antimatter"
+          },
+          "C": {
+            "item": "mekanism:radioactive_waste_barrel"
+          },
+          "D": {
+            "item": "ae2omnicells:quantum_omni_cell_component_256m"
+          },
+          "E": {
+            "item": "ae2omnicells:spent_nuclear_waste_singularity"
+          }
+        },
+        "pattern": [
+          "ABA",
+          "CDC",
+          "AEA"
+        ],
+        "result": {
+          "item": "ae2omnicells:spent_nuclear_waste_component"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}
