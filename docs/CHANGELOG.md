@@ -1,2 +1,1 @@
-* Update neoforge version in dev environment
-* Update some dependencies version
+* Update some cell component textures.
