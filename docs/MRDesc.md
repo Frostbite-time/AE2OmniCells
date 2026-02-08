@@ -60,7 +60,7 @@ Once you install it, the **Cell Workbench** switches from marking **exact resour
 * **Unreadable entries**: entries that fail to load will not be automatically removed; the game will attempt to read them again every time you enter the world, to better handle changes in your mod environment
 * **In-game guide**: more detailed documentation is available in-game via **GuideME**
 * **Built-in texture pack**: includes a resource pack that lets you use the 1.20.1 texture style in **1.21.1** (and vice versa)
-* **Dark mode texture pack**: see [OMNI Cells Dark Mode](https://www.curseforge.com/minecraft/texture-packs/omni-cells-dark-mode)
+* **Dark mode texture pack**: see [OMNI Cells Dark Mode](https://modrinth.com/resourcepack/omni-cells-dark-mode)
 
 ---
 
