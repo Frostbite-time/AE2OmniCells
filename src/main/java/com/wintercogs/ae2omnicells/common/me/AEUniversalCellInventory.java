@@ -13,6 +13,7 @@ import appeng.api.storage.cells.StorageCell;
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.core.definitions.AEItems;
 import appeng.util.ConfigInventory;
+import appeng.util.prioritylist.DefaultPriorityList;
 import appeng.util.prioritylist.IPartitionList;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.config.MekRadialChemicalCheckConfig;
@@ -20,6 +21,7 @@ import com.wintercogs.ae2omnicells.common.init.OCItems;
 import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import it.unimi.dsi.fastutil.objects.ReferenceArraySet;
 import me.ramidzkh.mekae2.ae2.MekanismKey;
 import mekanism.api.chemical.Chemical;
 import mekanism.common.registries.MekanismChemicals;
@@ -95,6 +97,15 @@ public class AEUniversalCellInventory implements StorageCell
     /** 均分卡 */
     private boolean cardEqualDistributionInstalled = false;
 
+    /** key分区缓存 */
+    private IPartitionList partitionList = IPartitionList.builder().build();
+
+    /** key分区键量 */
+    private int partitionConfigSize = 0;
+
+    /** keyType分区缓存 */
+    private final ReferenceArraySet<AEKeyType> partitionTypes = new ReferenceArraySet<>();
+
     public AEUniversalCellInventory(@NotNull AEUniversalCellData cellData,
                                     @NotNull ItemStack itemStack,
                                     @NotNull IAEUniversalCell cellType,
@@ -135,6 +146,8 @@ public class AEUniversalCellInventory implements StorageCell
 
         // 更新升级卡状态
         updateUpgradeCardState();
+        // 更新分区状态
+        updatePartitionState();
         // 初始化后把统计状态写进ItemStack给客户端显示用
         updateItemTooltipState();
     }
@@ -401,45 +414,22 @@ public class AEUniversalCellInventory implements StorageCell
     {
         // 升级槽
         final boolean hasInverter = this.cardInverterInstalled;
-        final boolean hasFuzzy = this.cardFuzzyInstalled;
         final boolean hasTypeFuzzy = this.cardTypeFuzzyInstalled;
 
-        // 分区配置
-        ConfigInventory config = null;
-        FuzzyMode fuzzyMode = FuzzyMode.IGNORE_ALL;
-        if (cellType instanceof ICellWorkbenchItem cellWorkbenchItem)
-        {
-            config = cellWorkbenchItem.getConfigInventory(itemStack);
-            if (hasFuzzy) fuzzyMode = cellWorkbenchItem.getFuzzyMode(itemStack);
-        }
-        if (config == null || config.keySet().isEmpty())
-        {
-            return true; // 未配置视为不过滤
-        }
+        // 未过滤视为不配置
+        if(this.partitionList.isEmpty()) return true;
 
         IncludeExclude mode = hasInverter ? IncludeExclude.BLACKLIST : IncludeExclude.WHITELIST;
 
         if(hasTypeFuzzy) // 如果有类型模糊卡，只根据其进行分区筛选
         {
             AEKeyType targetType = what.getType();
-            boolean typeMatched = false;
-            for (AEKey key : config.keySet())
-            {
-                if (key != null && key.getType() == targetType)
-                {
-                    typeMatched = true;
-                    break;
-                }
-            }
+            boolean typeMatched = this.partitionTypes.contains(targetType);
             return (mode == IncludeExclude.WHITELIST) ? typeMatched : !typeMatched;
         }
         else // 原逻辑
         {
-            IPartitionList.Builder builder = IPartitionList.builder();
-            if (hasFuzzy) builder.fuzzyMode(fuzzyMode);
-            builder.addAll(config.keySet());
-            IPartitionList list = builder.build();
-            return list.matchesFilter(what, mode);
+            return this.partitionList.matchesFilter(what, mode);
         }
     }
 
@@ -454,14 +444,11 @@ public class AEUniversalCellInventory implements StorageCell
         final boolean whitelist = !cardInverterInstalled;
 
         long estimatedTypes = Long.MAX_VALUE;
-        ConfigInventory config = (cellType instanceof ICellWorkbenchItem cwi)
-                ? cwi.getConfigInventory(itemStack)
-                : null;
 
         // ae 原版逻辑：只有在“非模糊 + 白名单 + 配置非空”时，用配置条目数估算类型数
-        if (!hasFuzzy && whitelist && config != null && !config.keySet().isEmpty())
+        if (!hasFuzzy && whitelist && !this.partitionList.isEmpty())
         {
-            estimatedTypes = config.keySet().size();
+            estimatedTypes = partitionConfigSize;
         }
 
         estimatedTypes = Math.min(estimatedTypes, totalTypesEff);
@@ -483,12 +470,7 @@ public class AEUniversalCellInventory implements StorageCell
     {
         if (!cardVoidInstalled) return inserted;
 
-        boolean unpartitioned = true;
-        if (cellType instanceof ICellWorkbenchItem cellWorkbenchItem)
-        {
-            ConfigInventory configInventory = cellWorkbenchItem.getConfigInventory(itemStack);
-            unpartitioned = (configInventory == null || configInventory.keySet().isEmpty());
-        }
+        boolean unpartitioned = this.partitionList.isEmpty();
 
         final long freeBytes = freeBytes();
         final boolean canOpen = canHoldNewItemGeneric(freeBytes);
@@ -547,6 +529,41 @@ public class AEUniversalCellInventory implements StorageCell
         this.cardFuzzyInstalled = upgrades.isInstalled(AEItems.FUZZY_CARD);
         this.cardTypeFuzzyInstalled = upgrades.isInstalled(OCItems.TYPE_FUZZY_CARD);
         this.cardEqualDistributionInstalled = upgrades.isInstalled(AEItems.EQUAL_DISTRIBUTION_CARD);
+    }
+
+    /** 更新分区配置状态 */
+    private void updatePartitionState()
+    {
+        this.partitionConfigSize = 0;
+        this.partitionTypes.clear();
+
+        final boolean hasFuzzy = this.cardFuzzyInstalled;
+
+        ConfigInventory config = null;
+        FuzzyMode fuzzyMode = FuzzyMode.IGNORE_ALL;
+        if (cellType instanceof ICellWorkbenchItem cellWorkbenchItem)
+        {
+            config = cellWorkbenchItem.getConfigInventory(itemStack);
+            if (hasFuzzy) fuzzyMode = cellWorkbenchItem.getFuzzyMode(itemStack);
+        }
+
+        var builder = IPartitionList.builder();
+        if (hasFuzzy) builder.fuzzyMode(fuzzyMode);
+        if (config != null)
+        {
+            var keys = config.keySet();
+            if (!keys.isEmpty())
+            {
+                builder.addAll(keys);
+                this.partitionConfigSize = keys.size();
+
+                for (AEKey key : keys)
+                {
+                    if (key != null) this.partitionTypes.add(key.getType());
+                }
+            }
+        }
+        this.partitionList = builder.build();
     }
 
     // 简单算数工具 --------------------------------------------------------------------
