@@ -226,7 +226,10 @@ public class AEUniversalCellInventory implements StorageCell
 
         // 这次实际能塞多少
         final long toInsert = Math.min(amount, allowedUnits);
-        if (toInsert <= 0) return 0;
+        if (toInsert <= 0)
+        {
+            return handleOverflowVoidOnInsert(what, amount, /*inserted*/ 0);
+        }
 
         if (mode == Actionable.MODULATE)
         {
@@ -247,7 +250,7 @@ public class AEUniversalCellInventory implements StorageCell
             // 客户端状态 + 标脏
             markChanged();
         }
-        return toInsert;
+        return handleOverflowVoidOnInsert(what, amount, /*inserted*/ toInsert);
     }
 
     /** 取出实现 */
