@@ -80,6 +80,21 @@ public class AEUniversalCellInventory implements StorageCell
      */
     private final Long2LongOpenHashMap bucketSums = new Long2LongOpenHashMap();
 
+    /** 虚空卡 */
+    private boolean cardVoidInstalled = false;
+
+    /** 反向卡 */
+    private boolean cardInverterInstalled = false;
+
+    /** 模糊卡 */
+    private boolean cardFuzzyInstalled = false;
+
+    /** 类型模糊卡 */
+    private boolean cardTypeFuzzyInstalled = false;
+
+    /** 均分卡 */
+    private boolean cardEqualDistributionInstalled = false;
+
     public AEUniversalCellInventory(@NotNull AEUniversalCellData cellData,
                                     @NotNull ItemStack itemStack,
                                     @NotNull IAEUniversalCell cellType,
@@ -118,6 +133,8 @@ public class AEUniversalCellInventory implements StorageCell
         }
         this.usedBytesCached = bytesForValues;
 
+        // 更新升级卡状态
+        updateUpgradeCardState();
         // 初始化后把统计状态写进ItemStack给客户端显示用
         updateItemTooltipState();
     }
@@ -383,10 +400,9 @@ public class AEUniversalCellInventory implements StorageCell
     private boolean matchesPartitionAndUpgrades(AEKey what)
     {
         // 升级槽
-        final IUpgradeInventory upgrades = cellType.getUpgrades(itemStack);
-        final boolean hasInverter = upgrades.isInstalled(AEItems.INVERTER_CARD);
-        final boolean hasFuzzy = upgrades.isInstalled(AEItems.FUZZY_CARD);
-        final boolean hasTypeFuzzy = upgrades.isInstalled(OCItems.TYPE_FUZZY_CARD);
+        final boolean hasInverter = this.cardInverterInstalled;
+        final boolean hasFuzzy = this.cardFuzzyInstalled;
+        final boolean hasTypeFuzzy = this.cardTypeFuzzyInstalled;
 
         // 分区配置
         ConfigInventory config = null;
@@ -432,11 +448,10 @@ public class AEUniversalCellInventory implements StorageCell
      */
     private long computeEqualDistributionCap(long apb)
     {
-        final IUpgradeInventory upgrades = cellType.getUpgrades(itemStack);
-        if (!upgrades.isInstalled(AEItems.EQUAL_DISTRIBUTION_CARD)) return Long.MAX_VALUE;
+        if (!this.cardEqualDistributionInstalled) return Long.MAX_VALUE;
 
-        final boolean hasFuzzy = upgrades.isInstalled(AEItems.FUZZY_CARD);
-        final boolean whitelist = !upgrades.isInstalled(AEItems.INVERTER_CARD);
+        final boolean hasFuzzy = cardFuzzyInstalled;
+        final boolean whitelist = !cardInverterInstalled;
 
         long estimatedTypes = Long.MAX_VALUE;
         ConfigInventory config = (cellType instanceof ICellWorkbenchItem cwi)
@@ -460,14 +475,13 @@ public class AEUniversalCellInventory implements StorageCell
 
     /**
      * 虚空卡处理（与 ae 原版一致）：
-     * - 若“未分区”且“无法再开新类型”，则：已存在该类型 => 全吞（返回 amount）；否则仅返回 inserted（通常 0）
+     * - 若“未分区”且“无法再开新类型”，则：已存在该类型 => 全吞（返回 amount）；否则仅返回 inserted
      * - 其它情况，只要装了虚空卡 => 全吞（返回 amount）
      * 未装虚空卡 => 返回 inserted
      */
     private long handleOverflowVoidOnInsert(AEKey what, long amount, long inserted)
     {
-        final IUpgradeInventory upgrades = cellType.getUpgrades(itemStack);
-        if (!upgrades.isInstalled(AEItems.VOID_CARD)) return inserted;
+        if (!cardVoidInstalled) return inserted;
 
         boolean unpartitioned = true;
         if (cellType instanceof ICellWorkbenchItem cellWorkbenchItem)
@@ -522,6 +536,17 @@ public class AEUniversalCellInventory implements StorageCell
             if (++count >= 5) break;
         }
         IAEUniversalCell.setTooltipShowStacks(itemStack, show);
+    }
+
+    /** 更新升级卡状态 */
+    private void updateUpgradeCardState()
+    {
+        final IUpgradeInventory upgrades = cellType.getUpgrades(itemStack);
+        this.cardVoidInstalled = upgrades.isInstalled(AEItems.VOID_CARD);
+        this.cardInverterInstalled = upgrades.isInstalled(AEItems.INVERTER_CARD);
+        this.cardFuzzyInstalled = upgrades.isInstalled(AEItems.FUZZY_CARD);
+        this.cardTypeFuzzyInstalled = upgrades.isInstalled(OCItems.TYPE_FUZZY_CARD);
+        this.cardEqualDistributionInstalled = upgrades.isInstalled(AEItems.EQUAL_DISTRIBUTION_CARD);
     }
 
     // 简单算数工具 --------------------------------------------------------------------

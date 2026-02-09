@@ -66,6 +66,15 @@ public class AEBigIntegerCellInventory implements StorageCell
      */
     private final Long2ObjectOpenHashMap<BigInteger> bucketSums = new Long2ObjectOpenHashMap<>();
 
+    /** 反向卡 */
+    private boolean cardInverterInstalled = false;
+
+    /** 模糊卡 */
+    private boolean cardFuzzyInstalled = false;
+
+    /** 类型模糊卡 */
+    private boolean cardTypeFuzzyInstalled = false;
+
     public AEBigIntegerCellInventory(@NotNull AEBigIntegerCellData cellData,
                                      @NotNull ItemStack itemStack,
                                      @NotNull IAEBigIntegerCell cellType,
@@ -97,6 +106,8 @@ public class AEBigIntegerCellInventory implements StorageCell
         }
         this.usedBytesCached = bytesForValues;
 
+        // 更新升级卡状态
+        updateUpgradeCardState();
         // 初始化后把统计状态写进ItemStack给客户端显示用
         updateItemTooltipState();
     }
@@ -261,10 +272,9 @@ public class AEBigIntegerCellInventory implements StorageCell
     private boolean matchesPartitionAndUpgrades(AEKey what)
     {
         // 升级槽
-        final IUpgradeInventory upgrades = cellType.getUpgrades(itemStack);
-        final boolean hasInverter = upgrades.isInstalled(AEItems.INVERTER_CARD);
-        final boolean hasFuzzy = upgrades.isInstalled(AEItems.FUZZY_CARD);
-        final boolean hasTypeFuzzy = upgrades.isInstalled(OCItems.TYPE_FUZZY_CARD);
+        final boolean hasInverter = this.cardInverterInstalled;
+        final boolean hasFuzzy = this.cardFuzzyInstalled;
+        final boolean hasTypeFuzzy = this.cardTypeFuzzyInstalled;
 
         // 分区配置
         ConfigInventory config = null;
@@ -340,6 +350,15 @@ public class AEBigIntegerCellInventory implements StorageCell
             if (++count >= 5) break;
         }
         IAEBigIntegerCell.setTooltipShowStacks(itemStack, show);
+    }
+
+    /** 更新升级卡状态 */
+    private void updateUpgradeCardState()
+    {
+        final IUpgradeInventory upgrades = cellType.getUpgrades(itemStack);
+        this.cardInverterInstalled = upgrades.isInstalled(AEItems.INVERTER_CARD);
+        this.cardFuzzyInstalled = upgrades.isInstalled(AEItems.FUZZY_CARD);
+        this.cardTypeFuzzyInstalled = upgrades.isInstalled(OCItems.TYPE_FUZZY_CARD);
     }
 
     // 简单算数工具（BigInteger 版本） ---------------------------------------------------
