@@ -32,15 +32,15 @@ public abstract class CraftingServiceMixin
     @Inject(method = "updateCPUClusters()V", at = @At("RETURN"), require = 0)
     private void ae2omnicells$updateCPUClusters(CallbackInfo ci)
     {
-        for(var blockEntity : this.grid.getMachines(OmniCraftingBlockEntity.class))
+        for (var blockEntity : this.grid.getMachines(OmniCraftingBlockEntity.class))
         {
             final CraftingCPUCluster cluster = blockEntity.getCluster();
-            if(cluster != null)
+            if (cluster != null)
             {
                 this.craftingCPUClusters.add(cluster);
 
                 ICraftingLink maybeLink = cluster.craftingLogic.getLastLink();
-                if(maybeLink != null)
+                if (maybeLink != null)
                 {
                     this.addLink((CraftingLink) maybeLink);
                 }

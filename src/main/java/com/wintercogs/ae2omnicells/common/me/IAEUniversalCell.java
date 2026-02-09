@@ -16,6 +16,7 @@ import java.util.List;
  * 定义一些信息获取接口以及一些为ItemStack快速设置/获取信息的方法
  * <p>
  * 是否无限容量、总字节数、待机功耗等信息
+ *
  * @author Frostbite
  */
 public interface IAEUniversalCell extends IUpgradeableItem
@@ -25,10 +26,14 @@ public interface IAEUniversalCell extends IUpgradeableItem
     String CELL_TYPES_USAGE_TAG_NAME = "ae_universal_cell_types_usage";
     String CELL_SHOW_TOOLTIP_STACKS_TAG_NAME = "ae_universal_cell_show_tooltip_stacks";
 
-    /** 约定：返回值小于等于0则视为不限制类型总数 */
+    /**
+     * 约定：返回值小于等于0则视为不限制类型总数
+     */
     int getTotalBytes();
 
-    /** 约定：返回值小于等于0则视为不限制类型总数 */
+    /**
+     * 约定：返回值小于等于0则视为不限制类型总数
+     */
     int getTotalTypes();
 
     double getIdleDrain();
@@ -53,8 +58,8 @@ public interface IAEUniversalCell extends IUpgradeableItem
     static int getUsedTypes(ItemStack stack)
     {
         CompoundTag tag = stack.getTag();
-        if(tag == null) return 0;
-        if(tag.contains(CELL_TYPES_USAGE_TAG_NAME)) return tag.getInt(CELL_TYPES_USAGE_TAG_NAME);
+        if (tag == null) return 0;
+        if (tag.contains(CELL_TYPES_USAGE_TAG_NAME)) return tag.getInt(CELL_TYPES_USAGE_TAG_NAME);
         return 0;
     }
 

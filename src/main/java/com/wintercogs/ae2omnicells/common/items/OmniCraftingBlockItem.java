@@ -38,13 +38,13 @@ public class OmniCraftingBlockItem extends CraftingBlockItem
         if (InteractionUtil.isInAlternateUseMode(player))
         {
             // 对空单元不执行操作
-            if(getBlock() instanceof IOmniCraftingBlock omniCraftingBlock && omniCraftingBlock.getOmniCraftingUnitType().storageType == OmniCraftingStorageType.UNIT)
+            if (getBlock() instanceof IOmniCraftingBlock omniCraftingBlock && omniCraftingBlock.getOmniCraftingUnitType().storageType == OmniCraftingStorageType.UNIT)
                 return InteractionResultHolder.pass(player.getItemInHand(hand));
 
             ItemStack stack = player.getItemInHand(hand);
 
             ItemStack removedUpgrade;
-            if(getBlock() instanceof OmniCraftingMonitorBlock)
+            if (getBlock() instanceof OmniCraftingMonitorBlock)
             {
                 removedUpgrade = AEParts.STORAGE_MONITOR.stack();
             }
@@ -68,10 +68,10 @@ public class OmniCraftingBlockItem extends CraftingBlockItem
         }
         return super.use(level, player, hand);
     }
-    
+
     public static Supplier<ItemLike> getDisassemblyExtraItem(Block disassemblyBlock)
     {
-        if(disassemblyBlock instanceof IOmniCraftingBlock omniCraftingBlock)
+        if (disassemblyBlock instanceof IOmniCraftingBlock omniCraftingBlock)
         {
             return () -> switch (omniCraftingBlock.getOmniCraftingUnitType())
             {

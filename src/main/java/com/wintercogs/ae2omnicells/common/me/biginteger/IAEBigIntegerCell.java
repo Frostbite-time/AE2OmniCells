@@ -57,8 +57,8 @@ public interface IAEBigIntegerCell extends IUpgradeableItem
     static int getUsedTypes(ItemStack stack)
     {
         CompoundTag tag = stack.getTag();
-        if(tag == null) return 0;
-        if(tag.contains(CELL_TYPES_USAGE_TAG_NAME)) return tag.getInt(CELL_TYPES_USAGE_TAG_NAME);
+        if (tag == null) return 0;
+        if (tag.contains(CELL_TYPES_USAGE_TAG_NAME)) return tag.getInt(CELL_TYPES_USAGE_TAG_NAME);
         return 0;
     }
 

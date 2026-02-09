@@ -22,17 +22,29 @@ public class OCItems
             DeferredRegister.create(ForgeRegistries.ITEMS, AE2OmniCells.MODID);
 
     // ---- 四套列表 ----
-    /** 全部注册过的物品 */
+    /**
+     * 全部注册过的物品
+     */
     private static final List<RegistryObject<? extends Item>> ALL = new ArrayList<>();
-    /** 元件（= 非便携存储元件：普通/复杂/量子 的所有存储盘） */
+    /**
+     * 元件（= 非便携存储元件：普通/复杂/量子 的所有存储盘）
+     */
     private static final List<RegistryObject<AEUniversalCellItem>> CELLS = new ArrayList<>();
-    /** 便携元件（= 便携通用盘：普通/复杂/量子 的所有便携盘） */
+    /**
+     * 便携元件（= 便携通用盘：普通/复杂/量子 的所有便携盘）
+     */
     private static final List<RegistryObject<AEPortableUniversalCellItem>> PORTABLE_CELLS = new ArrayList<>();
-    /** 创造存储元件 */
+    /**
+     * 创造存储元件
+     */
     private static final List<RegistryObject<Item>> CREATIVE_CELLS = new ArrayList<>();
-    /** 其他物品（= 元件外壳、各类组件、锭/处理器/压印模板等杂项） */
+    /**
+     * 其他物品（= 元件外壳、各类组件、锭/处理器/压印模板等杂项）
+     */
     private static final List<RegistryObject<Item>> OTHERS = new ArrayList<>();
-    /** 联动物品系列 */
+    /**
+     * 联动物品系列
+     */
     private static final List<RegistryObject<? extends Item>> MEK_INTEGRATIONS = new ArrayList<>();
 
     // ---- 杂项 / 其他物品 ----
@@ -175,7 +187,7 @@ public class OCItems
 
     // 废辐系列 - 元件
     @SuppressWarnings("unchecked")
-    public static final RegistryObject<AEUniversalCellItem> SPENT_NUCLEAR_WASTE_CELL = (RegistryObject<AEUniversalCellItem>)registerMekIntegration("spent_nuclear_waste_cell",
+    public static final RegistryObject<AEUniversalCellItem> SPENT_NUCLEAR_WASTE_CELL = (RegistryObject<AEUniversalCellItem>) registerMekIntegration("spent_nuclear_waste_cell",
             () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1), 59049, 1, 256));
     // 废辐系列 - 组件
     public static final RegistryObject<? extends Item> SPENT_NUCLEAR_WASTE_SINGULARITY = registerMekIntegration("spent_nuclear_waste_singularity",
@@ -195,26 +207,39 @@ public class OCItems
     {
         return Collections.unmodifiableList(ALL);
     }
-    /** 非便携元件（存储盘本体） */
+
+    /**
+     * 非便携元件（存储盘本体）
+     */
     public static List<RegistryObject<AEUniversalCellItem>> getCells()
     {
         return Collections.unmodifiableList(CELLS);
     }
-    /** 便携元件（便携通用盘） */
+
+    /**
+     * 便携元件（便携通用盘）
+     */
     public static List<RegistryObject<AEPortableUniversalCellItem>> getPortableCells()
     {
         return Collections.unmodifiableList(PORTABLE_CELLS);
     }
-    /** 其他物品（组件/外壳/锭/处理器/压印模板等） */
+
+    /**
+     * 其他物品（组件/外壳/锭/处理器/压印模板等）
+     */
     public static List<RegistryObject<Item>> getOthers()
     {
         return Collections.unmodifiableList(OTHERS);
     }
-    /** 创造存储元件 */
+
+    /**
+     * 创造存储元件
+     */
     public static List<RegistryObject<Item>> getCreativeCells()
     {
         return Collections.unmodifiableList(CREATIVE_CELLS);
     }
+
     public static List<RegistryObject<? extends Item>> getMekIntegrations()
     {
         return MEK_INTEGRATIONS;

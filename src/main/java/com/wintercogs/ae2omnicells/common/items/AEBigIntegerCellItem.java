@@ -43,6 +43,7 @@ import java.util.*;
 
 /**
  * 用于承载物品到存储系统的桥接物品
+ *
  * @author Frostbite
  */
 public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICellWorkbenchItem
@@ -78,7 +79,8 @@ public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICe
 
         // 升级图标
         List<ItemStack> upgrades = Collections.emptyList();
-        if (showUpg) {
+        if (showUpg)
+        {
             List<ItemStack> tmp = new ArrayList<>();
             getUpgrades(stack).forEach(tmp::add);
             upgrades = tmp;
@@ -88,15 +90,20 @@ public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICe
         // 为了兼容 AE2 的组件，按需裁剪数量，并设置 hasMore
         List<GenericStack> content = Collections.emptyList();
         boolean hasMore = false;
-        if (showCnt) {
+        if (showCnt)
+        {
             List<GenericStack> show = IAEUniversalCell.getTooltipShowStacks(stack);
-            if (!show.isEmpty()) {
+            if (!show.isEmpty())
+            {
                 // AE2 通常展示不超过 5 个条目；超过则裁剪并设置 hasMore = true
                 final int limit = 5;
-                if (show.size() > limit) {
+                if (show.size() > limit)
+                {
                     content = new ArrayList<>(show.subList(0, limit));
                     hasMore = true;
-                } else {
+                }
+                else
+                {
                     content = new ArrayList<>(show);
                 }
             }
@@ -135,7 +142,7 @@ public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICe
         {
             return FuzzyMode.valueOf(fz);
         }
-        catch(IllegalArgumentException ex)
+        catch (IllegalArgumentException ex)
         {
             return FuzzyMode.IGNORE_ALL;
         }
@@ -148,7 +155,8 @@ public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICe
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand)
+    {
         this.disassembleDrive(player.getItemInHand(hand), level, player);
         return new InteractionResultHolder<>(InteractionResult.sidedSuccess(level.isClientSide()),
                 player.getItemInHand(hand));
@@ -170,11 +178,11 @@ public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICe
 
     private boolean disassembleDrive(ItemStack stack, Level level, Player player)
     {
-        if(!player.isShiftKeyDown()) return false;
+        if (!player.isShiftKeyDown()) return false;
         Recipe<?> recipe = level.getRecipeManager().byKey(this.getRecipeId()).orElse(null);
         if (recipe instanceof CraftingRecipe)
         {
-            CraftingRecipe craftingRecipe = (CraftingRecipe)recipe;
+            CraftingRecipe craftingRecipe = (CraftingRecipe) recipe;
             if (level.isClientSide()) return true;
 
             Inventory playerInventory = player.getInventory();
@@ -187,13 +195,13 @@ public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICe
             {
                 playerInventory.setItem(playerInventory.selected, ItemStack.EMPTY);
 
-                for(Ingredient ingredient : craftingRecipe.getIngredients())
+                for (Ingredient ingredient : craftingRecipe.getIngredients())
                 {
                     ItemStack ingredientStack = ingredient.getItems()[0].copy();
                     playerInventory.placeItemBackInInventory(ingredientStack);
                 }
 
-                for(ItemStack upgrade : this.getUpgrades(stack))
+                for (ItemStack upgrade : this.getUpgrades(stack))
                 {
                     playerInventory.placeItemBackInInventory(upgrade);
                 }

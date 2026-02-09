@@ -59,16 +59,16 @@ public class OCCreativeModeTabs
                         }
 
                         // mek联动物品
-                        if(AE2OmniCells.AEMEK_LOADED)
+                        if (AE2OmniCells.AEMEK_LOADED)
                         {
-                            for(RegistryObject<? extends Item> ro : OCItems.getMekIntegrations())
+                            for (RegistryObject<? extends Item> ro : OCItems.getMekIntegrations())
                             {
                                 output.accept(ro.get());
                             }
                         }
 
                         // 创造元件
-                        for(RegistryObject<Item> ro : OCItems.getCreativeCells())
+                        for (RegistryObject<Item> ro : OCItems.getCreativeCells())
                         {
                             output.accept(ro.get());
                         }

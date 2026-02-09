@@ -19,7 +19,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider
     @Override
     protected void generate()
     {
-        for(RegistryObject<? extends Block> block : OCBlocks.ALL)
+        for (RegistryObject<? extends Block> block : OCBlocks.ALL)
         {
             dropSelf(block.get());
         }

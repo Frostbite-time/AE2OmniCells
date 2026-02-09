@@ -9,13 +9,16 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * 决定如何从ItemStack构建一个 {@link AEUniversalCellInventory}
+ *
  * @author Frostbite
  */
 public class AEUniversalCellHandler implements ICellHandler
 {
     public static final AEUniversalCellHandler INSTANCE = new AEUniversalCellHandler();
 
-    private AEUniversalCellHandler() {}
+    private AEUniversalCellHandler()
+    {
+    }
 
     @Override
     public boolean isCell(ItemStack itemStack)
@@ -27,12 +30,12 @@ public class AEUniversalCellHandler implements ICellHandler
     @Override
     public @Nullable StorageCell getCellInventory(ItemStack itemStack, @Nullable ISaveProvider iSaveProvider)
     {
-        if(ServerLifecycleHooks.getCurrentServer() == null) return null;
-        if(!(itemStack.getItem() instanceof IAEUniversalCell cellItem)) return null;
-        if(itemStack.getCount() != 1) return null;
+        if (ServerLifecycleHooks.getCurrentServer() == null) return null;
+        if (!(itemStack.getItem() instanceof IAEUniversalCell cellItem)) return null;
+        if (itemStack.getCount() != 1) return null;
 
         AEUniversalCellData cellData = AEUniversalCellData.computeIfAbsentCellDataForItemStack(itemStack);
-        if(cellData == null) return null;
+        if (cellData == null) return null;
 
         return new AEUniversalCellInventory(cellData, itemStack, cellItem, iSaveProvider);
     }

@@ -38,27 +38,41 @@ import java.util.List;
 public class AEBigIntegerCellInventory implements StorageCell
 {
 
-    /** 对应的 SavedData（用于 setDirty 通知存盘） */
+    /**
+     * 对应的 SavedData（用于 setDirty 通知存盘）
+     */
     private final @NotNull AEBigIntegerCellData cellData;
 
-    /** 原始存储引用（AEKey -> amount(BigInteger)） */
+    /**
+     * 原始存储引用（AEKey -> amount(BigInteger)）
+     */
     private final @NotNull Object2ObjectMap<AEKey, BigInteger> storage;
 
-    /** 对应的物品堆（用于更新客户端 NBT 用于 tooltip/states） */
+    /**
+     * 对应的物品堆（用于更新客户端 NBT 用于 tooltip/states）
+     */
     private final @NotNull ItemStack itemStack;
 
-    /** 元件类型（提供总字节/总类型/待机功耗等固定信息） */
+    /**
+     * 元件类型（提供总字节/总类型/待机功耗等固定信息）
+     */
     private final @NotNull IAEBigIntegerCell cellType;
 
-    /** AE容器的保存回调：用于统一的 persist 时机 */
+    /**
+     * AE容器的保存回调：用于统一的 persist 时机
+     */
     private final @Nullable ISaveProvider saveContainer;
 
     // 运行时缓存 ----------------------------------------------------------------------
 
-    /** 当前“已用字节”（BigInteger），按 Σ桶内 ceil(Σamount/amountPerByte) 计算 */
+    /**
+     * 当前“已用字节”（BigInteger），按 Σ桶内 ceil(Σamount/amountPerByte) 计算
+     */
     private BigInteger usedBytesCached;
 
-    /** 是否通知持久化 */
+    /**
+     * 是否通知持久化
+     */
     private boolean isPersisted = false;
 
     /**
@@ -67,22 +81,34 @@ public class AEBigIntegerCellInventory implements StorageCell
      */
     private final Long2ObjectOpenHashMap<BigInteger> bucketSums = new Long2ObjectOpenHashMap<>();
 
-    /** 反向卡 */
+    /**
+     * 反向卡
+     */
     private boolean cardInverterInstalled = false;
 
-    /** 模糊卡 */
+    /**
+     * 模糊卡
+     */
     private boolean cardFuzzyInstalled = false;
 
-    /** 类型模糊卡 */
+    /**
+     * 类型模糊卡
+     */
     private boolean cardTypeFuzzyInstalled = false;
 
-    /** key分区缓存 */
+    /**
+     * key分区缓存
+     */
     private IPartitionList partitionList = IPartitionList.builder().build();
 
-    /** key分区键量 */
+    /**
+     * key分区键量
+     */
     private int partitionConfigSize = 0;
 
-    /** keyType分区缓存（keyType很少，这个大概比哈希更快吧，没有实际测试过） */
+    /**
+     * keyType分区缓存（keyType很少，这个大概比哈希更快吧，没有实际测试过）
+     */
     private final ReferenceArraySet<AEKeyType> partitionTypes = new ReferenceArraySet<>();
 
     public AEBigIntegerCellInventory(@NotNull AEBigIntegerCellData cellData,
@@ -126,7 +152,9 @@ public class AEBigIntegerCellInventory implements StorageCell
 
     // StorageCell 接口 ----------------------------------------------------------------
 
-    /** 获取状态灯 */
+    /**
+     * 获取状态灯
+     */
     @Override
     public CellState getStatus()
     {
@@ -134,21 +162,27 @@ public class AEBigIntegerCellInventory implements StorageCell
         else return CellState.NOT_EMPTY;
     }
 
-    /** 待机功耗 */
+    /**
+     * 待机功耗
+     */
     @Override
     public double getIdleDrain()
     {
         return cellType.getIdleDrain();
     }
 
-    /** 允许被放入其他存储元件内 */
+    /**
+     * 允许被放入其他存储元件内
+     */
     @Override
     public boolean canFitInsideCell()
     {
         return true;
     }
 
-    /** 由驱动器等物品的统一监听，以减少频繁 tooltip 更新的额外开销 */
+    /**
+     * 由驱动器等物品的统一监听，以减少频繁 tooltip 更新的额外开销
+     */
     @Override
     public void persist()
     {
@@ -158,7 +192,9 @@ public class AEBigIntegerCellInventory implements StorageCell
         isPersisted = true;
     }
 
-    /** 存入实现（BigInteger） */
+    /**
+     * 存入实现（BigInteger）
+     */
     @Override
     public long insert(AEKey what, long amount, Actionable mode, IActionSource source)
     {
@@ -193,7 +229,9 @@ public class AEBigIntegerCellInventory implements StorageCell
         return amount;
     }
 
-    /** 取出实现（BigInteger） */
+    /**
+     * 取出实现（BigInteger）
+     */
     @Override
     public long extract(AEKey what, long amount, Actionable mode, IActionSource source)
     {
@@ -268,7 +306,9 @@ public class AEBigIntegerCellInventory implements StorageCell
 
     // 内部辅助工具 --------------------------------------------------------------------
 
-    /** 递归盘保护：若 what 是“另一个存储盘”且该盘声明不能嵌入，则拒收。 */
+    /**
+     * 递归盘保护：若 what 是“另一个存储盘”且该盘声明不能嵌入，则拒收。
+     */
     private boolean canNestStorageCells(AEKey what)
     {
         if (what instanceof AEItemKey itemKey)
@@ -280,7 +320,9 @@ public class AEBigIntegerCellInventory implements StorageCell
         return true;
     }
 
-    /** 分区/模糊/白黑名单匹配 */
+    /**
+     * 分区/模糊/白黑名单匹配
+     */
     private boolean matchesPartitionAndUpgrades(AEKey what)
     {
         // 升级槽
@@ -288,11 +330,11 @@ public class AEBigIntegerCellInventory implements StorageCell
         final boolean hasTypeFuzzy = this.cardTypeFuzzyInstalled;
 
         // 未过滤视为不配置
-        if(this.partitionList.isEmpty()) return true;
+        if (this.partitionList.isEmpty()) return true;
 
         IncludeExclude mode = hasInverter ? IncludeExclude.BLACKLIST : IncludeExclude.WHITELIST;
 
-        if(hasTypeFuzzy) // 如果有类型模糊卡，只根据其进行分区筛选
+        if (hasTypeFuzzy) // 如果有类型模糊卡，只根据其进行分区筛选
         {
             AEKeyType targetType = what.getType();
             boolean typeMatched = this.partitionTypes.contains(targetType);
@@ -319,7 +361,9 @@ public class AEBigIntegerCellInventory implements StorageCell
             persist();
     }
 
-    /** 把“已用字节/类型 & 状态 + 预览堆栈前五条”写到物品 NBT（仅供客户端 tooltip 用） */
+    /**
+     * 把“已用字节/类型 & 状态 + 预览堆栈前五条”写到物品 NBT（仅供客户端 tooltip 用）
+     */
     private void updateItemTooltipState()
     {
         BigInteger used = usedBytesCached.signum() > 0 ? usedBytesCached : BigInteger.ZERO;
@@ -341,7 +385,9 @@ public class AEBigIntegerCellInventory implements StorageCell
         IAEBigIntegerCell.setTooltipShowStacks(itemStack, show);
     }
 
-    /** 更新升级卡状态 */
+    /**
+     * 更新升级卡状态
+     */
     private void updateUpgradeCardState()
     {
         final IUpgradeInventory upgrades = cellType.getUpgrades(itemStack);
@@ -350,7 +396,9 @@ public class AEBigIntegerCellInventory implements StorageCell
         this.cardTypeFuzzyInstalled = upgrades.isInstalled(OCItems.TYPE_FUZZY_CARD.get());
     }
 
-    /** 更新分区配置状态 */
+    /**
+     * 更新分区配置状态
+     */
     private void updatePartitionState()
     {
         this.partitionConfigSize = 0;
@@ -387,7 +435,9 @@ public class AEBigIntegerCellInventory implements StorageCell
 
     // 简单算数工具（BigInteger 版本） ---------------------------------------------------
 
-    /** BigInteger 向上整除：ceil(a / bLong) */
+    /**
+     * BigInteger 向上整除：ceil(a / bLong)
+     */
     private static BigInteger ceilDiv(BigInteger a, long bLong)
     {
         if (bLong <= 0) throw new IllegalArgumentException("div by non-positive");
@@ -396,7 +446,9 @@ public class AEBigIntegerCellInventory implements StorageCell
         return a.add(b.subtract(BigInteger.ONE)).divide(b);
     }
 
-    /** BigInteger 向上整除：ceil(a / bBI) */
+    /**
+     * BigInteger 向上整除：ceil(a / bBI)
+     */
     private static BigInteger ceilDiv(BigInteger a, BigInteger b)
     {
         if (b.signum() <= 0) throw new IllegalArgumentException("div by non-positive");
@@ -404,7 +456,9 @@ public class AEBigIntegerCellInventory implements StorageCell
         return a.add(b.subtract(BigInteger.ONE)).divide(b);
     }
 
-    /** 将 BigInteger 钳到 long（下界 0，上界 Long.MAX_VALUE） */
+    /**
+     * 将 BigInteger 钳到 long（下界 0，上界 Long.MAX_VALUE）
+     */
     private static long clampToLong(BigInteger v)
     {
         if (v.signum() <= 0) return 0L;
@@ -413,20 +467,26 @@ public class AEBigIntegerCellInventory implements StorageCell
         return (r < 0) ? Long.MAX_VALUE : r;
     }
 
-    /** 将 null 或 负数 归一为 ZERO */
+    /**
+     * 将 null 或 负数 归一为 ZERO
+     */
     private static BigInteger nonNegative(BigInteger v)
     {
         if (v == null || v.signum() <= 0) return BigInteger.ZERO;
         return v;
     }
 
-    /** BigInteger 最小值 */
+    /**
+     * BigInteger 最小值
+     */
     private static BigInteger minBI(BigInteger a, BigInteger b)
     {
         return a.compareTo(b) <= 0 ? a : b;
     }
 
-    /** BigInteger 最大值 */
+    /**
+     * BigInteger 最大值
+     */
     @SuppressWarnings("unused")
     private static BigInteger maxBI(BigInteger a, BigInteger b)
     {

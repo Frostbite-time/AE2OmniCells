@@ -35,7 +35,9 @@ import java.util.*;
  */
 public class AEPortableUniversalCellItem extends AbstractPortableCell implements IAEUniversalCell
 {
-    /** 默认染色（可被 display.color 覆盖） */
+    /**
+     * 默认染色（可被 display.color 覆盖）
+     */
     private static final int DEFAULT_COLOR = 0xFFFFFF;
 
     private final double idleDrain;
@@ -64,7 +66,9 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
 
     // ---------- AbstractPortableCell 必需实现 ----------
 
-    /** 拆解时用的配方 ID，按注册名自动推导，保持与 AE 原版一致的 UX */
+    /**
+     * 拆解时用的配方 ID，按注册名自动推导，保持与 AE 原版一致的 UX
+     */
     @Override
     public ResourceLocation getRecipeId()
     {
@@ -72,7 +76,9 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
                 Objects.requireNonNull(this.getRegistryName()).getPath());
     }
 
-    /** 充电速率：基础 80 AE/t，每张能量卡再 +80 AE/t（与原版便携盘一致） */
+    /**
+     * 充电速率：基础 80 AE/t，每张能量卡再 +80 AE/t（与原版便携盘一致）
+     */
     @Override
     public double getChargeRate(ItemStack stack)
     {
@@ -121,9 +127,12 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
         final var tag = is.getOrCreateTag();
         final String fz = tag.getString("FuzzyMode");
         if (fz.isEmpty()) return FuzzyMode.IGNORE_ALL;
-        try {
+        try
+        {
             return FuzzyMode.valueOf(fz);
-        } catch (IllegalArgumentException ex) {
+        }
+        catch (IllegalArgumentException ex)
+        {
             return FuzzyMode.IGNORE_ALL;
         }
     }
@@ -165,7 +174,8 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
 
         // 升级图标
         List<ItemStack> upgrades = Collections.emptyList();
-        if (showUpg) {
+        if (showUpg)
+        {
             List<ItemStack> tmp = new ArrayList<>();
             getUpgrades(stack).forEach(tmp::add);
             upgrades = tmp;
@@ -174,14 +184,19 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
         // 内容预览（最多 5 条）
         List<GenericStack> content = Collections.emptyList();
         boolean hasMore = false;
-        if (showCnt) {
+        if (showCnt)
+        {
             List<GenericStack> show = IAEUniversalCell.getTooltipShowStacks(stack);
-            if (!show.isEmpty()) {
+            if (!show.isEmpty())
+            {
                 final int limit = 5;
-                if (show.size() > limit) {
+                if (show.size() > limit)
+                {
                     content = new ArrayList<>(show.subList(0, limit));
                     hasMore = true;
-                } else {
+                }
+                else
+                {
                     content = new ArrayList<>(show);
                 }
             }

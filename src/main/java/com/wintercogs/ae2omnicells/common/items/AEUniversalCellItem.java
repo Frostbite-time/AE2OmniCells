@@ -44,6 +44,7 @@ import java.util.*;
 
 /**
  * 用于承载物品到存储系统的桥接物品
+ *
  * @author Frostbite
  */
 public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICellWorkbenchItem
@@ -64,9 +65,9 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
     public static int getColor(ItemStack stack, int tintIndex)
     {
         if (tintIndex != 1) return 0xFFFFFF; // 白
-        if(stack.getItem() instanceof AEBasePoweredItem poweredContainer)
+        if (stack.getItem() instanceof AEBasePoweredItem poweredContainer)
         {
-            if(poweredContainer.getAECurrentPower(stack) <= 0)
+            if (poweredContainer.getAECurrentPower(stack) <= 0)
                 return CellState.ABSENT.getStateColor();
         }
         CellState state = IAEUniversalCell.getCellState(stack);
@@ -96,7 +97,8 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
 
         // 升级图标
         List<ItemStack> upgrades = Collections.emptyList();
-        if (showUpg) {
+        if (showUpg)
+        {
             List<ItemStack> tmp = new ArrayList<>();
             getUpgrades(stack).forEach(tmp::add);
             upgrades = tmp;
@@ -106,15 +108,20 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
         // 为了兼容 AE2 的组件，按需裁剪数量，并设置 hasMore
         List<GenericStack> content = Collections.emptyList();
         boolean hasMore = false;
-        if (showCnt) {
+        if (showCnt)
+        {
             List<GenericStack> show = IAEUniversalCell.getTooltipShowStacks(stack);
-            if (!show.isEmpty()) {
+            if (!show.isEmpty())
+            {
                 // AE2 通常展示不超过 5 个条目；超过则裁剪并设置 hasMore = true
                 final int limit = 5;
-                if (show.size() > limit) {
+                if (show.size() > limit)
+                {
                     content = new ArrayList<>(show.subList(0, limit));
                     hasMore = true;
-                } else {
+                }
+                else
+                {
                     content = new ArrayList<>(show);
                 }
             }
@@ -165,7 +172,7 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
         {
             return FuzzyMode.valueOf(fz);
         }
-        catch(IllegalArgumentException ex)
+        catch (IllegalArgumentException ex)
         {
             return FuzzyMode.IGNORE_ALL;
         }
@@ -178,7 +185,8 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand)
+    {
         this.disassembleDrive(player.getItemInHand(hand), level, player);
         return new InteractionResultHolder<>(InteractionResult.sidedSuccess(level.isClientSide()),
                 player.getItemInHand(hand));
@@ -200,11 +208,11 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
 
     private boolean disassembleDrive(ItemStack stack, Level level, Player player)
     {
-        if(!player.isShiftKeyDown()) return false;
+        if (!player.isShiftKeyDown()) return false;
         Recipe<?> recipe = level.getRecipeManager().byKey(this.getRecipeId()).orElse(null);
         if (recipe instanceof CraftingRecipe)
         {
-            CraftingRecipe craftingRecipe = (CraftingRecipe)recipe;
+            CraftingRecipe craftingRecipe = (CraftingRecipe) recipe;
             if (level.isClientSide()) return true;
 
             Inventory playerInventory = player.getInventory();
@@ -217,13 +225,13 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
             {
                 playerInventory.setItem(playerInventory.selected, ItemStack.EMPTY);
 
-                for(Ingredient ingredient : craftingRecipe.getIngredients())
+                for (Ingredient ingredient : craftingRecipe.getIngredients())
                 {
                     ItemStack ingredientStack = ingredient.getItems()[0].copy();
                     playerInventory.placeItemBackInInventory(ingredientStack);
                 }
 
-                for(ItemStack upgrade : this.getUpgrades(stack))
+                for (ItemStack upgrade : this.getUpgrades(stack))
                 {
                     playerInventory.placeItemBackInInventory(upgrade);
                 }

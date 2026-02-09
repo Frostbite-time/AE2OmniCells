@@ -28,9 +28,10 @@ public class ModBlockModelProvider extends BlockModelProvider
 
     /**
      * 生成便携元件的模型
+     *
      * @param texture 纹理
      */
-    protected BlockModelBuilder driveBlockModel(String name ,String texture)
+    protected BlockModelBuilder driveBlockModel(String name, String texture)
     {
         // 让 EFH 放行校验
         allowExternalModel("ae2:block/drive/drive_cell");
@@ -45,9 +46,11 @@ public class ModBlockModelProvider extends BlockModelProvider
         return BuiltInRegistries.ITEM.getKey(item.asItem()).getPath();
     }
 
-    private void allowExternalModel(String path) {
+    private void allowExternalModel(String path)
+    {
         ResourceLocation rl = new ResourceLocation(path);
-        if (!rl.getNamespace().equals(AE2OmniCells.MODID)) {
+        if (!rl.getNamespace().equals(AE2OmniCells.MODID))
+        {
             this.existingFileHelper.trackGenerated(rl, ModelProvider.MODEL); // 注意这里是 MODEL
         }
     }

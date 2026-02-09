@@ -46,33 +46,51 @@ import java.util.List;
 public class AEUniversalCellInventory implements StorageCell
 {
 
-    /** 对应的 SavedData（用于 setDirty 通知存盘） */
+    /**
+     * 对应的 SavedData（用于 setDirty 通知存盘）
+     */
     private final @NotNull AEUniversalCellData cellData;
 
-    /** 来自AEUniversalCellData的原始存储引用（AEKey -> amount） */
+    /**
+     * 来自AEUniversalCellData的原始存储引用（AEKey -> amount）
+     */
     private final @NotNull Object2LongMap<AEKey> storage;
 
-    /** 对应的物品堆（用于更新客户端 NBT 用于 tooltip/states） */
+    /**
+     * 对应的物品堆（用于更新客户端 NBT 用于 tooltip/states）
+     */
     private final @NotNull ItemStack itemStack;
 
-    /** 元件类型（由物品类实现，提供总字节/总类型/待机功耗等固定信息） */
+    /**
+     * 元件类型（由物品类实现，提供总字节/总类型/待机功耗等固定信息）
+     */
     private final @NotNull IAEUniversalCell cellType;
 
-    /** AE容器的保存回调，我们不使用此进行实际保存，在其有效时，利用其统一通知的时机来写入物品tooltip */
+    /**
+     * AE容器的保存回调，我们不使用此进行实际保存，在其有效时，利用其统一通知的时机来写入物品tooltip
+     */
     private final @Nullable ISaveProvider saveContainer;
 
     // 运行时缓存 ----------------------------------------------------------------------
 
-    /** 有效总字节（<=0 视为无限 -> Long.MAX_VALUE） */
+    /**
+     * 有效总字节（<=0 视为无限 -> Long.MAX_VALUE）
+     */
     private final long totalBytesEff;
 
-    /** 有效“最多类型数”（<=0 视为无限 -> Long.MAX_VALUE） */
+    /**
+     * 有效“最多类型数”（<=0 视为无限 -> Long.MAX_VALUE）
+     */
     private final long totalTypesEff;
 
-    /** 当前“已用字节”，按 Σ桶内 ceil(Σamount/amountPerByte) 计算 */
+    /**
+     * 当前“已用字节”，按 Σ桶内 ceil(Σamount/amountPerByte) 计算
+     */
     private long usedBytesCached;
 
-    /** 是否通知持久化 */
+    /**
+     * 是否通知持久化
+     */
     private boolean isPersisted = false;
 
     /**
@@ -81,31 +99,49 @@ public class AEUniversalCellInventory implements StorageCell
      */
     private final Long2LongOpenHashMap bucketSums = new Long2LongOpenHashMap();
 
-    /** 有多少个 apb 桶存在“碎片”（sum % apb != 0）。用于 O(1) 判断是否还有碎片可用 */
+    /**
+     * 有多少个 apb 桶存在“碎片”（sum % apb != 0）。用于 O(1) 判断是否还有碎片可用
+     */
     private int partialBucketCount = 0;
 
-    /** 虚空卡 */
+    /**
+     * 虚空卡
+     */
     private boolean cardVoidInstalled = false;
 
-    /** 反向卡 */
+    /**
+     * 反向卡
+     */
     private boolean cardInverterInstalled = false;
 
-    /** 模糊卡 */
+    /**
+     * 模糊卡
+     */
     private boolean cardFuzzyInstalled = false;
 
-    /** 类型模糊卡 */
+    /**
+     * 类型模糊卡
+     */
     private boolean cardTypeFuzzyInstalled = false;
 
-    /** 均分卡 */
+    /**
+     * 均分卡
+     */
     private boolean cardEqualDistributionInstalled = false;
 
-    /** key分区缓存 */
+    /**
+     * key分区缓存
+     */
     private IPartitionList partitionList = IPartitionList.builder().build();
 
-    /** key分区键量 */
+    /**
+     * key分区键量
+     */
     private int partitionConfigSize = 0;
 
-    /** keyType分区缓存（keyType很少，这个大概比哈希更快吧，没有实际测试过） */
+    /**
+     * keyType分区缓存（keyType很少，这个大概比哈希更快吧，没有实际测试过）
+     */
     private final ReferenceArraySet<AEKeyType> partitionTypes = new ReferenceArraySet<>();
 
     public AEUniversalCellInventory(@NotNull AEUniversalCellData cellData,
@@ -159,7 +195,9 @@ public class AEUniversalCellInventory implements StorageCell
 
     // StorageCell 接口 ----------------------------------------------------------------
 
-    /** 获取状态灯 */
+    /**
+     * 获取状态灯
+     */
     @Override
     public CellState getStatus()
     {
@@ -177,31 +215,39 @@ public class AEUniversalCellInventory implements StorageCell
         return hasPartial ? CellState.TYPES_FULL : CellState.FULL;
     }
 
-    /** 待机功耗 */
+    /**
+     * 待机功耗
+     */
     @Override
     public double getIdleDrain()
     {
         return cellType.getIdleDrain();
     }
 
-    /** 允许被放入其他存储元件内（此元件对应物品仅存储UUID和几个预览物品） */
+    /**
+     * 允许被放入其他存储元件内（此元件对应物品仅存储UUID和几个预览物品）
+     */
     @Override
     public boolean canFitInsideCell()
     {
         return true;
     }
 
-    /** 由驱动器等物品的统一监听，以进一步削减insert/extract时更新物品tooltip增加的额外性能消耗 */
+    /**
+     * 由驱动器等物品的统一监听，以进一步削减insert/extract时更新物品tooltip增加的额外性能消耗
+     */
     @Override
     public void persist()
     {
-        if(isPersisted) return;
+        if (isPersisted) return;
 
         updateItemTooltipState();
         isPersisted = true;
     }
 
-    /** 存入实现 */
+    /**
+     * 存入实现
+     */
     @Override
     public long insert(AEKey what, long amount, Actionable mode, IActionSource source)
     {
@@ -290,7 +336,9 @@ public class AEUniversalCellInventory implements StorageCell
         return handleOverflowVoidOnInsert(what, amount, /*inserted*/ toInsert);
     }
 
-    /** 取出实现 */
+    /**
+     * 取出实现
+     */
     @Override
     public long extract(AEKey what, long amount, Actionable mode, IActionSource source)
     {
@@ -366,7 +414,9 @@ public class AEUniversalCellInventory implements StorageCell
 
     // 内部辅助工具 --------------------------------------------------------------------
 
-    /** 当前剩余字节（无限时为 Long.MAX_VALUE）。 */
+    /**
+     * 当前剩余字节（无限时为 Long.MAX_VALUE）。
+     */
     private long freeBytes()
     {
         if (totalBytesEff == Long.MAX_VALUE) return Long.MAX_VALUE;
@@ -374,7 +424,9 @@ public class AEUniversalCellInventory implements StorageCell
         return Math.max(0, freeBytes);
     }
 
-    /** 是否还能新开一种类型（仅看类型名额；若无剩余字节但存在任意 apb 桶碎片，也允许借碎片开启） */
+    /**
+     * 是否还能新开一种类型（仅看类型名额；若无剩余字节但存在任意 apb 桶碎片，也允许借碎片开启）
+     */
     private boolean canHoldNewItemGeneric(long freeBytes)
     {
         if (storage.size() >= totalTypesEff) return false; // 没有类型名额
@@ -382,7 +434,9 @@ public class AEUniversalCellInventory implements StorageCell
         return hasAnyBucketPartial();                         // 或仍可用“桶碎片”（不增字节）开新类型
     }
 
-    /** 是否存在任何“桶”未凑满 1 字节（sum % amountPerByte != 0） */
+    /**
+     * 是否存在任何“桶”未凑满 1 字节（sum % amountPerByte != 0）
+     */
     private boolean hasAnyBucketPartial()
     {
         return this.partialBucketCount > 0;
@@ -402,9 +456,12 @@ public class AEUniversalCellInventory implements StorageCell
         return safeAdd(pad, extra);
     }
 
-    /** 递归盘保护：若 what 是“另一个存储盘”且该盘声明不能嵌入，则拒收。 */
+    /**
+     * 递归盘保护：若 what 是“另一个存储盘”且该盘声明不能嵌入，则拒收。
+     */
     private boolean canNestStorageCells(AEKey what
-    ) {
+    )
+    {
         if (what instanceof AEItemKey itemKey)
         {
             ItemStack s = itemKey.toStack();
@@ -414,7 +471,9 @@ public class AEUniversalCellInventory implements StorageCell
         return true;
     }
 
-    /** 分区/模糊/白黑名单匹配 */
+    /**
+     * 分区/模糊/白黑名单匹配
+     */
     private boolean matchesPartitionAndUpgrades(AEKey what)
     {
         // 升级槽
@@ -422,11 +481,11 @@ public class AEUniversalCellInventory implements StorageCell
         final boolean hasTypeFuzzy = this.cardTypeFuzzyInstalled;
 
         // 未过滤视为不配置
-        if(this.partitionList.isEmpty()) return true;
+        if (this.partitionList.isEmpty()) return true;
 
         IncludeExclude mode = hasInverter ? IncludeExclude.BLACKLIST : IncludeExclude.WHITELIST;
 
-        if(hasTypeFuzzy) // 如果有类型模糊卡，只根据其进行分区筛选
+        if (hasTypeFuzzy) // 如果有类型模糊卡，只根据其进行分区筛选
         {
             AEKeyType targetType = what.getType();
             boolean typeMatched = this.partitionTypes.contains(targetType);
@@ -498,13 +557,15 @@ public class AEUniversalCellInventory implements StorageCell
         cellData.setDirty();
 
         isPersisted = false;
-        if(saveContainer != null)
+        if (saveContainer != null)
             saveContainer.saveChanges();
         else
             persist();
     }
 
-    /** 把“已用字节/类型 & 状态 + 预览堆栈前五条”写到物品 NBT（仅供客户端 tooltip 用） */
+    /**
+     * 把“已用字节/类型 & 状态 + 预览堆栈前五条”写到物品 NBT（仅供客户端 tooltip 用）
+     */
     private void updateItemTooltipState()
     {
         long usedBytesClamped = Math.max(0, usedBytesCached);
@@ -525,7 +586,9 @@ public class AEUniversalCellInventory implements StorageCell
         IAEUniversalCell.setTooltipShowStacks(itemStack, show);
     }
 
-    /** 更新升级卡状态 */
+    /**
+     * 更新升级卡状态
+     */
     private void updateUpgradeCardState()
     {
         final IUpgradeInventory upgrades = cellType.getUpgrades(itemStack);
@@ -536,7 +599,9 @@ public class AEUniversalCellInventory implements StorageCell
         this.cardEqualDistributionInstalled = upgrades.isInstalled(AEItems.EQUAL_DISTRIBUTION_CARD);
     }
 
-    /** 更新分区配置状态 */
+    /**
+     * 更新分区配置状态
+     */
     private void updatePartitionState()
     {
         this.partitionConfigSize = 0;
@@ -571,7 +636,9 @@ public class AEUniversalCellInventory implements StorageCell
         this.partitionList = builder.build();
     }
 
-    /** 增量维护 partialBucketCount：仅当该 apb 桶从“有碎片/无碎片”状态发生变化时才调整计数 */
+    /**
+     * 增量维护 partialBucketCount：仅当该 apb 桶从“有碎片/无碎片”状态发生变化时才调整计数
+     */
     private void updatePartialBucketCount(long apb, long oldSum, long newSum)
     {
         boolean oldPartial = oldSum > 0 && (oldSum % apb) != 0;
@@ -591,7 +658,9 @@ public class AEUniversalCellInventory implements StorageCell
 
     // 简单算数工具 --------------------------------------------------------------------
 
-    /** 除法，然后向上取整 */
+    /**
+     * 除法，然后向上取整
+     */
     private static long ceilDiv(long a, long b)
     {
         if (b <= 0) throw new IllegalArgumentException("div by non-positive");
@@ -601,7 +670,9 @@ public class AEUniversalCellInventory implements StorageCell
         return r == 0 ? q : (q + 1);
     }
 
-    /** 加法（带上溢钳制） */
+    /**
+     * 加法（带上溢钳制）
+     */
     private static long safeAdd(long a, long b)
     {
         long r = a + b;
@@ -609,7 +680,9 @@ public class AEUniversalCellInventory implements StorageCell
         return r;
     }
 
-    /** 减法（带下溢钳制） */
+    /**
+     * 减法（带下溢钳制）
+     */
     private static long safeSub(long a, long b)
     {
         long r = a - b;
@@ -617,7 +690,9 @@ public class AEUniversalCellInventory implements StorageCell
         return r;
     }
 
-    /** 乘法（带上溢钳制） */
+    /**
+     * 乘法（带上溢钳制）
+     */
     private static long safeMul(long a, long b)
     {
         if (a == 0 || b == 0) return 0;
@@ -625,7 +700,9 @@ public class AEUniversalCellInventory implements StorageCell
         return a * b;
     }
 
-    /** 用来做mek化学品判断 */
+    /**
+     * 用来做mek化学品判断
+     */
     private static final class MekIntegration
     {
         static boolean allowInsert(ItemStack hostCell, AEKey what)

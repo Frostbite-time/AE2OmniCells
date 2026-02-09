@@ -48,7 +48,7 @@ public class ModBlockStateProvider extends BlockStateProvider
         blockWithItem(OCBlocks.SINGULARITY_BLOCK);
 
 
-        for(RegistryObject<? extends OmniCraftingUnitBlock> craftingBlock : OCBlocks.CRAFTING_STORAGES)
+        for (RegistryObject<? extends OmniCraftingUnitBlock> craftingBlock : OCBlocks.CRAFTING_STORAGES)
         {
             craftingModel(craftingBlock);
         }
@@ -61,7 +61,9 @@ public class ModBlockStateProvider extends BlockStateProvider
         simpleBlockWithItem(deferredBlock.get(), cubeAll(deferredBlock.get()));
     }
 
-    /** 合成存储器 */
+    /**
+     * 合成存储器
+     */
     private void craftingModel(RegistryObject<? extends OmniCraftingUnitBlock> block)
     {
         String path = block.getId().getPath();

@@ -21,35 +21,52 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
 
-/** 基于AEUniversalCellData的BigInteger版本，无其他逻辑更变，
- *  所有调试信息版本也仍使用AEUniversalCellData统一通知。
+/**
+ * 基于AEUniversalCellData的BigInteger版本，无其他逻辑更变，
+ * 所有调试信息版本也仍使用AEUniversalCellData统一通知。
  *
  * @author Frostbite
  */
 public class AEBigIntegerCellData extends SavedData
 {
-    /** 主容器子标签 */
+    /**
+     * 主容器子标签
+     */
     public static final String INV_SAVED_TAG = "inventory";
 
-    /** 读取成功的条目列表名（在 INV_SAVED_TAG 里） */
+    /**
+     * 读取成功的条目列表名（在 INV_SAVED_TAG 里）
+     */
     private static final String ENTRIES_TAG = "entries";
 
-    /** 读取失败的条目列表名（在 INV_SAVED_TAG 里） */
+    /**
+     * 读取失败的条目列表名（在 INV_SAVED_TAG 里）
+     */
     private static final String ERROR_ENTRIES_TAG = "error_entries";
 
-    /** 单条目里的 key 子标签名 */
+    /**
+     * 单条目里的 key 子标签名
+     */
     private static final String ENTRY_KEY_TAG = "key";
 
-    /** 单条目里的 amount 子标签名（BigInteger 序列化为 byte[]） */
+    /**
+     * 单条目里的 amount 子标签名（BigInteger 序列化为 byte[]）
+     */
     private static final String ENTRY_AMOUNT_TAG = "amount";
 
-    /** 在 ItemStack NBT 中用于存盘 UUID 的子标签名（与 Long 版保持一致） */
+    /**
+     * 在 ItemStack NBT 中用于存盘 UUID 的子标签名（与 Long 版保持一致）
+     */
     public static final String UUID_TAG = "ae_universal_cell_uuid";
 
-    /** 统一目录名（位于 world/data/ 下） */
+    /**
+     * 统一目录名（位于 world/data/ 下）
+     */
     private static final String SAVED_FOLDER_NAME = "ae_universal_cell_data";
 
-    /** 原始仓库存放在此处，后续使用此仓库的引用来构建 */
+    /**
+     * 原始仓库存放在此处，后续使用此仓库的引用来构建
+     */
     private final Object2ObjectMap<AEKey, BigInteger> storage;
 
     /**
@@ -72,13 +89,17 @@ public class AEBigIntegerCellData extends SavedData
         this.pendingReadErrors = pendingReadErrors;
     }
 
-    /** 获取原始存储数据（保持与 Long 版一致的对外接口） */
+    /**
+     * 获取原始存储数据（保持与 Long 版一致的对外接口）
+     */
     public @NotNull Object2ObjectMap<AEKey, BigInteger> getOriginalStorage()
     {
         return storage;
     }
 
-    /** 根据 UUID 获取对应的数据（仅当磁盘上已有对应文件时返回） */
+    /**
+     * 根据 UUID 获取对应的数据（仅当磁盘上已有对应文件时返回）
+     */
     public static @Nullable AEBigIntegerCellData getCellDataByUUID(@NotNull UUID uuid)
     {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
@@ -125,7 +146,8 @@ public class AEBigIntegerCellData extends SavedData
 
         // 分配一个全新的、与现有文件不冲突的 UUID
         UUID fresh;
-        do {
+        do
+        {
             fresh = UUID.randomUUID();
         } while (getCellDataByUUID(fresh) != null);
 
@@ -141,7 +163,9 @@ public class AEBigIntegerCellData extends SavedData
         return newData;
     }
 
-    /** 硬盘序列化（1.20.1：无 HolderLookup） */
+    /**
+     * 硬盘序列化（1.20.1：无 HolderLookup）
+     */
     @Override
     public @NotNull CompoundTag save(@NotNull CompoundTag tag)
     {
@@ -190,7 +214,9 @@ public class AEBigIntegerCellData extends SavedData
         return tag;
     }
 
-    /** 从硬盘反序列化（1.20.1：无 HolderLookup） */
+    /**
+     * 从硬盘反序列化（1.20.1：无 HolderLookup）
+     */
     public static AEBigIntegerCellData load(CompoundTag tag)
     {
         Object2ObjectMap<AEKey, BigInteger> storage = new Object2ObjectOpenHashMap<>();
@@ -265,13 +291,17 @@ public class AEBigIntegerCellData extends SavedData
 
     // ---------------------------------- 辅助方法 ----------------------------------
 
-    /** 生成 DataStorage 的路径（保持子路径：ae_universal_cell_data/<uuid>） */
+    /**
+     * 生成 DataStorage 的路径（保持子路径：ae_universal_cell_data/<uuid>）
+     */
     private static String makeKey(@NotNull UUID uuid)
     {
         return SAVED_FOLDER_NAME + "/" + uuid;
     }
 
-    /** 确保 world/data/ae_universal_cell_data 目录存在 */
+    /**
+     * 确保 world/data/ae_universal_cell_data 目录存在
+     */
     private static void ensureSaveDirExists(@NotNull MinecraftServer server)
     {
         Path dir = server.getWorldPath(LevelResource.ROOT)
@@ -288,7 +318,9 @@ public class AEBigIntegerCellData extends SavedData
         }
     }
 
-    /** 简单的工具：保持与 Long 版语义一致（仅累加正值） */
+    /**
+     * 简单的工具：保持与 Long 版语义一致（仅累加正值）
+     */
     private static void addTo(Object2ObjectMap<AEKey, BigInteger> map, AEKey key, BigInteger delta)
     {
         if (delta == null) return;
