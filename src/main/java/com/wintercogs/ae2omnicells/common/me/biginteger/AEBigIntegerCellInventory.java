@@ -82,7 +82,7 @@ public class AEBigIntegerCellInventory implements StorageCell
     /** key分区键量 */
     private int partitionConfigSize = 0;
 
-    /** keyType分区缓存 */
+    /** keyType分区缓存（keyType很少，这个大概比哈希更快吧，没有实际测试过） */
     private final ReferenceArraySet<AEKeyType> partitionTypes = new ReferenceArraySet<>();
 
     public AEBigIntegerCellInventory(@NotNull AEBigIntegerCellData cellData,

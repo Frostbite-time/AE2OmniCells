@@ -82,6 +82,9 @@ public class AEUniversalCellInventory implements StorageCell
      */
     private final Long2LongOpenHashMap bucketSums = new Long2LongOpenHashMap();
 
+    /** 有多少个 apb 桶存在“碎片”（sum % apb != 0）。用于 O(1) 判断是否还有碎片可用 */
+    private int partialBucketCount = 0;
+
     /** 虚空卡 */
     private boolean cardVoidInstalled = false;
 
@@ -103,7 +106,7 @@ public class AEUniversalCellInventory implements StorageCell
     /** key分区键量 */
     private int partitionConfigSize = 0;
 
-    /** keyType分区缓存 */
+    /** keyType分区缓存（keyType很少，这个大概比哈希更快吧，没有实际测试过） */
     private final ReferenceArraySet<AEKeyType> partitionTypes = new ReferenceArraySet<>();
 
     public AEUniversalCellInventory(@NotNull AEUniversalCellData cellData,
@@ -136,13 +139,16 @@ public class AEUniversalCellInventory implements StorageCell
         }
 
         long bytesForValues = 0;
+        int partial = 0;
         for (Long2LongMap.Entry b : bucketSums.long2LongEntrySet())
         {
             long apb = b.getLongKey();
             long sum = b.getLongValue();
             bytesForValues = safeAdd(bytesForValues, ceilDiv(sum, apb));
+            if (sum > 0 && (sum % apb) != 0) partial++;
         }
         this.usedBytesCached = bytesForValues;
+        this.partialBucketCount = partial;
 
         // 更新升级卡状态
         updateUpgradeCardState();
@@ -213,7 +219,6 @@ public class AEUniversalCellInventory implements StorageCell
             if (itemStack.getItem() == OCItems.SPENT_NUCLEAR_WASTE_CELL.get()) return 0;
         }
 
-
         // 分区/模糊/黑白名单 与 递归盘保护
         if (!matchesPartitionAndUpgrades(what)) return 0;
         if (!canNestStorageCells(what)) return 0;
@@ -263,12 +268,15 @@ public class AEUniversalCellInventory implements StorageCell
 
         if (mode == Actionable.MODULATE)
         {
-            // ---- 增量更新缓存：桶累计、已用字节、已用类型数 ----
+            // ---- 增量更新缓存：桶累计、已用字节 ----
             final long oldBucket = bucketSums.get(amountPerByte);
             final long newBucket = safeAdd(oldBucket, toInsert);
 
             // 值字节的增量 = ceil(new/apb) - ceil(old/apb)
             final long deltaValueBytes = safeSub(ceilDiv(newBucket, amountPerByte), ceilDiv(oldBucket, amountPerByte));
+
+            // 维护“桶碎片计数”（O(1)）
+            updatePartialBucketCount(amountPerByte, oldBucket, newBucket);
 
             // 应用“值字节”增量
             usedBytesCached = safeAdd(usedBytesCached, deltaValueBytes);
@@ -302,6 +310,9 @@ public class AEUniversalCellInventory implements StorageCell
 
             // 值字节的增量 = ceil(new/apb) - ceil(old/apb)（可能为负）
             final long deltaValueBytes = safeSub(ceilDiv(newBucket, amountPerByte), ceilDiv(oldBucket, amountPerByte));
+
+            // 维护“桶碎片计数”（O(1)）
+            updatePartialBucketCount(amountPerByte, oldBucket, newBucket);
 
             usedBytesCached = safeAdd(usedBytesCached, deltaValueBytes);
 
@@ -375,12 +386,7 @@ public class AEUniversalCellInventory implements StorageCell
     /** 是否存在任何“桶”未凑满 1 字节（sum % amountPerByte != 0） */
     private boolean hasAnyBucketPartial()
     {
-        for (Long2LongMap.Entry bucket : bucketSums.long2LongEntrySet())
-        {
-            long apb = bucket.getLongKey(), sum = bucket.getLongValue();
-            if (sum > 0 && (sum % apb) != 0) return true;
-        }
-        return false;
+        return this.partialBucketCount > 0;
     }
 
     /**
@@ -564,6 +570,24 @@ public class AEUniversalCellInventory implements StorageCell
             }
         }
         this.partitionList = builder.build();
+    }
+
+    /** 增量维护 partialBucketCount：仅当该 apb 桶从“有碎片/无碎片”状态发生变化时才调整计数 */
+    private void updatePartialBucketCount(long apb, long oldSum, long newSum)
+    {
+        boolean oldPartial = oldSum > 0 && (oldSum % apb) != 0;
+        boolean newPartial = newSum > 0 && (newSum % apb) != 0;
+
+        if (oldPartial == newPartial) return;
+
+        if (oldPartial)
+        {
+            this.partialBucketCount--;
+        }
+        else
+        {
+            this.partialBucketCount++;
+        }
     }
 
     // 简单算数工具 --------------------------------------------------------------------
