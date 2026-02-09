@@ -22,7 +22,7 @@ public class CraftingCPUClusterMixin
     private void ae2omnicells$addBlockEntity(CraftingBlockEntity te, CallbackInfo ci)
     {
         // 加上我们的自定义线程，绕过ae限制
-        if(te instanceof IAcceleratorThreadsProvider provider)
+        if (te instanceof IAcceleratorThreadsProvider provider)
             accelerator += provider.getOmniCustomAcceleratorThreads();
     }
 }

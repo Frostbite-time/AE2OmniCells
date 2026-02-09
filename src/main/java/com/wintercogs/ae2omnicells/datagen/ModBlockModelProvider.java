@@ -10,7 +10,9 @@ import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-/** 这个类我们在1.20.1版本使用，1.21.1版本中无用，此处仅留存文件，以便随时启用 */
+/**
+ * 这个类我们在1.20.1版本使用，1.21.1版本中无用，此处仅留存文件，以便随时启用
+ */
 public class ModBlockModelProvider extends BlockModelProvider
 {
     public ModBlockModelProvider(PackOutput output, ExistingFileHelper existingFileHelper)
@@ -25,9 +27,10 @@ public class ModBlockModelProvider extends BlockModelProvider
 
     /**
      * 生成便携元件的模型
+     *
      * @param texture 纹理
      */
-    protected BlockModelBuilder driveBlockModel(String name , String texture)
+    protected BlockModelBuilder driveBlockModel(String name, String texture)
     {
         // 让 EFH 放行校验
         allowExternalModel("ae2:block/drive/drive_cell");
@@ -42,9 +45,11 @@ public class ModBlockModelProvider extends BlockModelProvider
         return BuiltInRegistries.ITEM.getKey(item.asItem()).getPath();
     }
 
-    private void allowExternalModel(String path) {
+    private void allowExternalModel(String path)
+    {
         ResourceLocation rl = ResourceLocation.parse(path);
-        if (!rl.getNamespace().equals(AE2OmniCells.MODID)) {
+        if (!rl.getNamespace().equals(AE2OmniCells.MODID))
+        {
             this.existingFileHelper.trackGenerated(rl, ModelProvider.MODEL); // 注意这里是 MODEL
         }
     }

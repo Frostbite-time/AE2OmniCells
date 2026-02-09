@@ -14,15 +14,20 @@ import java.util.List;
  * 定义一些信息获取接口以及一些为ItemStack快速设置/获取信息的方法
  * <p>
  * 是否无限容量、总字节数、待机功耗等信息
+ *
  * @author Frostbite
  */
 public interface IAEUniversalCell extends IUpgradeableItem
 {
 
-    /** 约定：返回值小于等于0则视为不限制类型总数 */
+    /**
+     * 约定：返回值小于等于0则视为不限制类型总数
+     */
     int getTotalBytes();
 
-    /** 约定：返回值小于等于0则视为不限制类型总数 */
+    /**
+     * 约定：返回值小于等于0则视为不限制类型总数
+     */
     int getTotalTypes();
 
     double getIdleDrain();
@@ -54,9 +59,12 @@ public interface IAEUniversalCell extends IUpgradeableItem
     {
         String s = stack.get(OCDataComponents.CELL_STATE.get());
         if (s == null) return CellState.EMPTY;
-        try {
+        try
+        {
             return CellState.valueOf(s);
-        } catch (IllegalArgumentException ex) {
+        }
+        catch (IllegalArgumentException ex)
+        {
             return CellState.EMPTY;
         }
     }
@@ -67,13 +75,20 @@ public interface IAEUniversalCell extends IUpgradeableItem
         final int totalTypes = cellType.getTotalTypes(); // <=0 视为无限
 
         final CellState state;
-        if (usedBytes <= 0 && usedTypes <= 0) {
+        if (usedBytes <= 0 && usedTypes <= 0)
+        {
             state = CellState.EMPTY;
-        } else if (totalBytes > 0 && usedBytes >= totalBytes) {
+        }
+        else if (totalBytes > 0 && usedBytes >= totalBytes)
+        {
             state = CellState.FULL;
-        } else if (totalTypes > 0 && usedTypes >= totalTypes) {
+        }
+        else if (totalTypes > 0 && usedTypes >= totalTypes)
+        {
             state = CellState.TYPES_FULL;
-        } else {
+        }
+        else
+        {
             state = CellState.NOT_EMPTY;
         }
 
@@ -90,18 +105,23 @@ public interface IAEUniversalCell extends IUpgradeableItem
 
     static void setTooltipShowStacks(ItemStack stack, List<GenericStack> showStacks)
     {
-        if (showStacks == null || showStacks.isEmpty()) {
+        if (showStacks == null || showStacks.isEmpty())
+        {
             stack.remove(OCDataComponents.CELL_SHOW_TOOLTIP_STACKS.get());
             return;
         }
         // 过滤掉可能的 null，保持与旧实现“跳过坏条目”的语义
         List<GenericStack> cleaned = new ArrayList<>(showStacks.size());
-        for (GenericStack gs : showStacks) {
+        for (GenericStack gs : showStacks)
+        {
             if (gs != null) cleaned.add(gs);
         }
-        if (cleaned.isEmpty()) {
+        if (cleaned.isEmpty())
+        {
             stack.remove(OCDataComponents.CELL_SHOW_TOOLTIP_STACKS.get());
-        } else {
+        }
+        else
+        {
             stack.set(OCDataComponents.CELL_SHOW_TOOLTIP_STACKS.get(), cleaned);
         }
     }

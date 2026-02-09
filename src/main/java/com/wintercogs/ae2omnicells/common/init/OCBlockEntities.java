@@ -65,7 +65,8 @@ public class OCBlockEntities
             Class<T> entityClass,
             BlockEntityFactory<T> factory,
             Supplier<? extends AEBaseEntityBlock<?>>... blockSuppliers
-    ) {
+    )
+    {
         Preconditions.checkArgument(blockSuppliers.length > 0, "At least one block is required");
 
         var deferred = BLOCK_ENTITY_TYPES.register(id, () -> {
@@ -89,10 +90,14 @@ public class OCBlockEntities
             typeRef.set(type);
 
             // 把“物品形态”绑定给这个 BE 类型（AE 用于记忆卡/设置导入导出/tooltip 等）
-            try {
+            try
+            {
                 var item = blocks[0].asItem();
                 AEBaseBlockEntity.registerBlockEntityItem(type, item);
-            } catch (Throwable ignored) {}
+            }
+            catch (Throwable ignored)
+            {
+            }
 
             // 自动生成 tickers（如果实现了 AE 的标记接口）
             BlockEntityTicker<T> serverTicker = null;
@@ -137,7 +142,9 @@ public class OCBlockEntities
         return create(id, entityClass, (type, pos, state) -> ctorPosState.apply(pos, state), blockSuppliers);
     }
 
-    /** 返回实现类是 baseClass 的所有 BlockEntityType */
+    /**
+     * 返回实现类是 baseClass 的所有 BlockEntityType
+     */
     @SuppressWarnings("unchecked")
     public static <T extends BlockEntity> List<BlockEntityType<? extends T>> getSubclassesOf(Class<T> baseClass)
     {
@@ -152,13 +159,17 @@ public class OCBlockEntities
         return result;
     }
 
-    /** 返回实现了某接口的所有 BlockEntityType
-     *  AE用类似方法配合ALL列表统一注册能力，但我更喜欢手动管理 */
+    /**
+     * 返回实现了某接口的所有 BlockEntityType
+     * AE用类似方法配合ALL列表统一注册能力，但我更喜欢手动管理
+     */
     public static List<BlockEntityType<?>> getImplementorsOf(Class<?> iface)
     {
         var result = new ArrayList<BlockEntityType<?>>();
-        for (var t : ALL) {
-            if (iface.isAssignableFrom(t.getBlockEntityClass())) {
+        for (var t : ALL)
+        {
+            if (iface.isAssignableFrom(t.getBlockEntityClass()))
+            {
                 result.add(t.get());
             }
         }
@@ -166,22 +177,34 @@ public class OCBlockEntities
     }
 
 
-    /** 包装类型 */
+    /**
+     * 包装类型
+     */
     public static final class DeferredBlockEntityType<T extends BlockEntity> implements Supplier<BlockEntityType<T>>
     {
         private final Class<T> entityClass;
         private final Supplier<BlockEntityType<T>> delegate;
 
-        private DeferredBlockEntityType(Class<T> cls, Supplier<BlockEntityType<T>> delegate) {
+        private DeferredBlockEntityType(Class<T> cls, Supplier<BlockEntityType<T>> delegate)
+        {
             this.entityClass = cls;
             this.delegate = delegate;
         }
 
-        public BlockEntityType<T> get() { return delegate.get(); }
-        public Class<T> getBlockEntityClass() { return entityClass; }
+        public BlockEntityType<T> get()
+        {
+            return delegate.get();
+        }
+
+        public Class<T> getBlockEntityClass()
+        {
+            return entityClass;
+        }
     }
 
-    /** 三参构造版接口 */
+    /**
+     * 三参构造版接口
+     */
     @FunctionalInterface
     public interface BlockEntityFactory<T extends AEBaseBlockEntity>
     {

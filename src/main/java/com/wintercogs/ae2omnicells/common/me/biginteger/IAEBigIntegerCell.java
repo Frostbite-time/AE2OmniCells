@@ -50,9 +50,12 @@ public interface IAEBigIntegerCell extends IUpgradeableItem
     {
         String s = stack.get(OCDataComponents.CELL_STATE.get());
         if (s == null) return CellState.EMPTY;
-        try {
+        try
+        {
             return CellState.valueOf(s);
-        } catch (IllegalArgumentException ex) {
+        }
+        catch (IllegalArgumentException ex)
+        {
             return CellState.EMPTY;
         }
     }
@@ -72,18 +75,23 @@ public interface IAEBigIntegerCell extends IUpgradeableItem
 
     static void setTooltipShowStacks(ItemStack stack, List<GenericStack> showStacks)
     {
-        if (showStacks == null || showStacks.isEmpty()) {
+        if (showStacks == null || showStacks.isEmpty())
+        {
             stack.remove(OCDataComponents.CELL_SHOW_TOOLTIP_STACKS.get());
             return;
         }
         // 过滤掉可能的 null，保持与旧实现“跳过坏条目”的语义
         List<GenericStack> cleaned = new ArrayList<>(showStacks.size());
-        for (GenericStack gs : showStacks) {
+        for (GenericStack gs : showStacks)
+        {
             if (gs != null) cleaned.add(gs);
         }
-        if (cleaned.isEmpty()) {
+        if (cleaned.isEmpty())
+        {
             stack.remove(OCDataComponents.CELL_SHOW_TOOLTIP_STACKS.get());
-        } else {
+        }
+        else
+        {
             stack.set(OCDataComponents.CELL_SHOW_TOOLTIP_STACKS.get(), cleaned);
         }
     }

@@ -38,6 +38,7 @@ import java.util.Optional;
 
 /**
  * 用于承载物品到存储系统的桥接物品
+ *
  * @author Frostbite
  */
 public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICellWorkbenchItem
@@ -82,7 +83,8 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
 
         // 升级图标
         List<ItemStack> upgrades = Collections.emptyList();
-        if (showUpg) {
+        if (showUpg)
+        {
             List<ItemStack> tmp = new ArrayList<>();
             getUpgrades(stack).forEach(tmp::add);
             upgrades = tmp;
@@ -92,15 +94,20 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
         // 为了兼容 AE2 的组件，按需裁剪数量，并设置 hasMore
         List<GenericStack> content = Collections.emptyList();
         boolean hasMore = false;
-        if (showCnt) {
+        if (showCnt)
+        {
             List<GenericStack> show = IAEUniversalCell.getTooltipShowStacks(stack);
-            if (!show.isEmpty()) {
+            if (!show.isEmpty())
+            {
                 // AE2 通常展示不超过 5 个条目；超过则裁剪并设置 hasMore = true
                 final int limit = 5;
-                if (show.size() > limit) {
+                if (show.size() > limit)
+                {
                     content = new ArrayList<>(show.subList(0, limit));
                     hasMore = true;
-                } else {
+                }
+                else
+                {
                     content = new ArrayList<>(show);
                 }
             }
@@ -141,46 +148,55 @@ public class AEUniversalCellItem extends Item implements IAEUniversalCell, ICell
     }
 
     @Override
-    public FuzzyMode getFuzzyMode(ItemStack is) {
+    public FuzzyMode getFuzzyMode(ItemStack is)
+    {
         return is.getOrDefault(AEComponents.STORAGE_CELL_FUZZY_MODE, FuzzyMode.IGNORE_ALL);
     }
 
     @Override
-    public void setFuzzyMode(ItemStack is, FuzzyMode fzMode) {
+    public void setFuzzyMode(ItemStack is, FuzzyMode fzMode)
+    {
         is.set(AEComponents.STORAGE_CELL_FUZZY_MODE, fzMode);
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand)
+    {
         this.disassembleDrive(player.getItemInHand(hand), level, player);
         return new InteractionResultHolder<>(InteractionResult.sidedSuccess(level.isClientSide()),
                 player.getItemInHand(hand));
     }
 
-    private boolean disassembleDrive(ItemStack stack, Level level, Player player) {
-        if (!InteractionUtil.isInAlternateUseMode(player)) {
+    private boolean disassembleDrive(ItemStack stack, Level level, Player player)
+    {
+        if (!InteractionUtil.isInAlternateUseMode(player))
+        {
             return false;
         }
 
         var disassembledStacks = StorageCellDisassemblyRecipe.getDisassemblyResult(level, stack.getItem());
-        if (disassembledStacks.isEmpty()) {
+        if (disassembledStacks.isEmpty())
+        {
             return false;
         }
 
         var playerInventory = player.getInventory();
-        if (playerInventory.getSelected() != stack) {
+        if (playerInventory.getSelected() != stack)
+        {
             return false;
         }
 
         var inv = StorageCells.getCellInventory(stack, null);
-        if (inv != null && !inv.getAvailableStacks().isEmpty()) {
+        if (inv != null && !inv.getAvailableStacks().isEmpty())
+        {
             player.displayClientMessage(PlayerMessages.OnlyEmptyCellsCanBeDisassembled.text(), true);
             return false;
         }
 
         playerInventory.setItem(playerInventory.selected, ItemStack.EMPTY);
 
-        for (var disassembledStack : disassembledStacks) {
+        for (var disassembledStack : disassembledStacks)
+        {
             playerInventory.placeItemBackInInventory(disassembledStack.copy());
         }
 

@@ -38,7 +38,7 @@ public class OCBlocks
     // 奇点块
     public static final DeferredBlock<Block> SINGULARITY_BLOCK = registerBlock("singularity_block",
             () -> new Block(BlockBehaviour.Properties.of().strength(2f)));
-    
+
     // 三系合成存储器
     public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_UNIT_BLOCK = registerCraftingStorageBlock("omni_crafting_unit_block", OmniCraftingUnitType.OMNI_UNIT);
     public static final DeferredBlock<OmniCraftingMonitorBlock> OMNI_CRAFTING_MONITOR_BLOCK = registerCraftingMonitorBlock("omni_crafting_monitor_block", OmniCraftingUnitType.OMNI_MONITOR);
@@ -92,28 +92,28 @@ public class OCBlocks
     {
         DeferredBlock<OmniCraftingUnitBlock> toReturn = registerOnlyBlock(name, () -> new OmniCraftingUnitBlock(AEBaseBlock.metalProps(), type));
         OCItems.ITEMS.register(name, () -> new OmniCraftingBlockItem(toReturn.get(), new Item.Properties(), type.family));
-        
+
         CRAFTING_STORAGES.add(toReturn);
         return toReturn;
     }
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block)
     {
-        DeferredBlock<T> toReturn = registerOnlyBlock(name,block);
-        registerBlockItem(name,toReturn);
+        DeferredBlock<T> toReturn = registerOnlyBlock(name, block);
+        registerBlockItem(name, toReturn);
         return toReturn;
     }
 
     private static <T extends Block> DeferredBlock<T> registerOnlyBlock(String name, Supplier<T> block)
     {
-        DeferredBlock<T> toReturn = BLOCKS.register(name,block);
+        DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         ALL.add(toReturn);
         return toReturn;
     }
 
     private static <T extends Block> void registerBlockItem(String name, DeferredBlock<T> block)
     {
-        OCItems.ITEMS.register(name,() -> new BlockItem(block.get(), new Item.Properties()));
+        OCItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
     }
 
     public static void register(IEventBus eventBus)

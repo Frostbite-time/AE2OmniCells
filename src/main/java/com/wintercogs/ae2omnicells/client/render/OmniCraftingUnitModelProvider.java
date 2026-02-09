@@ -41,7 +41,7 @@ public class OmniCraftingUnitModelProvider extends AbstractCraftingUnitModelProv
     protected final static Material QUANTUM_UNIT_BASE = texture("quantum_unit_base");
     protected final static Material QUANTUM_LIGHT_BASE = texture("quantum_light_base");
     protected final static Material QUANTUM_MONITOR_BASE = texture("monitor/quantum_monitor_base");
-    
+
     protected final static Material STORAGE_1K_LIGHT = texture("light/1k_storage_light");
     protected final static Material STORAGE_4K_LIGHT = texture("light/4k_storage_light");
     protected final static Material STORAGE_16K_LIGHT = texture("light/16k_storage_light");
@@ -71,31 +71,31 @@ public class OmniCraftingUnitModelProvider extends AbstractCraftingUnitModelProv
     @Override
     public BakedModel getBakedModel(Function<Material, TextureAtlasSprite> spriteGetter)
     {
-        Material ringCornerMaterial = switch(type.family)
+        Material ringCornerMaterial = switch (type.family)
         {
             case OMNI -> OMNI_RING_CORNER;
             case COMPLEX -> COMPLEX_RING_CORNER;
             case QUANTUM -> QUANTUM_RING_CORNER;
         };
-        Material ringSideHorMaterial = switch(type.family)
+        Material ringSideHorMaterial = switch (type.family)
         {
             case OMNI -> OMNI_RING_SIDE_HOR;
             case COMPLEX -> COMPLEX_RING_SIDE_HOR;
             case QUANTUM -> QUANTUM_RING_SIDE_HOR;
         };
-        Material ringSideVerMaterial = switch(type.family)
+        Material ringSideVerMaterial = switch (type.family)
         {
             case OMNI -> OMNI_RING_SIDE_VER;
             case COMPLEX -> COMPLEX_RING_SIDE_VER;
             case QUANTUM -> QUANTUM_RING_SIDE_VER;
         };
-        Material unitMaterial = switch(type.family)
+        Material unitMaterial = switch (type.family)
         {
             case OMNI -> OMNI_UNIT_BASE;
             case COMPLEX -> COMPLEX_UNIT_BASE;
             case QUANTUM -> QUANTUM_UNIT_BASE;
         };
-        Material monitorMaterial = switch(type.family)
+        Material monitorMaterial = switch (type.family)
         {
             case OMNI -> OMNI_MONITOR_BASE;
             case COMPLEX -> COMPLEX_MONITOR_BASE;
@@ -117,13 +117,13 @@ public class OmniCraftingUnitModelProvider extends AbstractCraftingUnitModelProv
 
             default ->
             {
-                Material lightBaseMaterial = switch(type.family)
+                Material lightBaseMaterial = switch (type.family)
                 {
                     case OMNI -> OMNI_LIGHT_BASE;
                     case COMPLEX -> COMPLEX_LIGHT_BASE;
                     case QUANTUM -> QUANTUM_LIGHT_BASE;
                 };
-                Material lightMaterial = switch(type.storageType)
+                Material lightMaterial = switch (type.storageType)
                 {
                     case STORAGE_1K -> STORAGE_1K_LIGHT;
                     case STORAGE_4K -> STORAGE_4K_LIGHT;
@@ -154,7 +154,7 @@ public class OmniCraftingUnitModelProvider extends AbstractCraftingUnitModelProv
         return mat;
     }
 
-    private static Material texture(String namespace ,String name)
+    private static Material texture(String namespace, String name)
     {
         Material mat = new Material(TextureAtlas.LOCATION_BLOCKS,
                 ResourceLocation.fromNamespaceAndPath(namespace, "block/crafting/" + name));

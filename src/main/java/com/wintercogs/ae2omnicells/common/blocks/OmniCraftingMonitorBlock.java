@@ -26,7 +26,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class OmniCraftingMonitorBlock extends CraftingMonitorBlock implements IOmniCraftingBlock
 {
-    /** 与type变量一致，但是这里保留了更多类型信息 */
+    /**
+     * 与type变量一致，但是这里保留了更多类型信息
+     */
     public final OmniCraftingUnitType omniCraftingType;
 
     public OmniCraftingMonitorBlock(OmniCraftingUnitType type)
@@ -54,7 +56,8 @@ public class OmniCraftingMonitorBlock extends CraftingMonitorBlock implements IO
 
         if (level.getBlockEntity(pos) instanceof CraftingBlockEntity be && be.isFormed() && be.isActive())
         {
-            if (!level.isClientSide()) {
+            if (!level.isClientSide())
+            {
                 MenuOpener.open(CraftingCPUMenu.TYPE, player, MenuLocators.forBlockEntity(be));
             }
 
@@ -71,16 +74,16 @@ public class OmniCraftingMonitorBlock extends CraftingMonitorBlock implements IO
 
         Block upgradedBlock;
         // 用于特判合成监控器
-        if(heldItem.getItem() == AEParts.STORAGE_MONITOR.get())
+        if (heldItem.getItem() == AEParts.STORAGE_MONITOR.get())
             upgradedBlock = this.omniCraftingType.family.getMonitorBlock();
         else
             upgradedBlock = CraftingUnitTransformRecipe.getUpgradedBlock(level, heldItem);
 
-        if(upgradedBlock == null) return false;
-        if(!(upgradedBlock instanceof IOmniCraftingBlock upgradedOCBlock)) return false;
-        if(upgradedBlock == state.getBlock()) return false;
+        if (upgradedBlock == null) return false;
+        if (!(upgradedBlock instanceof IOmniCraftingBlock upgradedOCBlock)) return false;
+        if (upgradedBlock == state.getBlock()) return false;
         // 升级配方只能在一个系列之内进行，不同系列不能互转
-        if(upgradedOCBlock.getOmniCraftingUnitType().family != this.omniCraftingType.family) return false;
+        if (upgradedOCBlock.getOmniCraftingUnitType().family != this.omniCraftingType.family) return false;
 
         // 遵循ae原版行为，返回true以播放动画
         if (level.isClientSide()) return true;
@@ -111,7 +114,7 @@ public class OmniCraftingMonitorBlock extends CraftingMonitorBlock implements IO
             return InteractionResult.FAIL;
 
         ItemStack removedUpgrade;
-        if(this.omniCraftingType.storageType == OmniCraftingStorageType.MONITOR)
+        if (this.omniCraftingType.storageType == OmniCraftingStorageType.MONITOR)
         {
             removedUpgrade = AEParts.STORAGE_MONITOR.stack();
         }

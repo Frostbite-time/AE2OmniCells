@@ -5,6 +5,8 @@ package com.wintercogs.ae2omnicells.common.me.crafting;
  */
 public interface IAcceleratorThreadsProvider
 {
-    /** 获得线程数 */
+    /**
+     * 获得线程数
+     */
     int getOmniCustomAcceleratorThreads();
 }

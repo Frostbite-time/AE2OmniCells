@@ -20,13 +20,15 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
-public class OCDataComponents {
+public class OCDataComponents
+{
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENTS =
             DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, AE2OmniCells.MODID);
 
     private static <T> DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(
             String name, UnaryOperator<DataComponentType.Builder<T>> builder
-    ) {
+    )
+    {
         return DATA_COMPONENTS.register(name, () -> builder.apply(DataComponentType.builder()).build());
     }
 
@@ -43,9 +45,12 @@ public class OCDataComponents {
             register("cell_byte_usage_big", b -> b
                     .persistent(Codec.STRING.comapFlatMap(
                             s -> {
-                                try {
+                                try
+                                {
                                     return DataResult.success(new BigInteger(s));
-                                } catch (NumberFormatException e) {
+                                }
+                                catch (NumberFormatException e)
+                                {
                                     return DataResult.error(() -> "Invalid BigInteger: " + s);
                                 }
                             },

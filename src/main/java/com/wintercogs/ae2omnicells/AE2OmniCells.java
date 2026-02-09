@@ -60,13 +60,13 @@ public class AE2OmniCells
 
     private void constructMod(FMLConstructModEvent event)
     {
-        if(ModList.get().isLoaded(MEGA_MODID))
+        if (ModList.get().isLoaded(MEGA_MODID))
             MEGA_LOADED = true;
-        if(ModList.get().isLoaded(EAE_MODID))
+        if (ModList.get().isLoaded(EAE_MODID))
             EAE_LOADED = true;
-        if(ModList.get().isLoaded(AAE_MODID))
+        if (ModList.get().isLoaded(AAE_MODID))
             AAE_LOADED = true;
-        if(ModList.get().isLoaded(AEMEK_MODID))
+        if (ModList.get().isLoaded(AEMEK_MODID))
             AEMEK_LOADED = true;
     }
 

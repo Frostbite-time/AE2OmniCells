@@ -41,7 +41,9 @@ import java.util.*;
  */
 public class AEPortableUniversalCellItem extends AbstractPortableCell implements IAEUniversalCell
 {
-    /** 默认染色（可被 display.color 覆盖） */
+    /**
+     * 默认染色（可被 display.color 覆盖）
+     */
     private static final int DEFAULT_COLOR = 0xFFFFFF;
 
     private final double idleDrain;
@@ -70,7 +72,7 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
 
     public static void onRegisterCaps(RegisterCapabilitiesEvent event)
     {
-        for(DeferredItem<AEPortableUniversalCellItem> item : OCItems.getPortableCells())
+        for (DeferredItem<AEPortableUniversalCellItem> item : OCItems.getPortableCells())
         {
             event.registerItem(Capabilities.EnergyStorage.ITEM,
                     (stack, unused) -> new PoweredItemCapabilities(stack, item.get()), item);
@@ -79,13 +81,14 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
 
     public static int getColor(ItemStack stack, int tintIndex)
     {
-        if(tintIndex == 0) return 0x80caff; // 蓝色
+        if (tintIndex == 0) return 0x80caff; // 蓝色
         else if (tintIndex == 1)
         {
-            if(stack.getItem() instanceof PoweredContainerItem poweredContainer)
+            if (stack.getItem() instanceof PoweredContainerItem poweredContainer)
             {
-                if(poweredContainer.getAECurrentPower(stack) <= 0)
-                    return CellState.ABSENT.getStateColor();;
+                if (poweredContainer.getAECurrentPower(stack) <= 0)
+                    return CellState.ABSENT.getStateColor();
+                ;
             }
             return IAEUniversalCell.getCellState(stack).getStateColor();
         }
@@ -94,7 +97,9 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
 
     // ---------- AbstractPortableCell 必需实现 ----------
 
-    /** 拆解时用的配方 ID，按注册名自动推导，保持与 AE 原版一致的 UX */
+    /**
+     * 拆解时用的配方 ID，按注册名自动推导，保持与 AE 原版一致的 UX
+     */
     @Override
     public ResourceLocation getRecipeId()
     {
@@ -102,7 +107,9 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
                 Objects.requireNonNull(this.getRegistryName()).getPath());
     }
 
-    /** 充电速率：基础 80 AE/t，每张能量卡再 +80 AE/t（与原版便携盘一致） */
+    /**
+     * 充电速率：基础 80 AE/t，每张能量卡再 +80 AE/t（与原版便携盘一致）
+     */
     @Override
     public double getChargeRate(ItemStack stack)
     {
@@ -145,12 +152,14 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
     }
 
     @Override
-    public FuzzyMode getFuzzyMode(ItemStack is) {
+    public FuzzyMode getFuzzyMode(ItemStack is)
+    {
         return is.getOrDefault(AEComponents.STORAGE_CELL_FUZZY_MODE, FuzzyMode.IGNORE_ALL);
     }
 
     @Override
-    public void setFuzzyMode(ItemStack is, FuzzyMode fzMode) {
+    public void setFuzzyMode(ItemStack is, FuzzyMode fzMode)
+    {
         is.set(AEComponents.STORAGE_CELL_FUZZY_MODE, fzMode);
     }
 
@@ -181,7 +190,8 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
 
         // 升级图标
         List<ItemStack> upgrades = Collections.emptyList();
-        if (showUpg) {
+        if (showUpg)
+        {
             List<ItemStack> tmp = new ArrayList<>();
             getUpgrades(stack).forEach(tmp::add);
             upgrades = tmp;
@@ -190,14 +200,19 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
         // 内容预览（最多 5 条）
         List<GenericStack> content = Collections.emptyList();
         boolean hasMore = false;
-        if (showCnt) {
+        if (showCnt)
+        {
             List<GenericStack> show = IAEUniversalCell.getTooltipShowStacks(stack);
-            if (!show.isEmpty()) {
+            if (!show.isEmpty())
+            {
                 final int limit = 5;
-                if (show.size() > limit) {
+                if (show.size() > limit)
+                {
                     content = new ArrayList<>(show.subList(0, limit));
                     hasMore = true;
-                } else {
+                }
+                else
+                {
                     content = new ArrayList<>(show);
                 }
             }

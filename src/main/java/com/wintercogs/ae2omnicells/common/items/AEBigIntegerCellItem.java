@@ -36,7 +36,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-/** BigInteger版元件物品的承载类，仅用于创造元件 */
+/**
+ * BigInteger版元件物品的承载类，仅用于创造元件
+ */
 public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICellWorkbenchItem
 {
     private final double idleDrain;
@@ -70,7 +72,8 @@ public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICe
 
         // 升级图标
         List<ItemStack> upgrades = Collections.emptyList();
-        if (showUpg) {
+        if (showUpg)
+        {
             List<ItemStack> tmp = new ArrayList<>();
             getUpgrades(stack).forEach(tmp::add);
             upgrades = tmp;
@@ -80,15 +83,20 @@ public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICe
         // 为了兼容 AE2 的组件，按需裁剪数量，并设置 hasMore
         List<GenericStack> content = Collections.emptyList();
         boolean hasMore = false;
-        if (showCnt) {
+        if (showCnt)
+        {
             List<GenericStack> show = IAEBigIntegerCell.getTooltipShowStacks(stack);
-            if (!show.isEmpty()) {
+            if (!show.isEmpty())
+            {
                 // AE2 通常展示不超过 5 个条目；超过则裁剪并设置 hasMore = true
                 final int limit = 5;
-                if (show.size() > limit) {
+                if (show.size() > limit)
+                {
                     content = new ArrayList<>(show.subList(0, limit));
                     hasMore = true;
-                } else {
+                }
+                else
+                {
                     content = new ArrayList<>(show);
                 }
             }
@@ -129,36 +137,43 @@ public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICe
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand)
+    {
         this.disassembleDrive(player.getItemInHand(hand), level, player);
         return new InteractionResultHolder<>(InteractionResult.sidedSuccess(level.isClientSide()),
                 player.getItemInHand(hand));
     }
 
-    private boolean disassembleDrive(ItemStack stack, Level level, Player player) {
-        if (!InteractionUtil.isInAlternateUseMode(player)) {
+    private boolean disassembleDrive(ItemStack stack, Level level, Player player)
+    {
+        if (!InteractionUtil.isInAlternateUseMode(player))
+        {
             return false;
         }
 
         var disassembledStacks = StorageCellDisassemblyRecipe.getDisassemblyResult(level, stack.getItem());
-        if (disassembledStacks.isEmpty()) {
+        if (disassembledStacks.isEmpty())
+        {
             return false;
         }
 
         var playerInventory = player.getInventory();
-        if (playerInventory.getSelected() != stack) {
+        if (playerInventory.getSelected() != stack)
+        {
             return false;
         }
 
         var inv = StorageCells.getCellInventory(stack, null);
-        if (inv != null && !inv.getAvailableStacks().isEmpty()) {
+        if (inv != null && !inv.getAvailableStacks().isEmpty())
+        {
             player.displayClientMessage(PlayerMessages.OnlyEmptyCellsCanBeDisassembled.text(), true);
             return false;
         }
 
         playerInventory.setItem(playerInventory.selected, ItemStack.EMPTY);
 
-        for (var disassembledStack : disassembledStacks) {
+        for (var disassembledStack : disassembledStacks)
+        {
             playerInventory.placeItemBackInInventory(disassembledStack.copy());
         }
 

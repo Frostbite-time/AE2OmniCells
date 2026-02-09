@@ -16,13 +16,17 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 
 public class AE2ClientPlugin
 {
-    /** 运行在Client入口点 */
+    /**
+     * 运行在Client入口点
+     */
     public static void onInit()
     {
 
     }
 
-    /** init后立刻运行此段代码，在这里进行注册相关内容 */
+    /**
+     * init后立刻运行此段代码，在这里进行注册相关内容
+     */
     public static void onRegister(IEventBus modEventBus, IEventBus gameEventBus)
     {
         // 注册硬盘led灯
@@ -31,7 +35,9 @@ public class AE2ClientPlugin
         modEventBus.addListener(AE2ClientPlugin::registerEntityRenderers);
     }
 
-    /** 允许在CommonSetup */
+    /**
+     * 允许在CommonSetup
+     */
     public static void onCommonSetup()
     {
         // 注册存储元件模型
@@ -39,14 +45,14 @@ public class AE2ClientPlugin
 
         // 注册合成存储器以及监控器模型
         // 这里写入AE2的命名空间，能通过AE2的hook省去一个mixin
-        for(DeferredBlock<? extends OmniCraftingUnitBlock> block : OCBlocks.CRAFTING_STORAGES)
+        for (DeferredBlock<? extends OmniCraftingUnitBlock> block : OCBlocks.CRAFTING_STORAGES)
         {
-            if(block.get().type instanceof OmniCraftingUnitType omniCraftingUnitType)
+            if (block.get().type instanceof OmniCraftingUnitType omniCraftingUnitType)
                 BuiltInModelHooks.addBuiltInModel(AppEng.makeId("block/crafting/" + block.getId().getPath() + "_formed"), new CraftingCubeModel(new OmniCraftingUnitModelProvider(omniCraftingUnitType)));
         }
-        for(DeferredBlock<? extends CraftingMonitorBlock> block : OCBlocks.CRAFTING_MONITORS)
+        for (DeferredBlock<? extends CraftingMonitorBlock> block : OCBlocks.CRAFTING_MONITORS)
         {
-            if(block.get().type instanceof OmniCraftingUnitType omniCraftingUnitType)
+            if (block.get().type instanceof OmniCraftingUnitType omniCraftingUnitType)
                 BuiltInModelHooks.addBuiltInModel(AppEng.makeId("block/crafting/" + block.getId().getPath() + "_formed"), new CraftingCubeModel(new OmniCraftingUnitModelProvider(omniCraftingUnitType)));
         }
     }

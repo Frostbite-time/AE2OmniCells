@@ -16,25 +16,31 @@ public class AEPlugin
     private static final String CELL_GROUP_NAME = "ae2omnicells.cell.upgrades.group";
     private static final String PORTABLE_CELL_GROUP_NAME = "ae2omnicells.cell.portable.upgrades.group";
 
-    /** 在mod入口点调用 */
+    /**
+     * 在mod入口点调用
+     */
     public static void onInit()
     {
 
     }
 
-    /** init后立刻运行此段代码，在这里进行注册相关内容 */
+    /**
+     * init后立刻运行此段代码，在这里进行注册相关内容
+     */
     public static void onRegister(IEventBus modEventBus, IEventBus gameEventBus)
     {
 
     }
 
-    /** 在FMLCommonSetupEvent阶段调用 */
+    /**
+     * 在FMLCommonSetupEvent阶段调用
+     */
     public static void onCommonSetup()
     {
         StorageCells.addCellHandler(AEUniversalCellHandler.INSTANCE);
         StorageCells.addCellHandler(AEBigIntegerCellHandler.INSTANCE);
 
-        for(DeferredItem<AEUniversalCellItem> registryItem : OCItems.getCells())
+        for (DeferredItem<AEUniversalCellItem> registryItem : OCItems.getCells())
         {
             Upgrades.add(AEItems.FUZZY_CARD, registryItem.get(), 1, CELL_GROUP_NAME);
             Upgrades.add(AEItems.VOID_CARD, registryItem.get(), 1, CELL_GROUP_NAME);
@@ -42,7 +48,7 @@ public class AEPlugin
             Upgrades.add(AEItems.EQUAL_DISTRIBUTION_CARD, registryItem.get(), 1, CELL_GROUP_NAME);
             Upgrades.add(OCItems.TYPE_FUZZY_CARD, registryItem.get(), 1, CELL_GROUP_NAME);
         }
-        for(DeferredItem<AEPortableUniversalCellItem> registryItem : OCItems.getPortableCells())
+        for (DeferredItem<AEPortableUniversalCellItem> registryItem : OCItems.getPortableCells())
         {
             Upgrades.add(AEItems.FUZZY_CARD, registryItem.get(), 1, PORTABLE_CELL_GROUP_NAME);
             Upgrades.add(AEItems.VOID_CARD, registryItem.get(), 1, PORTABLE_CELL_GROUP_NAME);
@@ -52,7 +58,7 @@ public class AEPlugin
             Upgrades.add(OCItems.TYPE_FUZZY_CARD, registryItem.get(), 1, PORTABLE_CELL_GROUP_NAME);
         }
         // 为两个创造元件添加升级卡，再单独为long级别添加溢出销毁和均分卡
-        for(DeferredItem<Item> registryItem : OCItems.getCreativeCells())
+        for (DeferredItem<Item> registryItem : OCItems.getCreativeCells())
         {
             Upgrades.add(AEItems.FUZZY_CARD, registryItem.get(), 1, CELL_GROUP_NAME);
             Upgrades.add(AEItems.INVERTER_CARD, registryItem.get(), 1, CELL_GROUP_NAME);

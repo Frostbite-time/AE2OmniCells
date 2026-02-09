@@ -25,7 +25,7 @@ public class CustomizableBlockModelProvider extends BlockModelProvider
     // 不自动执行，这里返回空 future；真正写文件时我们手动调用 generateAll
     @Override
     @NotNull
-    public  CompletableFuture<?> run(@NotNull CachedOutput cache)
+    public CompletableFuture<?> run(@NotNull CachedOutput cache)
     {
         return CompletableFuture.allOf();
     }

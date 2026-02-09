@@ -25,14 +25,18 @@ public class OmniCraftingBlockEntity extends CraftingBlockEntity implements IAcc
         );
     }
 
-    /** 始终返回0，躲开AE的线程检查 */
+    /**
+     * 始终返回0，躲开AE的线程检查
+     */
     @Override
     public int getAcceleratorThreads()
     {
         return 0;
     }
 
-    /** 返回真实线程数，随后用mixin仅作加法逻辑的注入，最大化兼容 */
+    /**
+     * 返回真实线程数，随后用mixin仅作加法逻辑的注入，最大化兼容
+     */
     @Override
     public int getOmniCustomAcceleratorThreads()
     {

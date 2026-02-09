@@ -25,15 +25,15 @@ public class ModItemModelProvider extends ItemModelProvider
     @Override
     protected void registerModels()
     {
-        for(DeferredItem<Item> registryItem : OCItems.getOthers())
+        for (DeferredItem<Item> registryItem : OCItems.getOthers())
         {
             basicItem(registryItem.get());
         }
-        for(DeferredItem<AEUniversalCellItem> registryItem : OCItems.getCells())
+        for (DeferredItem<AEUniversalCellItem> registryItem : OCItems.getCells())
         {
             cellWithOwnBaseAndAeLed(registryItem.get());
         }
-        for(DeferredItem<Item> registryItem : OCItems.getCreativeCells())
+        for (DeferredItem<Item> registryItem : OCItems.getCreativeCells())
         {
             cellWithOwnBaseAndAeLed(registryItem.get());
         }
@@ -142,6 +142,7 @@ public class ModItemModelProvider extends ItemModelProvider
 
     /**
      * 生成便携元件的模型
+     *
      * @param item    物品
      * @param housing layer2 纹理
      * @param side    layer3 纹理

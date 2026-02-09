@@ -19,7 +19,6 @@ import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingUnitType;
 import com.wintercogs.ae2omnicells.datagen.builder.CellDisassemblyRecipeBuilder;
 import mekanism.api.datagen.recipe.builder.PressurizedReactionRecipeBuilder;
 import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
-import mekanism.common.Mekanism;
 import mekanism.common.registries.MekanismBlocks;
 import mekanism.common.registries.MekanismChemicals;
 import mekanism.common.registries.MekanismFluids;
@@ -277,11 +276,11 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         // 奇点
         PressurizedReactionRecipeBuilder.reaction(
-                IngredientCreatorAccess.item().from(AEItems.SINGULARITY),
-                IngredientCreatorAccess.fluid().from(MekanismFluids.LITHIUM.asStack(1000)),
-                IngredientCreatorAccess.chemicalStack().fromHolder(MekanismChemicals.POLONIUM, 1000),
-                900,
-                new ItemStack(OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY.get()))
+                        IngredientCreatorAccess.item().from(AEItems.SINGULARITY),
+                        IngredientCreatorAccess.fluid().from(MekanismFluids.LITHIUM.asStack(1000)),
+                        IngredientCreatorAccess.chemicalStack().fromHolder(MekanismChemicals.POLONIUM, 1000),
+                        900,
+                        new ItemStack(OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY.get()))
                 .addCondition(new ModLoadedCondition(AE2OmniCells.AEMEK_MODID))
                 .build(recipeOutput, AE2OmniCells.makeId(OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY.getId().getPath()));
 
@@ -302,43 +301,58 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     }
 
     // ---------- 统一ID工具 ----------
-    private static ResourceLocation componentShapedId(DeferredItem<? extends Item> comp) {
+    private static ResourceLocation componentShapedId(DeferredItem<? extends Item> comp)
+    {
         return AE2OmniCells.makeId("components/shaped/" + comp.getId().getPath());
     }
-    private static ResourceLocation housingShapedId(DeferredItem<? extends Item> housing) {
+
+    private static ResourceLocation housingShapedId(DeferredItem<? extends Item> housing)
+    {
         return AE2OmniCells.makeId("cells/housing/" + housing.getId().getPath());
     }
-    private static ResourceLocation cellShapedId(DeferredItem<? extends Item> cell) {
+
+    private static ResourceLocation cellShapedId(DeferredItem<? extends Item> cell)
+    {
         return AE2OmniCells.makeId("cells/shaped/" + cell.getId().getPath());
     }
-    private static ResourceLocation cellShapelessId(DeferredItem<? extends Item> cell) {
+
+    private static ResourceLocation cellShapelessId(DeferredItem<? extends Item> cell)
+    {
         return AE2OmniCells.makeId("cells/shapeless/" + cell.getId().getPath());
     }
-    private static ResourceLocation disassemblyId(String series, DeferredItem<? extends Item> idLike, boolean portable) {
+
+    private static ResourceLocation disassemblyId(String series, DeferredItem<? extends Item> idLike, boolean portable)
+    {
         String base = (portable ? "disassembly/portable/" : "disassembly/") + series + "/" + idLike.getId().getPath();
         return AE2OmniCells.makeId(base);
     }
+
     private static ResourceLocation craftingUnitUpgradeId(DeferredBlock<?> craftingUnit)
     {
         return AE2OmniCells.makeId("crafting_unit/upgrade/" + craftingUnit.getId().getPath());
     }
+
     private static ResourceLocation craftingUnitShapelessId(DeferredBlock<?> craftingUnit)
     {
         return AE2OmniCells.makeId("crafting_unit/shapeless" + craftingUnit.getId().getPath());
     }
+
     private static ResourceLocation craftingUnitShapedId(DeferredBlock<?> craftingUnit)
     {
         return AE2OmniCells.makeId("crafting_unit/shaped" + craftingUnit.getId().getPath());
     }
 
     // 这是什么系列的硬盘？
-    private enum Series { OMNI, COMPLEX, QUANTUM }
+    private enum Series
+    {OMNI, COMPLEX, QUANTUM}
 
     private record TierRow(
             DeferredItem<? extends Item> component,
             DeferredItem<? extends Item> cell,
             DeferredItem<? extends Item> portableCell
-    ) {}
+    )
+    {
+    }
 
     // 系列材料描述
     private record SeriesMaterials(
@@ -349,7 +363,9 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             ItemLike componentProcessorP,  // 组件配方里使用的处理器（OMNI/COMPLEX/QUANTUM 各自不同）
             String componentGroupKey,      // 组件分组 key（REI/JEI）
             String seriesFolder            // 拆解路径段：omni/complex/quantum
-    ) {}
+    )
+    {
+    }
 
     private void buildAllByTiers(RecipeOutput out)
     {
@@ -388,40 +404,40 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         // --------- Tier 列表（按 1k→256m）---------
         TierRow[] OMNI_ROWS = new TierRow[]{
-                new TierRow(OCItems.OMNI_CELL_COMPONENT_1K,  OCItems.OMNI_CELL_1K,  OCItems.PORTABLE_OMNI_CELL_1K),
-                new TierRow(OCItems.OMNI_CELL_COMPONENT_4K,  OCItems.OMNI_CELL_4K,  OCItems.PORTABLE_OMNI_CELL_4K),
+                new TierRow(OCItems.OMNI_CELL_COMPONENT_1K, OCItems.OMNI_CELL_1K, OCItems.PORTABLE_OMNI_CELL_1K),
+                new TierRow(OCItems.OMNI_CELL_COMPONENT_4K, OCItems.OMNI_CELL_4K, OCItems.PORTABLE_OMNI_CELL_4K),
                 new TierRow(OCItems.OMNI_CELL_COMPONENT_16K, OCItems.OMNI_CELL_16K, OCItems.PORTABLE_OMNI_CELL_16K),
                 new TierRow(OCItems.OMNI_CELL_COMPONENT_64K, OCItems.OMNI_CELL_64K, OCItems.PORTABLE_OMNI_CELL_64K),
-                new TierRow(OCItems.OMNI_CELL_COMPONENT_256K,OCItems.OMNI_CELL_256K,OCItems.PORTABLE_OMNI_CELL_256K),
-                new TierRow(OCItems.OMNI_CELL_COMPONENT_1M,  OCItems.OMNI_CELL_1M,  OCItems.PORTABLE_OMNI_CELL_1M),
-                new TierRow(OCItems.OMNI_CELL_COMPONENT_4M,  OCItems.OMNI_CELL_4M,  OCItems.PORTABLE_OMNI_CELL_4M),
+                new TierRow(OCItems.OMNI_CELL_COMPONENT_256K, OCItems.OMNI_CELL_256K, OCItems.PORTABLE_OMNI_CELL_256K),
+                new TierRow(OCItems.OMNI_CELL_COMPONENT_1M, OCItems.OMNI_CELL_1M, OCItems.PORTABLE_OMNI_CELL_1M),
+                new TierRow(OCItems.OMNI_CELL_COMPONENT_4M, OCItems.OMNI_CELL_4M, OCItems.PORTABLE_OMNI_CELL_4M),
                 new TierRow(OCItems.OMNI_CELL_COMPONENT_16M, OCItems.OMNI_CELL_16M, OCItems.PORTABLE_OMNI_CELL_16M),
                 new TierRow(OCItems.OMNI_CELL_COMPONENT_64M, OCItems.OMNI_CELL_64M, OCItems.PORTABLE_OMNI_CELL_64M),
-                new TierRow(OCItems.OMNI_CELL_COMPONENT_256M,OCItems.OMNI_CELL_256M,OCItems.PORTABLE_OMNI_CELL_256M)
+                new TierRow(OCItems.OMNI_CELL_COMPONENT_256M, OCItems.OMNI_CELL_256M, OCItems.PORTABLE_OMNI_CELL_256M)
         };
         TierRow[] COMPLEX_ROWS = new TierRow[]{
-                new TierRow(OCItems.COMPLEX_OMNI_CELL_COMPONENT_1K,  OCItems.COMPLEX_OMNI_CELL_1K,  OCItems.PORTABLE_COMPLEX_OMNI_CELL_1K),
-                new TierRow(OCItems.COMPLEX_OMNI_CELL_COMPONENT_4K,  OCItems.COMPLEX_OMNI_CELL_4K,  OCItems.PORTABLE_COMPLEX_OMNI_CELL_4K),
+                new TierRow(OCItems.COMPLEX_OMNI_CELL_COMPONENT_1K, OCItems.COMPLEX_OMNI_CELL_1K, OCItems.PORTABLE_COMPLEX_OMNI_CELL_1K),
+                new TierRow(OCItems.COMPLEX_OMNI_CELL_COMPONENT_4K, OCItems.COMPLEX_OMNI_CELL_4K, OCItems.PORTABLE_COMPLEX_OMNI_CELL_4K),
                 new TierRow(OCItems.COMPLEX_OMNI_CELL_COMPONENT_16K, OCItems.COMPLEX_OMNI_CELL_16K, OCItems.PORTABLE_COMPLEX_OMNI_CELL_16K),
                 new TierRow(OCItems.COMPLEX_OMNI_CELL_COMPONENT_64K, OCItems.COMPLEX_OMNI_CELL_64K, OCItems.PORTABLE_COMPLEX_OMNI_CELL_64K),
-                new TierRow(OCItems.COMPLEX_OMNI_CELL_COMPONENT_256K,OCItems.COMPLEX_OMNI_CELL_256K,OCItems.PORTABLE_COMPLEX_OMNI_CELL_256K),
-                new TierRow(OCItems.COMPLEX_OMNI_CELL_COMPONENT_1M,  OCItems.COMPLEX_OMNI_CELL_1M,  OCItems.PORTABLE_COMPLEX_OMNI_CELL_1M),
-                new TierRow(OCItems.COMPLEX_OMNI_CELL_COMPONENT_4M,  OCItems.COMPLEX_OMNI_CELL_4M,  OCItems.PORTABLE_COMPLEX_OMNI_CELL_4M),
+                new TierRow(OCItems.COMPLEX_OMNI_CELL_COMPONENT_256K, OCItems.COMPLEX_OMNI_CELL_256K, OCItems.PORTABLE_COMPLEX_OMNI_CELL_256K),
+                new TierRow(OCItems.COMPLEX_OMNI_CELL_COMPONENT_1M, OCItems.COMPLEX_OMNI_CELL_1M, OCItems.PORTABLE_COMPLEX_OMNI_CELL_1M),
+                new TierRow(OCItems.COMPLEX_OMNI_CELL_COMPONENT_4M, OCItems.COMPLEX_OMNI_CELL_4M, OCItems.PORTABLE_COMPLEX_OMNI_CELL_4M),
                 new TierRow(OCItems.COMPLEX_OMNI_CELL_COMPONENT_16M, OCItems.COMPLEX_OMNI_CELL_16M, OCItems.PORTABLE_COMPLEX_OMNI_CELL_16M),
                 new TierRow(OCItems.COMPLEX_OMNI_CELL_COMPONENT_64M, OCItems.COMPLEX_OMNI_CELL_64M, OCItems.PORTABLE_COMPLEX_OMNI_CELL_64M),
-                new TierRow(OCItems.COMPLEX_OMNI_CELL_COMPONENT_256M,OCItems.COMPLEX_OMNI_CELL_256M,OCItems.PORTABLE_COMPLEX_OMNI_CELL_256M)
+                new TierRow(OCItems.COMPLEX_OMNI_CELL_COMPONENT_256M, OCItems.COMPLEX_OMNI_CELL_256M, OCItems.PORTABLE_COMPLEX_OMNI_CELL_256M)
         };
         TierRow[] QUANTUM_ROWS = new TierRow[]{
-                new TierRow(OCItems.QUANTUM_OMNI_CELL_COMPONENT_1K,  OCItems.QUANTUM_OMNI_CELL_1K,  OCItems.PORTABLE_QUANTUM_OMNI_CELL_1K),
-                new TierRow(OCItems.QUANTUM_OMNI_CELL_COMPONENT_4K,  OCItems.QUANTUM_OMNI_CELL_4K,  OCItems.PORTABLE_QUANTUM_OMNI_CELL_4K),
+                new TierRow(OCItems.QUANTUM_OMNI_CELL_COMPONENT_1K, OCItems.QUANTUM_OMNI_CELL_1K, OCItems.PORTABLE_QUANTUM_OMNI_CELL_1K),
+                new TierRow(OCItems.QUANTUM_OMNI_CELL_COMPONENT_4K, OCItems.QUANTUM_OMNI_CELL_4K, OCItems.PORTABLE_QUANTUM_OMNI_CELL_4K),
                 new TierRow(OCItems.QUANTUM_OMNI_CELL_COMPONENT_16K, OCItems.QUANTUM_OMNI_CELL_16K, OCItems.PORTABLE_QUANTUM_OMNI_CELL_16K),
                 new TierRow(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64K, OCItems.QUANTUM_OMNI_CELL_64K, OCItems.PORTABLE_QUANTUM_OMNI_CELL_64K),
-                new TierRow(OCItems.QUANTUM_OMNI_CELL_COMPONENT_256K,OCItems.QUANTUM_OMNI_CELL_256K,OCItems.PORTABLE_QUANTUM_OMNI_CELL_256K),
-                new TierRow(OCItems.QUANTUM_OMNI_CELL_COMPONENT_1M,  OCItems.QUANTUM_OMNI_CELL_1M,  OCItems.PORTABLE_QUANTUM_OMNI_CELL_1M),
-                new TierRow(OCItems.QUANTUM_OMNI_CELL_COMPONENT_4M,  OCItems.QUANTUM_OMNI_CELL_4M,  OCItems.PORTABLE_QUANTUM_OMNI_CELL_4M),
+                new TierRow(OCItems.QUANTUM_OMNI_CELL_COMPONENT_256K, OCItems.QUANTUM_OMNI_CELL_256K, OCItems.PORTABLE_QUANTUM_OMNI_CELL_256K),
+                new TierRow(OCItems.QUANTUM_OMNI_CELL_COMPONENT_1M, OCItems.QUANTUM_OMNI_CELL_1M, OCItems.PORTABLE_QUANTUM_OMNI_CELL_1M),
+                new TierRow(OCItems.QUANTUM_OMNI_CELL_COMPONENT_4M, OCItems.QUANTUM_OMNI_CELL_4M, OCItems.PORTABLE_QUANTUM_OMNI_CELL_4M),
                 new TierRow(OCItems.QUANTUM_OMNI_CELL_COMPONENT_16M, OCItems.QUANTUM_OMNI_CELL_16M, OCItems.PORTABLE_QUANTUM_OMNI_CELL_16M),
                 new TierRow(OCItems.QUANTUM_OMNI_CELL_COMPONENT_64M, OCItems.QUANTUM_OMNI_CELL_64M, OCItems.PORTABLE_QUANTUM_OMNI_CELL_64M),
-                new TierRow(OCItems.QUANTUM_OMNI_CELL_COMPONENT_256M,OCItems.QUANTUM_OMNI_CELL_256M,OCItems.PORTABLE_QUANTUM_OMNI_CELL_256M)
+                new TierRow(OCItems.QUANTUM_OMNI_CELL_COMPONENT_256M, OCItems.QUANTUM_OMNI_CELL_256M, OCItems.PORTABLE_QUANTUM_OMNI_CELL_256M)
         };
 
         // --------- 外壳三条（ID 也统一到 cells/housing/...）---------
@@ -461,16 +477,20 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                                    TagKey<Item> B_ENDER_DUST)
     {
         // 组件（1K 基础式 + 其余套娃）
-        for (int i = 0; i < rows.length; i++) {
+        for (int i = 0; i < rows.length; i++)
+        {
             var comp = rows[i].component().get();
 
             ShapedRecipeBuilder b = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, comp)
                     .group(mats.componentGroupKey());
 
-            if (i == 0) {
+            if (i == 0)
+            {
                 // 基础式：各系不同
-                switch (mats.series()) {
-                    case OMNI -> {
+                switch (mats.series())
+                {
+                    case OMNI ->
+                    {
                         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, comp)
                                 .pattern("RPR")
                                 .pattern("ECE")
@@ -484,7 +504,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                                 .save(out, componentShapedId(rows[i].component()));
                         continue;
                     }
-                    case COMPLEX -> {
+                    case COMPLEX ->
+                    {
                         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, comp)
                                 .pattern("GPG")
                                 .pattern("ECE")
@@ -498,7 +519,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                                 .save(out, componentShapedId(rows[i].component()));
                         continue;
                     }
-                    case QUANTUM -> {
+                    case QUANTUM ->
+                    {
                         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, comp)
                                 .pattern("NPN")
                                 .pattern("ECE")
@@ -513,7 +535,9 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                         continue;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 // 套娃式：统一 U/Q 模板，材料依系列而不同只体现在 P（已经注入）
                 ShapedRecipeBuilder.shaped(RecipeCategory.MISC, comp)
                         .pattern("RPR").pattern("UQU").pattern("RUR")
@@ -528,19 +552,23 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         }
 
         // 单元（非便携：shaped + shapeless）
-        for (TierRow row : rows) {
+        for (TierRow row : rows)
+        {
             var cell = row.cell().get();
             var comp = row.component().get();
 
             // shaped
-            if (mats.series() == Series.OMNI) {
+            if (mats.series() == Series.OMNI)
+            {
                 ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cell)
                         .pattern("ABA").pattern("BMB").pattern("CCC")
                         .define('A', A_GLASS).define('B', B_ENDER_DUST)
                         .define('C', mats.materialC()).define('M', comp)
                         .unlockedBy("has_component", has(comp))
                         .save(out, cellShapedId(row.cell()));
-            } else {
+            }
+            else
+            {
                 ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cell)
                         .pattern("ABA").pattern("BMB").pattern("CDC")
                         .define('A', A_GLASS).define('B', B_ENDER_DUST)
@@ -559,9 +587,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         }
 
         // 便携（shapeless）
-        for (TierRow row : rows) {
+        for (TierRow row : rows)
+        {
             var pCell = row.portableCell().get();
-            var comp  = row.component().get();
+            var comp = row.component().get();
 
             ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, pCell)
                     .requires(mats.housing())
@@ -573,7 +602,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         }
 
         // 拆解（非便携 & 便携）
-        for (TierRow row : rows) {
+        for (TierRow row : rows)
+        {
             // 非便携
             CellDisassemblyRecipeBuilder.cell(row.cell().get())
                     .add(mats.housing())
@@ -592,7 +622,9 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
 
     // 合成存储器升级配方构建
-    record UnitTransformTier(DeferredBlock<?> baseBlock, ItemLike upgradeItem) {}
+    record UnitTransformTier(DeferredBlock<?> baseBlock, ItemLike upgradeItem)
+    {
+    }
 
     private void buildAllCraftingUnitTransforms(RecipeOutput output)
     {
@@ -633,7 +665,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         // 这里不添加有关合成监控器的拆解配方，因为这三者对应的升级物品一致，不仅会和ae2原版的合成存储器冲突，甚至它们之间本身也会冲突
         // 我们将在代码中硬编码地添加拆解和升级逻辑
-        for(UnitTransformTier tier : tiers)
+        for (UnitTransformTier tier : tiers)
         {
             output.accept(
                     craftingUnitUpgradeId(tier.baseBlock),
@@ -648,12 +680,12 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         tiers.add(new UnitTransformTier(OCBlocks.COMPLEX_CRAFTING_MONITOR_BLOCK, AEParts.STORAGE_MONITOR));
         tiers.add(new UnitTransformTier(OCBlocks.QUANTUM_CRAFTING_MONITOR_BLOCK, AEParts.STORAGE_MONITOR));
 
-        for(UnitTransformTier tier : tiers)
+        for (UnitTransformTier tier : tiers)
         {
-            if(!(tier.baseBlock.get() instanceof AbstractCraftingUnitBlock<?> craftingUnitBlock)) continue;
-            if(!(craftingUnitBlock.type instanceof OmniCraftingUnitType craftingUnitType)) continue;
+            if (!(tier.baseBlock.get() instanceof AbstractCraftingUnitBlock<?> craftingUnitBlock)) continue;
+            if (!(craftingUnitBlock.type instanceof OmniCraftingUnitType craftingUnitType)) continue;
 
-            ItemLike inputUnit = switch(craftingUnitType.family)
+            ItemLike inputUnit = switch (craftingUnitType.family)
             {
                 case OMNI -> OCBlocks.OMNI_CRAFTING_UNIT_BLOCK;
                 case COMPLEX -> OCBlocks.COMPLEX_CRAFTING_UNIT_BLOCK;

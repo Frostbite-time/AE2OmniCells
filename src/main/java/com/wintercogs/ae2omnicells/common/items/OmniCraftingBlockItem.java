@@ -34,7 +34,7 @@ public class OmniCraftingBlockItem extends CraftingBlockItem
             ItemStack stack = player.getItemInHand(hand);
 
             ItemStack removedUpgrade;
-            if(getBlock() instanceof OmniCraftingMonitorBlock)
+            if (getBlock() instanceof OmniCraftingMonitorBlock)
             {
                 removedUpgrade = AEParts.STORAGE_MONITOR.stack();
             }
