@@ -18,6 +18,7 @@ import com.wintercogs.ae2omnicells.common.init.OCItems;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.ReferenceArraySet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -66,6 +67,24 @@ public class AEBigIntegerCellInventory implements StorageCell
      */
     private final Long2ObjectOpenHashMap<BigInteger> bucketSums = new Long2ObjectOpenHashMap<>();
 
+    /** 反向卡 */
+    private boolean cardInverterInstalled = false;
+
+    /** 模糊卡 */
+    private boolean cardFuzzyInstalled = false;
+
+    /** 类型模糊卡 */
+    private boolean cardTypeFuzzyInstalled = false;
+
+    /** key分区缓存 */
+    private IPartitionList partitionList = IPartitionList.builder().build();
+
+    /** key分区键量 */
+    private int partitionConfigSize = 0;
+
+    /** keyType分区缓存（keyType很少，这个大概比哈希更快吧，没有实际测试过） */
+    private final ReferenceArraySet<AEKeyType> partitionTypes = new ReferenceArraySet<>();
+
     public AEBigIntegerCellInventory(@NotNull AEBigIntegerCellData cellData,
                                      @NotNull ItemStack itemStack,
                                      @NotNull IAEBigIntegerCell cellType,
@@ -97,6 +116,10 @@ public class AEBigIntegerCellInventory implements StorageCell
         }
         this.usedBytesCached = bytesForValues;
 
+        // 更新升级卡状态
+        updateUpgradeCardState();
+        // 更新分区状态
+        updatePartitionState();
         // 初始化后把统计状态写进ItemStack给客户端显示用
         updateItemTooltipState();
     }
@@ -261,47 +284,23 @@ public class AEBigIntegerCellInventory implements StorageCell
     private boolean matchesPartitionAndUpgrades(AEKey what)
     {
         // 升级槽
-        final IUpgradeInventory upgrades = cellType.getUpgrades(itemStack);
-        final boolean hasInverter = upgrades.isInstalled(AEItems.INVERTER_CARD);
-        final boolean hasFuzzy = upgrades.isInstalled(AEItems.FUZZY_CARD);
-        final boolean hasTypeFuzzy = upgrades.isInstalled(OCItems.TYPE_FUZZY_CARD.get());
+        final boolean hasInverter = this.cardInverterInstalled;
+        final boolean hasTypeFuzzy = this.cardTypeFuzzyInstalled;
 
-        // 分区配置
-        ConfigInventory config = null;
-        FuzzyMode fuzzyMode = FuzzyMode.IGNORE_ALL;
-        if (cellType instanceof ICellWorkbenchItem cellWorkbenchItem)
-        {
-            config = cellWorkbenchItem.getConfigInventory(itemStack);
-            if (hasFuzzy) fuzzyMode = cellWorkbenchItem.getFuzzyMode(itemStack);
-        }
-        if (config == null || config.keySet().isEmpty())
-        {
-            return true; // 未配置视为不过滤
-        }
+        // 未过滤视为不配置
+        if(this.partitionList.isEmpty()) return true;
 
         IncludeExclude mode = hasInverter ? IncludeExclude.BLACKLIST : IncludeExclude.WHITELIST;
 
         if(hasTypeFuzzy) // 如果有类型模糊卡，只根据其进行分区筛选
         {
             AEKeyType targetType = what.getType();
-            boolean typeMatched = false;
-            for (AEKey key : config.keySet())
-            {
-                if (key != null && key.getType() == targetType)
-                {
-                    typeMatched = true;
-                    break;
-                }
-            }
+            boolean typeMatched = this.partitionTypes.contains(targetType);
             return (mode == IncludeExclude.WHITELIST) ? typeMatched : !typeMatched;
         }
         else // 原逻辑
         {
-            IPartitionList.Builder builder = IPartitionList.builder();
-            if (hasFuzzy) builder.fuzzyMode(fuzzyMode);
-            builder.addAll(config.keySet());
-            IPartitionList list = builder.build();
-            return list.matchesFilter(what, mode);
+            return this.partitionList.matchesFilter(what, mode);
         }
     }
 
@@ -340,6 +339,50 @@ public class AEBigIntegerCellInventory implements StorageCell
             if (++count >= 5) break;
         }
         IAEBigIntegerCell.setTooltipShowStacks(itemStack, show);
+    }
+
+    /** 更新升级卡状态 */
+    private void updateUpgradeCardState()
+    {
+        final IUpgradeInventory upgrades = cellType.getUpgrades(itemStack);
+        this.cardInverterInstalled = upgrades.isInstalled(AEItems.INVERTER_CARD);
+        this.cardFuzzyInstalled = upgrades.isInstalled(AEItems.FUZZY_CARD);
+        this.cardTypeFuzzyInstalled = upgrades.isInstalled(OCItems.TYPE_FUZZY_CARD.get());
+    }
+
+    /** 更新分区配置状态 */
+    private void updatePartitionState()
+    {
+        this.partitionConfigSize = 0;
+        this.partitionTypes.clear();
+
+        final boolean hasFuzzy = this.cardFuzzyInstalled;
+
+        ConfigInventory config = null;
+        FuzzyMode fuzzyMode = FuzzyMode.IGNORE_ALL;
+        if (cellType instanceof ICellWorkbenchItem cellWorkbenchItem)
+        {
+            config = cellWorkbenchItem.getConfigInventory(itemStack);
+            if (hasFuzzy) fuzzyMode = cellWorkbenchItem.getFuzzyMode(itemStack);
+        }
+
+        var builder = IPartitionList.builder();
+        if (hasFuzzy) builder.fuzzyMode(fuzzyMode);
+        if (config != null)
+        {
+            var keys = config.keySet();
+            if (!keys.isEmpty())
+            {
+                builder.addAll(keys);
+                this.partitionConfigSize = keys.size();
+
+                for (AEKey key : keys)
+                {
+                    if (key != null) this.partitionTypes.add(key.getType());
+                }
+            }
+        }
+        this.partitionList = builder.build();
     }
 
     // 简单算数工具（BigInteger 版本） ---------------------------------------------------

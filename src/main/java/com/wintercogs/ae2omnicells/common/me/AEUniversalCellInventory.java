@@ -15,14 +15,13 @@ import appeng.core.definitions.AEItems;
 import appeng.util.ConfigInventory;
 import appeng.util.prioritylist.IPartitionList;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
-import com.wintercogs.ae2omnicells.common.config.MekRadialChemicalCheck;
 import com.wintercogs.ae2omnicells.common.config.MekRadialChemicalCheckConfig;
 import com.wintercogs.ae2omnicells.common.init.OCItems;
 import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import it.unimi.dsi.fastutil.objects.ReferenceArraySet;
 import me.ramidzkh.mekae2.ae2.MekanismKey;
-import mekanism.api.chemical.Chemical;
 import mekanism.api.chemical.gas.attribute.GasAttributes;
 import mekanism.common.registries.MekanismGases;
 import net.minecraft.network.chat.Component;
@@ -82,6 +81,33 @@ public class AEUniversalCellInventory implements StorageCell
      */
     private final Long2LongOpenHashMap bucketSums = new Long2LongOpenHashMap();
 
+    /** 有多少个 apb 桶存在“碎片”（sum % apb != 0）。用于 O(1) 判断是否还有碎片可用 */
+    private int partialBucketCount = 0;
+
+    /** 虚空卡 */
+    private boolean cardVoidInstalled = false;
+
+    /** 反向卡 */
+    private boolean cardInverterInstalled = false;
+
+    /** 模糊卡 */
+    private boolean cardFuzzyInstalled = false;
+
+    /** 类型模糊卡 */
+    private boolean cardTypeFuzzyInstalled = false;
+
+    /** 均分卡 */
+    private boolean cardEqualDistributionInstalled = false;
+
+    /** key分区缓存 */
+    private IPartitionList partitionList = IPartitionList.builder().build();
+
+    /** key分区键量 */
+    private int partitionConfigSize = 0;
+
+    /** keyType分区缓存（keyType很少，这个大概比哈希更快吧，没有实际测试过） */
+    private final ReferenceArraySet<AEKeyType> partitionTypes = new ReferenceArraySet<>();
+
     public AEUniversalCellInventory(@NotNull AEUniversalCellData cellData,
                                     @NotNull ItemStack itemStack,
                                     @NotNull IAEUniversalCell cellType,
@@ -112,14 +138,21 @@ public class AEUniversalCellInventory implements StorageCell
         }
 
         long bytesForValues = 0;
+        int partial = 0;
         for (Long2LongMap.Entry b : bucketSums.long2LongEntrySet())
         {
             long apb = b.getLongKey();
             long sum = b.getLongValue();
             bytesForValues = safeAdd(bytesForValues, ceilDiv(sum, apb));
+            if (sum > 0 && (sum % apb) != 0) partial++;
         }
         this.usedBytesCached = bytesForValues;
+        this.partialBucketCount = partial;
 
+        // 更新升级卡状态
+        updateUpgradeCardState();
+        // 更新分区状态
+        updatePartitionState();
         // 初始化后把统计状态写进ItemStack给客户端显示用
         updateItemTooltipState();
     }
@@ -234,12 +267,15 @@ public class AEUniversalCellInventory implements StorageCell
 
         if (mode == Actionable.MODULATE)
         {
-            // ---- 增量更新缓存：桶累计、已用字节、已用类型数 ----
+            // ---- 增量更新缓存：桶累计、已用字节 ----
             final long oldBucket = bucketSums.get(amountPerByte);
             final long newBucket = safeAdd(oldBucket, toInsert);
 
             // 值字节的增量 = ceil(new/apb) - ceil(old/apb)
             final long deltaValueBytes = safeSub(ceilDiv(newBucket, amountPerByte), ceilDiv(oldBucket, amountPerByte));
+
+            // 维护“桶碎片计数”（O(1)）
+            updatePartialBucketCount(amountPerByte, oldBucket, newBucket);
 
             // 应用“值字节”增量
             usedBytesCached = safeAdd(usedBytesCached, deltaValueBytes);
@@ -273,6 +309,9 @@ public class AEUniversalCellInventory implements StorageCell
 
             // 值字节的增量 = ceil(new/apb) - ceil(old/apb)（可能为负）
             final long deltaValueBytes = safeSub(ceilDiv(newBucket, amountPerByte), ceilDiv(oldBucket, amountPerByte));
+
+            // 维护“桶碎片计数”（O(1)）
+            updatePartialBucketCount(amountPerByte, oldBucket, newBucket);
 
             usedBytesCached = safeAdd(usedBytesCached, deltaValueBytes);
 
@@ -346,12 +385,7 @@ public class AEUniversalCellInventory implements StorageCell
     /** 是否存在任何“桶”未凑满 1 字节（sum % amountPerByte != 0） */
     private boolean hasAnyBucketPartial()
     {
-        for (Long2LongMap.Entry bucket : bucketSums.long2LongEntrySet())
-        {
-            long apb = bucket.getLongKey(), sum = bucket.getLongValue();
-            if (sum > 0 && (sum % apb) != 0) return true;
-        }
-        return false;
+        return this.partialBucketCount > 0;
     }
 
     /**
@@ -384,47 +418,23 @@ public class AEUniversalCellInventory implements StorageCell
     private boolean matchesPartitionAndUpgrades(AEKey what)
     {
         // 升级槽
-        final IUpgradeInventory upgrades = cellType.getUpgrades(itemStack);
-        final boolean hasInverter = upgrades.isInstalled(AEItems.INVERTER_CARD);
-        final boolean hasFuzzy = upgrades.isInstalled(AEItems.FUZZY_CARD);
-        final boolean hasTypeFuzzy = upgrades.isInstalled(OCItems.TYPE_FUZZY_CARD.get());
+        final boolean hasInverter = this.cardInverterInstalled;
+        final boolean hasTypeFuzzy = this.cardTypeFuzzyInstalled;
 
-        // 分区配置
-        ConfigInventory config = null;
-        FuzzyMode fuzzyMode = FuzzyMode.IGNORE_ALL;
-        if (cellType instanceof ICellWorkbenchItem cellWorkbenchItem)
-        {
-            config = cellWorkbenchItem.getConfigInventory(itemStack);
-            if (hasFuzzy) fuzzyMode = cellWorkbenchItem.getFuzzyMode(itemStack);
-        }
-        if (config == null || config.keySet().isEmpty())
-        {
-            return true; // 未配置视为不过滤
-        }
+        // 未过滤视为不配置
+        if(this.partitionList.isEmpty()) return true;
 
         IncludeExclude mode = hasInverter ? IncludeExclude.BLACKLIST : IncludeExclude.WHITELIST;
 
         if(hasTypeFuzzy) // 如果有类型模糊卡，只根据其进行分区筛选
         {
             AEKeyType targetType = what.getType();
-            boolean typeMatched = false;
-            for (AEKey key : config.keySet())
-            {
-                if (key != null && key.getType() == targetType)
-                {
-                    typeMatched = true;
-                    break;
-                }
-            }
+            boolean typeMatched = this.partitionTypes.contains(targetType);
             return (mode == IncludeExclude.WHITELIST) ? typeMatched : !typeMatched;
         }
         else // 原逻辑
         {
-            IPartitionList.Builder builder = IPartitionList.builder();
-            if (hasFuzzy) builder.fuzzyMode(fuzzyMode);
-            builder.addAll(config.keySet());
-            IPartitionList list = builder.build();
-            return list.matchesFilter(what, mode);
+            return this.partitionList.matchesFilter(what, mode);
         }
     }
 
@@ -433,21 +443,17 @@ public class AEUniversalCellInventory implements StorageCell
      */
     private long computeEqualDistributionCap(long apb)
     {
-        final IUpgradeInventory upgrades = cellType.getUpgrades(itemStack);
-        if (!upgrades.isInstalled(AEItems.EQUAL_DISTRIBUTION_CARD)) return Long.MAX_VALUE;
+        if (!this.cardEqualDistributionInstalled) return Long.MAX_VALUE;
 
-        final boolean hasFuzzy = upgrades.isInstalled(AEItems.FUZZY_CARD);
-        final boolean whitelist = !upgrades.isInstalled(AEItems.INVERTER_CARD);
+        final boolean hasFuzzy = cardFuzzyInstalled;
+        final boolean whitelist = !cardInverterInstalled;
 
         long estimatedTypes = Long.MAX_VALUE;
-        ConfigInventory config = (cellType instanceof ICellWorkbenchItem cwi)
-                ? cwi.getConfigInventory(itemStack)
-                : null;
 
         // ae 原版逻辑：只有在“非模糊 + 白名单 + 配置非空”时，用配置条目数估算类型数
-        if (!hasFuzzy && whitelist && config != null && !config.keySet().isEmpty())
+        if (!hasFuzzy && whitelist && !this.partitionList.isEmpty())
         {
-            estimatedTypes = config.keySet().size();
+            estimatedTypes = partitionConfigSize;
         }
 
         estimatedTypes = Math.min(estimatedTypes, totalTypesEff);
@@ -461,21 +467,15 @@ public class AEUniversalCellInventory implements StorageCell
 
     /**
      * 虚空卡处理（与 ae 原版一致）：
-     * - 若“未分区”且“无法再开新类型”，则：已存在该类型 => 全吞（返回 amount）；否则仅返回 inserted（通常 0）
+     * - 若“未分区”且“无法再开新类型”，则：已存在该类型 => 全吞（返回 amount）；否则仅返回 inserted
      * - 其它情况，只要装了虚空卡 => 全吞（返回 amount）
      * 未装虚空卡 => 返回 inserted
      */
     private long handleOverflowVoidOnInsert(AEKey what, long amount, long inserted)
     {
-        final IUpgradeInventory upgrades = cellType.getUpgrades(itemStack);
-        if (!upgrades.isInstalled(AEItems.VOID_CARD)) return inserted;
+        if (!cardVoidInstalled) return inserted;
 
-        boolean unpartitioned = true;
-        if (cellType instanceof ICellWorkbenchItem cellWorkbenchItem)
-        {
-            ConfigInventory configInventory = cellWorkbenchItem.getConfigInventory(itemStack);
-            unpartitioned = (configInventory == null || configInventory.keySet().isEmpty());
-        }
+        boolean unpartitioned = this.partitionList.isEmpty();
 
         final long freeBytes = freeBytes();
         final boolean canOpen = canHoldNewItemGeneric(freeBytes);
@@ -523,6 +523,70 @@ public class AEUniversalCellInventory implements StorageCell
             if (++count >= 5) break;
         }
         IAEUniversalCell.setTooltipShowStacks(itemStack, show);
+    }
+
+    /** 更新升级卡状态 */
+    private void updateUpgradeCardState()
+    {
+        final IUpgradeInventory upgrades = cellType.getUpgrades(itemStack);
+        this.cardVoidInstalled = upgrades.isInstalled(AEItems.VOID_CARD);
+        this.cardInverterInstalled = upgrades.isInstalled(AEItems.INVERTER_CARD);
+        this.cardFuzzyInstalled = upgrades.isInstalled(AEItems.FUZZY_CARD);
+        this.cardTypeFuzzyInstalled = upgrades.isInstalled(OCItems.TYPE_FUZZY_CARD.get());
+        this.cardEqualDistributionInstalled = upgrades.isInstalled(AEItems.EQUAL_DISTRIBUTION_CARD);
+    }
+
+    /** 更新分区配置状态 */
+    private void updatePartitionState()
+    {
+        this.partitionConfigSize = 0;
+        this.partitionTypes.clear();
+
+        final boolean hasFuzzy = this.cardFuzzyInstalled;
+
+        ConfigInventory config = null;
+        FuzzyMode fuzzyMode = FuzzyMode.IGNORE_ALL;
+        if (cellType instanceof ICellWorkbenchItem cellWorkbenchItem)
+        {
+            config = cellWorkbenchItem.getConfigInventory(itemStack);
+            if (hasFuzzy) fuzzyMode = cellWorkbenchItem.getFuzzyMode(itemStack);
+        }
+
+        var builder = IPartitionList.builder();
+        if (hasFuzzy) builder.fuzzyMode(fuzzyMode);
+        if (config != null)
+        {
+            var keys = config.keySet();
+            if (!keys.isEmpty())
+            {
+                builder.addAll(keys);
+                this.partitionConfigSize = keys.size();
+
+                for (AEKey key : keys)
+                {
+                    if (key != null) this.partitionTypes.add(key.getType());
+                }
+            }
+        }
+        this.partitionList = builder.build();
+    }
+
+    /** 增量维护 partialBucketCount：仅当该 apb 桶从“有碎片/无碎片”状态发生变化时才调整计数 */
+    private void updatePartialBucketCount(long apb, long oldSum, long newSum)
+    {
+        boolean oldPartial = oldSum > 0 && (oldSum % apb) != 0;
+        boolean newPartial = newSum > 0 && (newSum % apb) != 0;
+
+        if (oldPartial == newPartial) return;
+
+        if (oldPartial)
+        {
+            this.partialBucketCount--;
+        }
+        else
+        {
+            this.partialBucketCount++;
+        }
     }
 
     // 简单算数工具 --------------------------------------------------------------------
