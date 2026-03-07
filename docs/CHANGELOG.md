@@ -1,2 +1,1 @@
-* Fixed an issue where the Void Card didn’t work in certain cases.
-* Improved performance.
+* Fix the mod version number so it can be used for version comparison.
