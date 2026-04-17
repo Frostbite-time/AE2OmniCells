@@ -200,9 +200,8 @@ public class AEBigIntegerCellInventory implements StorageCell
     {
         if (amount <= 0) return 0;
 
-        // 分区/模糊/黑白名单 与 递归盘保护
+        // 分区/模糊/黑白名单
         if (!matchesPartitionAndUpgrades(what)) return 0;
-        if (!canNestStorageCells(what)) return 0;
 
         final long apb = Math.max(1, what.getType().getAmountPerByte());
         final BigInteger current = nonNegative(storage.get(what));
@@ -308,6 +307,9 @@ public class AEBigIntegerCellInventory implements StorageCell
 
     /**
      * 递归盘保护：若 what 是“另一个存储盘”且该盘声明不能嵌入，则拒收。
+     * <p>
+     * 分析后认为Saved Data存储的数据实际上不会在insert需要此保护。
+     * 将其保护行为移动到updateItemTooltipState防止预览信息过大。
      */
     private boolean canNestStorageCells(AEKey what)
     {
@@ -379,6 +381,7 @@ public class AEBigIntegerCellInventory implements StorageCell
         {
             BigInteger v = nonNegative(e.getValue());
             if (v.signum() <= 0) continue;
+            if (!canNestStorageCells(e.getKey())) continue;
             show.add(new GenericStack(e.getKey(), clampToLong(v)));
             if (++count >= 5) break;
         }
