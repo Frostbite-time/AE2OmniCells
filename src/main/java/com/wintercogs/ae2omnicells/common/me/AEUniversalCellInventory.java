@@ -264,9 +264,8 @@ public class AEUniversalCellInventory implements StorageCell
             if (itemStack.getItem() == OCItems.SPENT_NUCLEAR_WASTE_CELL.get()) return 0;
         }
 
-        // 分区/模糊/黑白名单 与 递归盘保护
+        // 分区/模糊/黑白名单
         if (!matchesPartitionAndUpgrades(what)) return 0;
-        if (!canNestStorageCells(what)) return 0;
 
         // 取当前 apb 与现存量
         final long amountPerByte = Math.max(1, what.getType().getAmountPerByte());
@@ -458,9 +457,11 @@ public class AEUniversalCellInventory implements StorageCell
 
     /**
      * 递归盘保护：若 what 是“另一个存储盘”且该盘声明不能嵌入，则拒收。
+     * <p>
+     * 分析后认为Saved Data存储的数据实际上不会在insert需要此保护。
+     * 将其保护行为移动到updateItemTooltipState防止预览信息过大。
      */
-    private boolean canNestStorageCells(AEKey what
-    )
+    private boolean canNestStorageCells(AEKey what)
     {
         if (what instanceof AEItemKey itemKey)
         {
@@ -580,6 +581,7 @@ public class AEUniversalCellInventory implements StorageCell
         {
             long v = e.getLongValue();
             if (v <= 0L) continue;
+            if (!canNestStorageCells(e.getKey())) continue;
             show.add(new GenericStack(e.getKey(), v));
             if (++count >= 5) break;
         }
