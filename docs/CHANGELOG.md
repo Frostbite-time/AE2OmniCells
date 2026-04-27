@@ -1,1 +1,1 @@
-* improve performance
+* Add Ender Nugget
