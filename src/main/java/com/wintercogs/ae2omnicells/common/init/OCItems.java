@@ -47,6 +47,7 @@ public class OCItems
 
     // ---- 杂项 / 其他物品 ----
     public static final DeferredItem<Item> ENDER_INGOT = registerOtherItem("ender_ingot", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> ENDER_NUGGET = registerOtherItem("ender_nugget", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> CHARGED_ENDER_INGOT = registerOtherItem("charged_ender_ingot", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> OMNI_LINK_PRINT_PRESS = registerOtherItem("omni_link_print_press", () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> COMPLEX_LINK_PRINT_PRESS = registerOtherItem("complex_link_print_press", () -> new Item(new Item.Properties()));
