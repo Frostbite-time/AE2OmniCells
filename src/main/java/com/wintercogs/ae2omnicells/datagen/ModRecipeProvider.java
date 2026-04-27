@@ -66,6 +66,12 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 AE2OmniCells.makeId("ender_ingot_block_from_ingots").toString(), null,
                 AE2OmniCells.makeId("ender_ingot_from_blocks").toString(), null);
 
+        // 末影钢粒与末影钢锭互转
+        nineBlockStorageRecipes(recipeOutput, RecipeCategory.MISC, OCItems.ENDER_NUGGET.get(),
+                RecipeCategory.MISC, OCItems.ENDER_INGOT.get(),
+                AE2OmniCells.makeId("ender_ingot_from_nuggets").toString(), null,
+                AE2OmniCells.makeId("ender_nugget_from_ingot").toString(), null);
+
         // 下界合金碎片块以及其拆解配方
         nineBlockStorageRecipes(recipeOutput, RecipeCategory.MISC, Items.NETHERITE_SCRAP,
                 RecipeCategory.BUILDING_BLOCKS, OCBlocks.NETHERITE_SCRAP_BLOCK.get(),

@@ -1,4 +1,4 @@
-// 1.20.1	2025-10-31T14:33:24.7718677	Item Models: ae2omnicells
+// 1.20.1	2026-04-27T20:36:54.6091395	Item Models: ae2omnicells
 c3ee4707e3112ec779ee06893a8f7d08de7722c1 assets/ae2omnicells/models/item/charged_ender_ingot.json
 5d7828731240f75ea8538e3c26228a7b6bbd1ec7 assets/ae2omnicells/models/item/complex_link_circuit_print.json
 98291d54365d20bb43693bce65d1cfcb71ef1c83 assets/ae2omnicells/models/item/complex_link_print_press.json
@@ -27,6 +27,7 @@ ad25f85d601f3fe26684f9d5855b184630f7128e assets/ae2omnicells/models/item/complex
 6a8f1cf83bb58a06922b7d34d0845fa96533207f assets/ae2omnicells/models/item/creative_ae_cell_biginteger.json
 7f97e544c0325bc8a80356b88abbc0945d0d963b assets/ae2omnicells/models/item/creative_ae_cell_long.json
 ceb386dbd94dc063d5562a89d56ad8a74ff418a8 assets/ae2omnicells/models/item/ender_ingot.json
+6eb835735870c30b0456d97180a1cceb93811943 assets/ae2omnicells/models/item/ender_nugget.json
 e7d52e1f514a77ab6c3da4d583671467392cf3e3 assets/ae2omnicells/models/item/multidimensional_expansion_circuit_print.json
 16dc8f971d828c1602f31b8d676ee91ca2a144ca assets/ae2omnicells/models/item/multidimensional_expansion_print_press.json
 55aa2d0a3de9e7e0f418715acf444f7102f3724d assets/ae2omnicells/models/item/multidimensional_expansion_processor.json

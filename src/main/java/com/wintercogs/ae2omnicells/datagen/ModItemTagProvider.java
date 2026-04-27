@@ -28,6 +28,9 @@ public class ModItemTagProvider extends ItemTagsProvider
                 .add(OCItems.ENDER_INGOT.get())
                 .add(OCItems.CHARGED_ENDER_INGOT.get());
 
+        tag(Tags.Items.NUGGETS)
+                .add(OCItems.ENDER_NUGGET.get());
+
         tag(Tags.Items.STORAGE_BLOCKS)
                 .add(OCBlocks.ENDER_INGOT_BLOCK.get().asItem())
                 .add(OCBlocks.NETHERITE_SCRAP_BLOCK.get().asItem())
