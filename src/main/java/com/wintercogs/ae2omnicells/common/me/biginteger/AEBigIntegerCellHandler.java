@@ -4,7 +4,7 @@ import appeng.api.storage.cells.ICellHandler;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.cells.StorageCell;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.minecraftforge.fml.util.thread.EffectiveSide;
 import org.jetbrains.annotations.Nullable;
 
 public class AEBigIntegerCellHandler implements ICellHandler
@@ -25,7 +25,7 @@ public class AEBigIntegerCellHandler implements ICellHandler
     @Override
     public @Nullable StorageCell getCellInventory(ItemStack itemStack, @Nullable ISaveProvider iSaveProvider)
     {
-        if (ServerLifecycleHooks.getCurrentServer() == null) return null;
+        if (!EffectiveSide.get().isServer()) return null;
         if (!(itemStack.getItem() instanceof IAEBigIntegerCell cellItem)) return null;
         if (itemStack.getCount() != 1) return null;
 

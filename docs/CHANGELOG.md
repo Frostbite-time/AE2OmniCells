@@ -1,1 +1,1 @@
-* Add Ender Nugget
+* Fixed the issue where the render thread could access `AEUniversalCellInventory`.
