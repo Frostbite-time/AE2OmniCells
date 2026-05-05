@@ -13,6 +13,7 @@ import com.wintercogs.ae2omnicells.common.blocks.entities.OmniCraftingBlockEntit
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingStorageType;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingUnitType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
@@ -62,14 +63,14 @@ public class OmniCraftingUnitBlock extends AbstractCraftingUnitBlock<OmniCraftin
                 MenuOpener.open(CraftingCPUMenu.TYPE, player, MenuLocators.forBlockEntity(be));
             }
 
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return InteractionResult.SUCCESS;
         }
 
         return super.useWithoutItem(state, level, pos, player, hitResult);
     }
 
     @Override
-    public boolean upgrade(ItemStack heldItem, BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
+    public boolean upgrade(ItemStack heldItem, BlockState state, ServerLevel level, BlockPos pos, Player player, BlockHitResult hit)
     {
         if (heldItem.isEmpty()) return false;
 
@@ -111,7 +112,7 @@ public class OmniCraftingUnitBlock extends AbstractCraftingUnitBlock<OmniCraftin
     @Override
     public InteractionResult removeUpgrade(Level level, Player player, BlockPos pos, BlockState newState)
     {
-        if (this.omniCraftingType.storageType == OmniCraftingStorageType.UNIT || level.isClientSide())
+        if (this.omniCraftingType.storageType == OmniCraftingStorageType.UNIT || !(level instanceof ServerLevel serverLevel))
             return InteractionResult.FAIL;
 
         ItemStack removedUpgrade;
@@ -121,19 +122,19 @@ public class OmniCraftingUnitBlock extends AbstractCraftingUnitBlock<OmniCraftin
         }
         else
         {
-            removedUpgrade = CraftingUnitTransformRecipe.getRemovedUpgrade(level, this);
+            removedUpgrade = CraftingUnitTransformRecipe.getRemovedUpgrade(serverLevel, this);
         }
         if (removedUpgrade.isEmpty()) return InteractionResult.FAIL;
 
 
-        var cb = this.getBlockEntity(level, pos);
+        var cb = this.getBlockEntity(serverLevel, pos);
         if (cb != null && cb.getCluster() != null && cb.getCluster().isBusy())
         {
-            player.displayClientMessage(PlayerMessages.CraftingCpuBusy.text().withColor(0xFF1F1F), true);
+            player.sendOverlayMessage(PlayerMessages.CraftingCpuBusy.text().withColor(0xFF1F1F));
             return InteractionResult.PASS;
         }
 
-        if (!this.transform(level, pos, newState))
+        if (!this.transform(serverLevel, pos, newState))
             return InteractionResult.FAIL;
 
         player.getInventory().placeItemBackInInventory(removedUpgrade);

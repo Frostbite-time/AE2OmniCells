@@ -2,7 +2,7 @@ package com.wintercogs.ae2omnicells.client.me;
 
 import appeng.block.crafting.CraftingMonitorBlock;
 import appeng.client.render.crafting.CraftingCubeModel;
-import appeng.client.render.crafting.CraftingMonitorRenderer;
+import appeng.client.renderer.blockentity.CraftingMonitorRenderer;
 import appeng.core.AppEng;
 import appeng.hooks.BuiltInModelHooks;
 import com.wintercogs.ae2omnicells.client.render.OmniCraftingUnitModelProvider;
