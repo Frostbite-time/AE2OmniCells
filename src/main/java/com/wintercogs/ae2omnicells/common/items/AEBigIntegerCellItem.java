@@ -18,14 +18,15 @@ import appeng.util.Platform;
 import com.wintercogs.ae2omnicells.common.me.biginteger.IAEBigIntegerCell;
 import com.wintercogs.ae2omnicells.common.me.localization.AEUniversalTooltips;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * BigInteger版元件物品的承载类，仅用于创造元件
@@ -51,16 +53,17 @@ public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICe
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack,
-                                @NotNull Item.TooltipContext context,
-                                @NotNull List<Component> lines,
+                                @NotNull TooltipContext context,
+                                @NotNull TooltipDisplay display,
+                                @NotNull Consumer<Component> builder,
                                 @NotNull TooltipFlag tooltipFlag)
     {
         if (Platform.isClient())
         {
             BigInteger used = IAEBigIntegerCell.getUsedBytes(stack);
-            lines.add(AEUniversalTooltips.bytesUsed(used, -1));
+            builder.accept(AEUniversalTooltips.bytesUsed(used, -1));
             long typesUsed = IAEBigIntegerCell.getUsedTypes(stack);
-            lines.add(AEUniversalTooltips.typesUsed(typesUsed, -1));
+            builder.accept(AEUniversalTooltips.typesUsed(typesUsed, -1));
         }
     }
 
@@ -137,14 +140,16 @@ public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICe
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand)
+    public @NotNull InteractionResult use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand)
     {
-        this.disassembleDrive(player.getItemInHand(hand), level, player);
-        return new InteractionResultHolder<>(InteractionResult.sidedSuccess(level.isClientSide()),
-                player.getItemInHand(hand));
+        if (level instanceof ServerLevel serverLevel)
+        {
+            this.disassembleDrive(player.getItemInHand(hand), serverLevel, player);
+        }
+        return InteractionResult.SUCCESS;
     }
 
-    private boolean disassembleDrive(ItemStack stack, Level level, Player player)
+    private boolean disassembleDrive(ItemStack stack, ServerLevel level, Player player)
     {
         if (!InteractionUtil.isInAlternateUseMode(player))
         {
@@ -158,7 +163,7 @@ public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICe
         }
 
         var playerInventory = player.getInventory();
-        if (playerInventory.getSelected() != stack)
+        if (playerInventory.getSelectedItem() != stack)
         {
             return false;
         }
@@ -166,11 +171,11 @@ public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICe
         var inv = StorageCells.getCellInventory(stack, null);
         if (inv != null && !inv.getAvailableStacks().isEmpty())
         {
-            player.displayClientMessage(PlayerMessages.OnlyEmptyCellsCanBeDisassembled.text(), true);
+            player.sendOverlayMessage(PlayerMessages.OnlyEmptyCellsCanBeDisassembled.text());
             return false;
         }
 
-        playerInventory.setItem(playerInventory.selected, ItemStack.EMPTY);
+        playerInventory.setItem(playerInventory.getSelectedSlot(), ItemStack.EMPTY);
 
         for (var disassembledStack : disassembledStacks)
         {
@@ -185,8 +190,11 @@ public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICe
     @Override
     public @NotNull InteractionResult onItemUseFirst(@NotNull ItemStack stack, UseOnContext context)
     {
-        return this.disassembleDrive(stack, context.getLevel(), context.getPlayer())
-                ? InteractionResult.sidedSuccess(context.getLevel().isClientSide())
-                : InteractionResult.PASS;
+        if (context.getLevel() instanceof ServerLevel serverLevel
+                && this.disassembleDrive(stack, serverLevel, context.getPlayer()))
+        {
+            return InteractionResult.SUCCESS;
+        }
+        return InteractionResult.PASS;
     }
 }

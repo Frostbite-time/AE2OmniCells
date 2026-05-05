@@ -2,7 +2,7 @@ package com.wintercogs.ae2omnicells;
 
 import com.wintercogs.ae2omnicells.client.me.AE2ClientPlugin;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
@@ -44,7 +44,7 @@ public class AE2OmniCellsClient
         if (event.getPackType() != PackType.CLIENT_RESOURCES) return;
 
         // “相对模组 resources”的路径：resources/resourcepacks/optional_textures
-        ResourceLocation id = AE2OmniCells.makeId("resourcepacks/optional_textures");
+        Identifier id = AE2OmniCells.makeId("resourcepacks/optional_textures");
 
         Component title = Component.translatable("pack.ae2omnicells.optional_textures.title");
 

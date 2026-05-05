@@ -1,7 +1,7 @@
 package com.wintercogs.ae2omnicells.client.init;
 
+import appeng.client.InitScreens;
 import appeng.client.gui.me.common.MEStorageScreen;
-import appeng.init.client.InitScreens;
 import appeng.menu.me.common.MEStorageMenu;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.init.OCMenus;

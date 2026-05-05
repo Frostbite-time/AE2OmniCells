@@ -5,7 +5,7 @@ import com.wintercogs.ae2omnicells.common.init.OCItems;
 import com.wintercogs.ae2omnicells.common.items.AEUniversalCellItem;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
@@ -170,7 +170,7 @@ public class ModItemModelProvider extends ItemModelProvider
      */
     private void allowExternalTexture(String path)
     {
-        ResourceLocation rl = ResourceLocation.parse(path);
+        Identifier rl = Identifier.parse(path);
         if (!rl.getNamespace().equals(AE2OmniCells.MODID))
         {
             this.existingFileHelper.trackGenerated(rl, ModelProvider.TEXTURE);
@@ -180,7 +180,7 @@ public class ModItemModelProvider extends ItemModelProvider
     // 快速注册带led灯状态的存储元件模型
     public ItemModelBuilder cellWithOwnBaseAndAeLed(Item item)
     {
-        ResourceLocation id = BuiltInRegistries.ITEM.getKey(item);
+        Identifier id = BuiltInRegistries.ITEM.getKey(item);
         var base = modLoc("item/" + id.getPath());
 
         return withExistingParent(id.getPath(), mcLoc("item/generated"))

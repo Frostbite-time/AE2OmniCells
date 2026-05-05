@@ -20,18 +20,20 @@ import com.wintercogs.ae2omnicells.common.init.OCItems;
 import com.wintercogs.ae2omnicells.common.me.IAEUniversalCell;
 import com.wintercogs.ae2omnicells.common.me.localization.AEUniversalTooltips;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * 便携通用单元（统一 Key 类型的便携盘）
@@ -74,8 +76,9 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
     {
         for (DeferredItem<AEPortableUniversalCellItem> item : OCItems.getPortableCells())
         {
-            event.registerItem(Capabilities.EnergyStorage.ITEM,
-                    (stack, unused) -> new PoweredItemCapabilities(stack, item.get()), item);
+            event.registerItem(Capabilities.Energy.ITEM,
+                    (stack, context) -> new PoweredItemCapabilities(context, item.asItem(), item.get()),
+                    item);
         }
     }
 
@@ -101,7 +104,7 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
      * 拆解时用的配方 ID，按注册名自动推导，保持与 AE 原版一致的 UX
      */
     @Override
-    public ResourceLocation getRecipeId()
+    public Identifier getRecipeId()
     {
         return AE2OmniCells.makeId("cells/shapeless/" +
                 Objects.requireNonNull(this.getRegistryName()).getPath());
@@ -164,18 +167,22 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
     }
 
     // ---------- Tooltip：文本 + 预览组件 ----------
+
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag advancedTooltips)
+    public void appendHoverText(ItemStack stack,
+                                TooltipContext context,
+                                TooltipDisplay tooltipDisplay,
+                                Consumer<Component> lines,
+                                TooltipFlag tooltipFlags)
     {
-        // 仅客户端做纯展示文本（不影响服务端逻辑）
-        super.appendHoverText(stack, context, lines, advancedTooltips);
+        super.appendHoverText(stack, context, tooltipDisplay, lines, tooltipFlags);
         if (Platform.isClient())
         {
             long usedBytes = IAEUniversalCell.getUsedBytes(stack);
             long usedTypes = IAEUniversalCell.getUsedTypes(stack);
 
-            lines.add(AEUniversalTooltips.bytesUsed(usedBytes, getTotalBytes()));
-            lines.add(AEUniversalTooltips.typesUsed(usedTypes, getTotalTypes()));
+            lines.accept(AEUniversalTooltips.bytesUsed(usedBytes, getTotalBytes()));
+            lines.accept(AEUniversalTooltips.typesUsed(usedTypes, getTotalTypes()));
         }
     }
 

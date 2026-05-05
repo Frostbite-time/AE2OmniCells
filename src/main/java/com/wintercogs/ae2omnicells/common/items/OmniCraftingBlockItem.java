@@ -6,8 +6,9 @@ import appeng.recipes.game.CraftingUnitTransformRecipe;
 import appeng.util.InteractionUtil;
 import com.wintercogs.ae2omnicells.common.blocks.OmniCraftingMonitorBlock;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingFamily;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -27,9 +28,10 @@ public class OmniCraftingBlockItem extends CraftingBlockItem
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
+    public @NotNull InteractionResult use(Level level, Player player, InteractionHand hand)
     {
-        if (InteractionUtil.isInAlternateUseMode(player))
+        if (InteractionUtil.isInAlternateUseMode(player) &&
+                level instanceof ServerLevel serverLevel)
         {
             ItemStack stack = player.getItemInHand(hand);
 
@@ -40,7 +42,7 @@ public class OmniCraftingBlockItem extends CraftingBlockItem
             }
             else
             {
-                removedUpgrade = CraftingUnitTransformRecipe.getRemovedUpgrade(level, getBlock());
+                removedUpgrade = CraftingUnitTransformRecipe.getRemovedUpgrade(serverLevel, getBlock());
             }
             if (removedUpgrade.isEmpty()) return super.use(level, player, hand);
 
@@ -54,7 +56,7 @@ public class OmniCraftingBlockItem extends CraftingBlockItem
             ItemLike unitBlock = this.family.getUnitBaseBlock();
             inv.placeItemBackInInventory(new ItemStack(unitBlock, itemCount));
 
-            return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());
+            return InteractionResult.SUCCESS;
         }
         return super.use(level, player, hand);
     }

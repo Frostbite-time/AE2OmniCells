@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -157,7 +157,7 @@ public class OmniCraftingUnitModelProvider extends AbstractCraftingUnitModelProv
     private static Material texture(String namespace, String name)
     {
         Material mat = new Material(TextureAtlas.LOCATION_BLOCKS,
-                ResourceLocation.fromNamespaceAndPath(namespace, "block/crafting/" + name));
+                Identifier.fromNamespaceAndPath(namespace, "block/crafting/" + name));
         MATERIALS.add(mat);
         return mat;
     }

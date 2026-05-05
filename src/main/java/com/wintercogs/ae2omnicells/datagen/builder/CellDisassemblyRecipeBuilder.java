@@ -3,7 +3,7 @@ package com.wintercogs.ae2omnicells.datagen.builder;
 import appeng.recipes.game.StorageCellDisassemblyRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.conditions.ICondition;
@@ -119,13 +119,13 @@ public class CellDisassemblyRecipeBuilder
         var base = BuiltInRegistries.ITEM.getKey(cell.asItem());
         String ns = overrideNamespace != null ? overrideNamespace : base.getNamespace();
         String fullPath = (folder == null || folder.isEmpty()) ? path : (folder + "/" + path);
-        save(out, ResourceLocation.fromNamespaceAndPath(ns, fullPath));
+        save(out, Identifier.fromNamespaceAndPath(ns, fullPath));
     }
 
     /**
      * 完全自定义 id 保存
      */
-    public void save(RecipeOutput out, ResourceLocation id)
+    public void save(RecipeOutput out, Identifier id)
     {
         if (outputs.isEmpty())
         {
@@ -149,12 +149,12 @@ public class CellDisassemblyRecipeBuilder
         }
     }
 
-    private ResourceLocation defaultId()
+    private Identifier defaultId()
     {
         var itemId = BuiltInRegistries.ITEM.getKey(cell.asItem());
         String ns = (overrideNamespace != null) ? overrideNamespace : itemId.getNamespace();
         String path = itemId.getPath() + "_disassembly";
         if (folder != null && !folder.isEmpty()) path = folder + "/" + path;
-        return ResourceLocation.fromNamespaceAndPath(ns, path);
+        return Identifier.fromNamespaceAndPath(ns, path);
     }
 }

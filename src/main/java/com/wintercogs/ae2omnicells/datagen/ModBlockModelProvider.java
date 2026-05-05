@@ -3,7 +3,7 @@ package com.wintercogs.ae2omnicells.datagen;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
@@ -36,7 +36,7 @@ public class ModBlockModelProvider extends BlockModelProvider
         allowExternalModel("ae2:block/drive/drive_cell");
         allowExternalTexture(texture);
 
-        return withExistingParent(name, ResourceLocation.parse("ae2:block/drive/drive_cell"))
+        return withExistingParent(name, Identifier.parse("ae2:block/drive/drive_cell"))
                 .texture("cell", texture);
     }
 
@@ -47,7 +47,7 @@ public class ModBlockModelProvider extends BlockModelProvider
 
     private void allowExternalModel(String path)
     {
-        ResourceLocation rl = ResourceLocation.parse(path);
+        Identifier rl = Identifier.parse(path);
         if (!rl.getNamespace().equals(AE2OmniCells.MODID))
         {
             this.existingFileHelper.trackGenerated(rl, ModelProvider.MODEL); // 注意这里是 MODEL
@@ -59,7 +59,7 @@ public class ModBlockModelProvider extends BlockModelProvider
      */
     private void allowExternalTexture(String path)
     {
-        ResourceLocation rl = ResourceLocation.parse(path);
+        Identifier rl = Identifier.parse(path);
         if (!rl.getNamespace().equals(AE2OmniCells.MODID))
         {
             this.existingFileHelper.trackGenerated(rl, ModelProvider.TEXTURE);

@@ -4,7 +4,7 @@ import appeng.api.client.StorageCellModels;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.items.AEPortableUniversalCellItem;
 import com.wintercogs.ae2omnicells.common.items.AEUniversalCellItem;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
@@ -19,10 +19,10 @@ public class AE2StorageModels
     private static final String COMPLEX_MODEL_PREFIX = AE2OmniCells.makeId("drive/cells/complex/cell_").toString();
     private static final String QUANTUM_MODEL_PREFIX = AE2OmniCells.makeId("drive/cells/quantum/cell_").toString();
 
-    private static final ResourceLocation MODEL_CELL_CREATIVE = ResourceLocation.parse(
+    private static final Identifier MODEL_CELL_CREATIVE = Identifier.parse(
             "ae2:block/drive/cells/creative_cell");
 
-    private static final ResourceLocation MODEL_SPENT_NUCLEAR_WASTE_CELL = AE2OmniCells.makeId("drive/cells/spent_nuclear_waste_cell");
+    private static final Identifier MODEL_SPENT_NUCLEAR_WASTE_CELL = AE2OmniCells.makeId("drive/cells/spent_nuclear_waste_cell");
 
     // 统一的 Tier 后缀顺序
     private static final String[] SUFFIXES = {
@@ -165,6 +165,6 @@ public class AE2StorageModels
 
     private static void registerModel(String prefix, String cap, ItemLike item)
     {
-        StorageCellModels.registerModel(item, ResourceLocation.parse(prefix + cap));
+        StorageCellModels.registerModel(item, Identifier.parse(prefix + cap));
     }
 }

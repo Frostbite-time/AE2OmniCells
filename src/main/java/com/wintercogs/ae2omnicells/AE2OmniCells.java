@@ -3,7 +3,7 @@ package com.wintercogs.ae2omnicells;
 import com.mojang.logging.LogUtils;
 import com.wintercogs.ae2omnicells.common.init.*;
 import com.wintercogs.ae2omnicells.common.me.AEPlugin;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -91,8 +91,8 @@ public class AE2OmniCells
         }
     }
 
-    public static ResourceLocation makeId(String path)
+    public static Identifier makeId(String path)
     {
-        return ResourceLocation.fromNamespaceAndPath(AE2OmniCells.MODID, path);
+        return Identifier.fromNamespaceAndPath(AE2OmniCells.MODID, path);
     }
 }
