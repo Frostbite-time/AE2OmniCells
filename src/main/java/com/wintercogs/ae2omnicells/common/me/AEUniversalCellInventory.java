@@ -21,9 +21,6 @@ import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.ReferenceArraySet;
-import me.ramidzkh.mekae2.ae2.MekanismKey;
-import mekanism.api.chemical.Chemical;
-import mekanism.common.registries.MekanismChemicals;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -710,20 +707,22 @@ public class AEUniversalCellInventory implements StorageCell
         static boolean allowInsert(ItemStack hostCell, AEKey what)
         {
             final boolean isWasteCell = hostCell.getItem() == OCItems.SPENT_NUCLEAR_WASTE_CELL.get();
+            return MekRadialChemicalCheckConfig.checkMode.allow(isWasteCell, false, false);
 
-            // 非 Mek 化学：废核盘一律拒，普通盘不干预
-            if (!(what instanceof MekanismKey mekanismKey))
-            {
-                return !isWasteCell;
-            }
-
-            final Chemical chemical = mekanismKey.getStack().getChemical();
-            final boolean isSpent = chemical == MekanismChemicals.SPENT_NUCLEAR_WASTE.get();
-            final boolean isRadio = chemical.isRadioactive();
-
-            // 交给策略枚举做最终判定
-            return MekRadialChemicalCheckConfig.checkMode
-                    .allow(isWasteCell, isSpent, isRadio);
+            // TODO 等待AEMek更新后再恢复真实逻辑
+//            // 非 Mek 化学：废核盘一律拒，普通盘不干预
+//            if (!(what instanceof MekanismKey mekanismKey))
+//            {
+//                return !isWasteCell;
+//            }
+//
+//            final Chemical chemical = mekanismKey.getStack().getChemical();
+//            final boolean isSpent = chemical == MekanismChemicals.SPENT_NUCLEAR_WASTE.get();
+//            final boolean isRadio = chemical.isRadioactive();
+//
+//            // 交给策略枚举做最终判定
+//            return MekRadialChemicalCheckConfig.checkMode
+//                    .allow(isWasteCell, isSpent, isRadio);
         }
     }
 }
