@@ -10,7 +10,6 @@ import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.blocks.entities.OmniCraftingBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -22,11 +21,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public class OCBlockEntities
+public final class OCBlockEntities
 {
+
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
             DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, AE2OmniCells.MODID);
 
@@ -60,44 +59,29 @@ public class OCBlockEntities
      * 用于AEBaseBlockEntity注册，自动附加ticker并绑定物品型态以用于AE的一些机制
      */
     @SafeVarargs
-    public static <T extends AEBaseBlockEntity> DeferredBlockEntityType<T> create(
+    private static <T extends AEBaseBlockEntity> DeferredBlockEntityType<T> create(
             String id,
             Class<T> entityClass,
             BlockEntityFactory<T> factory,
             Supplier<? extends AEBaseEntityBlock<?>>... blockSuppliers
     )
     {
-        Preconditions.checkArgument(blockSuppliers.length > 0, "At least one block is required");
+        Preconditions.checkArgument(blockSuppliers.length > 0);
 
         var deferred = BLOCK_ENTITY_TYPES.register(id, () -> {
-            // 把 BlockEntityType 反向塞入 BE 构造用
-            AtomicReference<BlockEntityType<T>> typeRef = new AtomicReference<>();
+            AtomicReference<BlockEntityType<T>> typeHolder = new AtomicReference<>();
 
             BlockEntityType.BlockEntitySupplier<T> supplier = (pos, state) ->
-                    factory.create(typeRef.get(), pos, state);
+                    factory.create(typeHolder.get(), pos, state);
 
-            // 解包方块
             AEBaseEntityBlock<?>[] blocks = Arrays.stream(blockSuppliers)
                     .map(Supplier::get)
                     .toArray(AEBaseEntityBlock[]::new);
 
-            // 构造 BE 类型
-            @SuppressWarnings("unchecked")
-            Block[] vanillaBlocks = Arrays.stream(blocks).toArray(Block[]::new);
+            BlockEntityType<T> type = new BlockEntityType<>(supplier, blocks);
+            typeHolder.setPlain(type);
 
-            BlockEntityType<T> type = BlockEntityType.Builder.of(supplier, vanillaBlocks).build(null);
-            // 让上面的 supplier 拿得到 type
-            typeRef.set(type);
-
-            // 把“物品形态”绑定给这个 BE 类型（AE 用于记忆卡/设置导入导出/tooltip 等）
-            try
-            {
-                var item = blocks[0].asItem();
-                AEBaseBlockEntity.registerBlockEntityItem(type, item);
-            }
-            catch (Throwable ignored)
-            {
-            }
+            AEBaseBlockEntity.registerBlockEntityItem(type, blocks[0].asItem());
 
             // 自动生成 tickers（如果实现了 AE 的标记接口）
             BlockEntityTicker<T> serverTicker = null;
@@ -128,21 +112,6 @@ public class OCBlockEntities
     }
 
     /**
-     * 便捷重载：如果 BE 构造是(BlockPos, BlockState)用这个。
-     * 内部会忽略 type，把二参构造包装为三参工厂。
-     */
-    @SafeVarargs
-    public static <T extends AEBaseBlockEntity> DeferredBlockEntityType<T> create(
-            String id,
-            Class<T> entityClass,
-            BiFunction<BlockPos, BlockState, T> ctorPosState,
-            Supplier<? extends AEBaseEntityBlock<?>>... blockSuppliers
-    )
-    {
-        return create(id, entityClass, (type, pos, state) -> ctorPosState.apply(pos, state), blockSuppliers);
-    }
-
-    /**
      * 返回实现类是 baseClass 的所有 BlockEntityType
      */
     @SuppressWarnings("unchecked")
@@ -161,7 +130,6 @@ public class OCBlockEntities
 
     /**
      * 返回实现了某接口的所有 BlockEntityType
-     * AE用类似方法配合ALL列表统一注册能力，但我更喜欢手动管理
      */
     public static List<BlockEntityType<?>> getImplementorsOf(Class<?> iface)
     {
@@ -206,7 +174,7 @@ public class OCBlockEntities
      * 三参构造版接口
      */
     @FunctionalInterface
-    public interface BlockEntityFactory<T extends AEBaseBlockEntity>
+    private interface BlockEntityFactory<T extends AEBaseBlockEntity>
     {
         T create(BlockEntityType<T> type, BlockPos pos, BlockState state);
     }
