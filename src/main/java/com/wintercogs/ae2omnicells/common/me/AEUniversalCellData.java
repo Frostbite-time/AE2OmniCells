@@ -1,6 +1,10 @@
 package com.wintercogs.ae2omnicells.common.me;
 
 import appeng.api.stacks.AEKey;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
 import com.wintercogs.ae2omnicells.common.init.OCDataComponents;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
@@ -8,11 +12,17 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.saveddata.SavedDataType;
 import net.minecraft.world.level.storage.LevelResource;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -87,15 +97,14 @@ public class AEUniversalCellData extends SavedData
         this.pendingReadErrors = pendingReadErrors;
     }
 
-    public static final SavedData.Factory<AEUniversalCellData> FACTORY =
-            new SavedData.Factory<>(
-                    () -> {
-                        Object2LongOpenHashMap<AEKey> s = new Object2LongOpenHashMap<>();
-                        s.defaultReturnValue(0L);
-                        return new AEUniversalCellData(s, new ObjectArrayList<>());
-                    },
-                    AEUniversalCellData::load
-            );
+    private static final SavedDataType.Factory<AEUniversalCellData> DATA_FACTORY = level -> {
+        Object2LongOpenHashMap<AEKey> s = new Object2LongOpenHashMap<>();
+        s.defaultReturnValue(0L);
+        return new AEUniversalCellData(s, new ObjectArrayList<>());
+    };
+
+    private static final SavedDataType.Factory<Codec<AEUniversalCellData>> CODEC_FACTORY =
+            level -> createCodec(level != null ? level.registryAccess() : net.minecraft.core.RegistryAccess.EMPTY);
 
     /**
      * 获取原始存储数据（fastutil 原生 Map，便于无装箱访问）
@@ -115,8 +124,7 @@ public class AEUniversalCellData extends SavedData
 
         ensureSaveDirExists(server);
 
-        final String key = makeKey(uuid);
-        return server.overworld().getDataStorage().get(FACTORY, key);
+        return server.overworld().getDataStorage().get(makeType(uuid));
     }
 
     /**
@@ -158,18 +166,16 @@ public class AEUniversalCellData extends SavedData
         Object2LongOpenHashMap<AEKey> s = new Object2LongOpenHashMap<>();
         s.defaultReturnValue(0L);
         AEUniversalCellData newData = new AEUniversalCellData(s);
-        dataStorage.set(makeKey(fresh), newData);
+        dataStorage.set(makeType(fresh), newData);
         // 不为空数据标脏，直到有insert/extract操作后由它们标脏
 
         return newData;
     }
 
-    /**
-     * 硬盘序列化（1.21.1 新签名，提供 registries）
-     */
-    @Override
-    public @NotNull CompoundTag save(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries)
+    public @NotNull CompoundTag toTag(HolderLookup.@NotNull Provider registries)
     {
+        CompoundTag tag = new CompoundTag();
+
         // 统一放在 INV_SAVED_TAG 里
         CompoundTag invTag = new CompoundTag();
 
@@ -190,7 +196,9 @@ public class AEUniversalCellData extends SavedData
             try
             {
                 CompoundTag entry = new CompoundTag();
-                entry.put(ENTRY_KEY_TAG, key.toTagGeneric(registries));
+                TagValueOutput keyOutput = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, registries);
+                key.toTagGeneric(keyOutput);
+                entry.put(ENTRY_KEY_TAG, keyOutput.buildResult());
                 entry.putLong(ENTRY_AMOUNT_TAG, amount);
                 entriesList.add(entry);
             }
@@ -215,27 +223,24 @@ public class AEUniversalCellData extends SavedData
         return tag;
     }
 
-    /**
-     * 从硬盘反序列化（1.21.1 需要 registries）
-     */
-    public static AEUniversalCellData load(CompoundTag tag, HolderLookup.Provider registries)
+    public static AEUniversalCellData fromTag(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries)
     {
         Object2LongOpenHashMap<AEKey> storage = new Object2LongOpenHashMap<>();
         storage.defaultReturnValue(0L);
         ObjectArrayList<CompoundTag> errorQueue = new ObjectArrayList<>();
 
         // 统一从 INV_SAVED_TAG 读取
-        CompoundTag invTag = tag.getCompound(INV_SAVED_TAG);
+        CompoundTag invTag = tag.getCompoundOrEmpty(INV_SAVED_TAG);
 
         // 读取正常条目
-        ListTag entries = invTag.getList(ENTRIES_TAG, Tag.TAG_COMPOUND);
+        ListTag entries = getCompoundList(invTag, ENTRIES_TAG);
         for (int i = 0; i < entries.size(); i++)
         {
-            CompoundTag entry = entries.getCompound(i);
+            CompoundTag entry = entries.getCompoundOrEmpty(i);
             try
             {
-                CompoundTag keyTag = entry.getCompound(ENTRY_KEY_TAG);
-                AEKey key = AEKey.fromTagGeneric(registries, keyTag); // 1.21.1 需传 registries
+                CompoundTag keyTag = entry.getCompoundOrEmpty(ENTRY_KEY_TAG);
+                AEKey key = AEKey.fromTagGeneric(TagValueInput.create(ProblemReporter.DISCARDING, registries, keyTag));
                 if (key == null)
                 {
                     // 解析失败 -> 放入错误队列，打印
@@ -243,7 +248,7 @@ public class AEUniversalCellData extends SavedData
                     System.err.println("[AEUniversalCellData] Failed to deserialize entry (null key). Entry=" + entry);
                     continue;
                 }
-                long amount = entry.getLong(ENTRY_AMOUNT_TAG);
+                long amount = entry.getLongOr(ENTRY_AMOUNT_TAG, 0L);
                 storage.addTo(key, amount); // 原生累加，避免装箱
             }
             catch (Throwable ex)
@@ -255,18 +260,18 @@ public class AEUniversalCellData extends SavedData
         }
 
         // 尝试重读历史错误条目（上次保存时写入的 ERROR_ENTRIES_TAG）
-        ListTag oldErrors = invTag.getList(ERROR_ENTRIES_TAG, Tag.TAG_COMPOUND);
+        ListTag oldErrors = getCompoundList(invTag, ERROR_ENTRIES_TAG);
         for (int i = 0; i < oldErrors.size(); i++)
         {
-            CompoundTag badEntry = oldErrors.getCompound(i);
+            CompoundTag badEntry = oldErrors.getCompoundOrEmpty(i);
             boolean recovered = false;
             try
             {
-                CompoundTag keyTag = badEntry.getCompound(ENTRY_KEY_TAG);
-                AEKey key = AEKey.fromTagGeneric(registries, keyTag);
+                CompoundTag keyTag = badEntry.getCompoundOrEmpty(ENTRY_KEY_TAG);
+                AEKey key = AEKey.fromTagGeneric(TagValueInput.create(ProblemReporter.DISCARDING, registries, keyTag));
                 if (key != null)
                 {
-                    long amount = badEntry.getLong(ENTRY_AMOUNT_TAG);
+                    long amount = badEntry.getLongOr(ENTRY_AMOUNT_TAG, 0L);
                     storage.addTo(key, amount); // 原生累加
                     recovered = true;
                 }
@@ -290,14 +295,45 @@ public class AEUniversalCellData extends SavedData
         return new AEUniversalCellData(storage, errorQueue);
     }
 
+    private static Codec<AEUniversalCellData> createCodec(HolderLookup.@NotNull Provider registries)
+    {
+        return new Codec<>()
+        {
+            @Override
+            public <T> DataResult<T> encode(AEUniversalCellData data, DynamicOps<T> ops, T prefix)
+            {
+                T encoded = NbtOps.INSTANCE.convertTo(ops, data.toTag(registries));
+                return ops.getMap(encoded).flatMap(map -> ops.mergeToMap(prefix, map));
+            }
+
+            @Override
+            public <T> DataResult<Pair<AEUniversalCellData, T>> decode(DynamicOps<T> ops, T input)
+            {
+                Tag tag = ops.convertTo(NbtOps.INSTANCE, input);
+                if (tag instanceof CompoundTag compound)
+                {
+                    return DataResult.success(Pair.of(fromTag(compound, registries), ops.empty()));
+                }
+                return DataResult.error(() -> "Expected compound tag for AEUniversalCellData, got " + tag.getType().getName());
+            }
+        };
+    }
+
+    private static ListTag getCompoundList(@NotNull CompoundTag tag, @NotNull String name)
+    {
+        return tag.getList(name)
+                .filter(list -> list.isEmpty() || list.getFirst().getId() == Tag.TAG_COMPOUND)
+                .orElseGet(ListTag::new);
+    }
+
     // ---------------------------------- 辅助方法 ----------------------------------
 
     /**
      * 生成 DataStorage 的路径（保持子路径：ae_universal_cell_data/<uuid>）
      */
-    private static String makeKey(@NotNull UUID uuid)
+    private static SavedDataType<@NotNull AEUniversalCellData> makeType(@NotNull UUID uuid)
     {
-        return SAVED_FOLDER_NAME + "/" + uuid;
+        return new SavedDataType<>(Identifier.fromNamespaceAndPath(SAVED_FOLDER_NAME, uuid.toString()), DATA_FACTORY, CODEC_FACTORY);
     }
 
     /**
@@ -314,7 +350,7 @@ public class AEUniversalCellData extends SavedData
         }
         catch (IOException e)
         {
-            // 不中断，但留痕方便排查
+            // 留痕方便排查
             System.err.println("[AEUniversalCellData] Failed to create save directory: " + dir + " : " + e);
         }
     }
