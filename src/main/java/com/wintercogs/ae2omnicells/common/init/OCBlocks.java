@@ -8,7 +8,6 @@ import com.wintercogs.ae2omnicells.common.blocks.OmniCraftingUnitBlock;
 import com.wintercogs.ae2omnicells.common.items.OmniCraftingBlockItem;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingUnitType;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
@@ -17,7 +16,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 public class OCBlocks
 {
@@ -29,15 +28,15 @@ public class OCBlocks
 
     // 末影钢块
     public static final DeferredBlock<Block> ENDER_INGOT_BLOCK = registerBlock("ender_ingot_block",
-            () -> new Block(BlockBehaviour.Properties.of().strength(2f)));
+            properties -> new Block(properties.strength(2f)));
 
     // 下界合金碎片块
     public static final DeferredBlock<Block> NETHERITE_SCRAP_BLOCK = registerBlock("netherite_scrap_block",
-            () -> new Block(BlockBehaviour.Properties.of().strength(2f)));
+            properties -> new Block(properties.strength(2f)));
 
     // 奇点块
     public static final DeferredBlock<Block> SINGULARITY_BLOCK = registerBlock("singularity_block",
-            () -> new Block(BlockBehaviour.Properties.of().strength(2f)));
+            properties -> new Block(properties.strength(2f)));
 
     // 三系合成存储器
     public static final DeferredBlock<OmniCraftingUnitBlock> OMNI_CRAFTING_UNIT_BLOCK = registerCraftingStorageBlock("omni_crafting_unit_block", OmniCraftingUnitType.OMNI_UNIT);
@@ -81,8 +80,8 @@ public class OCBlocks
 
     private static DeferredBlock<OmniCraftingMonitorBlock> registerCraftingMonitorBlock(String name, OmniCraftingUnitType type)
     {
-        DeferredBlock<OmniCraftingMonitorBlock> toReturn = registerOnlyBlock(name, () -> new OmniCraftingMonitorBlock(type));
-        OCItems.ITEMS.register(name, () -> new OmniCraftingBlockItem(toReturn.get(), new Item.Properties(), type.family));
+        DeferredBlock<OmniCraftingMonitorBlock> toReturn = registerOnlyBlock(name, properties -> new OmniCraftingMonitorBlock(properties, type));
+        OCItems.ITEMS.registerItem(name, properties -> new OmniCraftingBlockItem(toReturn.get(), properties, type.family));
 
         CRAFTING_MONITORS.add(toReturn);
         return toReturn;
@@ -90,30 +89,30 @@ public class OCBlocks
 
     private static DeferredBlock<OmniCraftingUnitBlock> registerCraftingStorageBlock(String name, OmniCraftingUnitType type)
     {
-        DeferredBlock<OmniCraftingUnitBlock> toReturn = registerOnlyBlock(name, () -> new OmniCraftingUnitBlock(AEBaseBlock.metalProps(), type));
-        OCItems.ITEMS.register(name, () -> new OmniCraftingBlockItem(toReturn.get(), new Item.Properties(), type.family));
+        DeferredBlock<OmniCraftingUnitBlock> toReturn = registerOnlyBlock(name, properties -> new OmniCraftingUnitBlock(AEBaseBlock.metalProps(properties), type));
+        OCItems.ITEMS.registerItem(name, properties -> new OmniCraftingBlockItem(toReturn.get(), properties, type.family));
 
         CRAFTING_STORAGES.add(toReturn);
         return toReturn;
     }
 
-    private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block)
+    private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block)
     {
         DeferredBlock<T> toReturn = registerOnlyBlock(name, block);
         registerBlockItem(name, toReturn);
         return toReturn;
     }
 
-    private static <T extends Block> DeferredBlock<T> registerOnlyBlock(String name, Supplier<T> block)
+    private static <T extends Block> DeferredBlock<T> registerOnlyBlock(String name, Function<BlockBehaviour.Properties, T> block)
     {
-        DeferredBlock<T> toReturn = BLOCKS.register(name, block);
+        DeferredBlock<T> toReturn = BLOCKS.registerBlock(name, block);
         ALL.add(toReturn);
         return toReturn;
     }
 
     private static <T extends Block> void registerBlockItem(String name, DeferredBlock<T> block)
     {
-        OCItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
+        OCItems.ITEMS.registerItem(name, properties -> new BlockItem(block.get(), properties));
     }
 
     public static void register(IEventBus eventBus)

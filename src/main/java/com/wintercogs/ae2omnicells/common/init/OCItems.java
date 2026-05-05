@@ -13,7 +13,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 public class OCItems
 {
@@ -46,23 +46,23 @@ public class OCItems
     private static final List<DeferredItem<? extends Item>> MEK_INTEGRATIONS = new ArrayList<>();
 
     // ---- 杂项 / 其他物品 ----
-    public static final DeferredItem<Item> ENDER_INGOT = registerOtherItem("ender_ingot", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> ENDER_NUGGET = registerOtherItem("ender_nugget", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> CHARGED_ENDER_INGOT = registerOtherItem("charged_ender_ingot", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> OMNI_LINK_PRINT_PRESS = registerOtherItem("omni_link_print_press", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> COMPLEX_LINK_PRINT_PRESS = registerOtherItem("complex_link_print_press", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> MULTIDIMENSIONAL_EXPANSION_PRINT_PRESS = registerOtherItem("multidimensional_expansion_print_press", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> OMNI_LINK_CIRCUIT_PRINT = registerOtherItem("omni_link_circuit_print", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> COMPLEX_LINK_CIRCUIT_PRINT = registerOtherItem("complex_link_circuit_print", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> MULTIDIMENSIONAL_EXPANSION_CIRCUIT_PRINT = registerOtherItem("multidimensional_expansion_circuit_print", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> OMNI_LINK_PROCESSOR = registerOtherItem("omni_link_processor", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> COMPLEX_LINK_PROCESSOR = registerOtherItem("complex_link_processor", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> MULTIDIMENSIONAL_EXPANSION_PROCESSOR = registerOtherItem("multidimensional_expansion_processor", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> ENDER_INGOT = registerOtherItem("ender_ingot", Item::new);
+    public static final DeferredItem<Item> ENDER_NUGGET = registerOtherItem("ender_nugget", Item::new);
+    public static final DeferredItem<Item> CHARGED_ENDER_INGOT = registerOtherItem("charged_ender_ingot", Item::new);
+    public static final DeferredItem<Item> OMNI_LINK_PRINT_PRESS = registerOtherItem("omni_link_print_press", Item::new);
+    public static final DeferredItem<Item> COMPLEX_LINK_PRINT_PRESS = registerOtherItem("complex_link_print_press", Item::new);
+    public static final DeferredItem<Item> MULTIDIMENSIONAL_EXPANSION_PRINT_PRESS = registerOtherItem("multidimensional_expansion_print_press", Item::new);
+    public static final DeferredItem<Item> OMNI_LINK_CIRCUIT_PRINT = registerOtherItem("omni_link_circuit_print", Item::new);
+    public static final DeferredItem<Item> COMPLEX_LINK_CIRCUIT_PRINT = registerOtherItem("complex_link_circuit_print", Item::new);
+    public static final DeferredItem<Item> MULTIDIMENSIONAL_EXPANSION_CIRCUIT_PRINT = registerOtherItem("multidimensional_expansion_circuit_print", Item::new);
+    public static final DeferredItem<Item> OMNI_LINK_PROCESSOR = registerOtherItem("omni_link_processor", Item::new);
+    public static final DeferredItem<Item> COMPLEX_LINK_PROCESSOR = registerOtherItem("complex_link_processor", Item::new);
+    public static final DeferredItem<Item> MULTIDIMENSIONAL_EXPANSION_PROCESSOR = registerOtherItem("multidimensional_expansion_processor", Item::new);
 
     // 外壳
-    public static final DeferredItem<Item> OMNI_CELL_HOUSING = registerOtherItem("omni_cell_housing", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> COMPLEX_OMNI_CELL_HOUSING = registerOtherItem("complex_omni_cell_housing", () -> new Item(new Item.Properties()));
-    public static final DeferredItem<Item> QUANTUM_OMNI_CELL_HOUSING = registerOtherItem("quantum_omni_cell_housing", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> OMNI_CELL_HOUSING = registerOtherItem("omni_cell_housing", Item::new);
+    public static final DeferredItem<Item> COMPLEX_OMNI_CELL_HOUSING = registerOtherItem("complex_omni_cell_housing", Item::new);
+    public static final DeferredItem<Item> QUANTUM_OMNI_CELL_HOUSING = registerOtherItem("quantum_omni_cell_housing", Item::new);
 
     // ---- 全能存储组件（其他物品归类） ----
     public static final DeferredItem<Item> OMNI_CELL_COMPONENT_1K = registerComponent("omni_cell_component_1k");
@@ -174,26 +174,26 @@ public class OCItems
 
     // 创造物品 - LONG级存储元件
     public static final DeferredItem<Item> CREATIVE_AE_CELL_LONG = registerCreativeCell("creative_ae_cell_long",
-            () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1), 64, -1, -1));
+            properties -> new AEUniversalCellItem(properties.stacksTo(1), 64, -1, -1));
 
     // 创造物品 - BigInteger级存储元件
     public static final DeferredItem<Item> CREATIVE_AE_CELL_BIGINTEGER = registerCreativeCell("creative_ae_cell_biginteger",
-            () -> new AEBigIntegerCellItem(new Item.Properties().stacksTo(1), 64));
+            properties -> new AEBigIntegerCellItem(properties.stacksTo(1), 64));
 
     // 升级卡 - 类型模糊卡
     public static final DeferredItem<Item> TYPE_FUZZY_CARD = registerOtherItem("type_fuzzy_card",
-            () -> Upgrades.createUpgradeCardItem(new Item.Properties()));
+            Upgrades::createUpgradeCardItem);
 
     // 废辐系列 - 元件
     @SuppressWarnings("unchecked")
     public static final DeferredItem<AEUniversalCellItem> SPENT_NUCLEAR_WASTE_CELL = (DeferredItem<AEUniversalCellItem>) registerMekIntegration("spent_nuclear_waste_cell",
-            () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1), 59049, 1, 256));
+            properties -> new AEUniversalCellItem(properties.stacksTo(1), 59049, 1, 256));
     // 废辐系列 - 组件
     public static final DeferredItem<? extends Item> SPENT_NUCLEAR_WASTE_SINGULARITY = registerMekIntegration("spent_nuclear_waste_singularity",
-            () -> new Item(new Item.Properties()));
+            Item::new);
     // 废辐系列 - 奇点
     public static final DeferredItem<? extends Item> SPENT_NUCLEAR_WASTE_COMPONENT = registerMekIntegration("spent_nuclear_waste_component",
-            () -> new Item(new Item.Properties()));
+            Item::new);
 
     public static void register(IEventBus eventBus)
     {
@@ -244,19 +244,16 @@ public class OCItems
     }
 
     // ---------- 工具方法 ----------
-    private static <T extends Item> DeferredItem<T> registerItem(String name, Supplier<T> supplier)
+    private static <T extends Item> DeferredItem<T> registerItem(String name, Function<Item.Properties, T> factory)
     {
-        DeferredItem<T> obj = ITEMS.register(name, () -> {
-            T t = supplier.get();
-            return t instanceof Item ? t : (T) new Item(new Item.Properties());
-        });
+        DeferredItem<T> obj = ITEMS.registerItem(name, factory);
         ALL.add(obj);
         return obj;
     }
 
-    private static DeferredItem<Item> registerOtherItem(String name, Supplier<Item> sup)
+    private static DeferredItem<Item> registerOtherItem(String name, Function<Item.Properties, Item> factory)
     {
-        DeferredItem<Item> obj = registerItem(name, sup);
+        DeferredItem<Item> obj = registerItem(name, factory);
         OTHERS.add(obj);
         return obj;
     }
@@ -264,7 +261,7 @@ public class OCItems
     // 组件统一归“其他物品”
     private static DeferredItem<Item> registerComponent(String name)
     {
-        DeferredItem<Item> obj = registerOtherItem(name, () -> new Item(new Item.Properties()));
+        DeferredItem<Item> obj = registerOtherItem(name, Item::new);
         return obj;
     }
 
@@ -273,7 +270,7 @@ public class OCItems
             String name, int idlePower, int types, int kilobytes)
     {
         DeferredItem<AEUniversalCellItem> obj = registerItem(name,
-                () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1),
+                properties -> new AEUniversalCellItem(properties.stacksTo(1),
                         idlePower, types, kilobytes));
         CELLS.add(obj);
         return obj;
@@ -284,7 +281,7 @@ public class OCItems
             String name, int idlePower, int types, int kilobytes)
     {
         DeferredItem<AEUniversalCellItem> obj = registerItem(name,
-                () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1),
+                properties -> new AEUniversalCellItem(properties.stacksTo(1),
                         idlePower, types, kilobytes));
         CELLS.add(obj);
         return obj;
@@ -295,7 +292,7 @@ public class OCItems
             String name, int idlePower, int types, int kilobytes)
     {
         DeferredItem<AEUniversalCellItem> obj = registerItem(name,
-                () -> new AEUniversalCellItem(new Item.Properties().stacksTo(1),
+                properties -> new AEUniversalCellItem(properties.stacksTo(1),
                         idlePower, types, kilobytes));
         CELLS.add(obj);
         return obj;
@@ -305,30 +302,29 @@ public class OCItems
     private static DeferredItem<AEPortableUniversalCellItem> registerPortableCell(
             String name, int idlePower, int types, int kilobytes)
     {
-        DeferredItem<AEPortableUniversalCellItem> obj = ITEMS.register(name, () ->
+        DeferredItem<AEPortableUniversalCellItem> obj = registerItem(name, properties ->
                 new AEPortableUniversalCellItem(
                         OCMenus.PORTABLE_UNIVERSAL_CELL_MENU,
-                        new Item.Properties().stacksTo(1),
+                        properties.stacksTo(1),
                         types, kilobytes, idlePower
                 )
         );
-        ALL.add(obj);
         PORTABLE_CELLS.add(obj);
         return obj;
     }
 
     // 创造元件
     private static DeferredItem<Item> registerCreativeCell(
-            String name, Supplier<Item> sup)
+            String name, Function<Item.Properties, Item> factory)
     {
-        DeferredItem<Item> obj = registerItem(name, sup);
+        DeferredItem<Item> obj = registerItem(name, factory);
         CREATIVE_CELLS.add(obj);
         return obj;
     }
 
-    private static DeferredItem<? extends Item> registerMekIntegration(String name, Supplier<Item> sup)
+    private static DeferredItem<? extends Item> registerMekIntegration(String name, Function<Item.Properties, Item> factory)
     {
-        DeferredItem<Item> obj = registerItem(name, sup);
+        DeferredItem<Item> obj = registerItem(name, factory);
         MEK_INTEGRATIONS.add(obj);
         return obj;
     }
