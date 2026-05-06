@@ -4,14 +4,10 @@
     "model": "ae2omnicells:item/portable_quantum_omni_cell_4k",
     "tints": [
       {
-        "type": "minecraft:constant",
-        "value": -1
+        "type": "ae2:portable_cell_color"
       },
       {
         "type": "ae2omnicells:storage_cell_state"
-      },
-      {
-        "type": "ae2:portable_cell_color"
       }
     ]
   }

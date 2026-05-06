@@ -201,13 +201,13 @@ public class ModModelProvider extends ModelProvider
     private void portableCell(ItemModelGenerators itemModels, Item item, String housing, String side)
     {
         Identifier model = FOUR_LAYERED_ITEM.create(item, TextureMapping.layered(
-                        new Material(Identifier.parse(housing)),
+                        new Material(modLocation("item/led/portable_cell_screen")),
                         new Material(modLocation("item/led/portable_cell_led")),
-                        new Material(modLocation("item/led/portable_cell_screen"))
+                        new Material(Identifier.parse(housing))
                 ).put(LAYER3, new Material(Identifier.parse(side))),
                 itemModels.modelOutput
         );
-        itemModels.itemModelOutput.accept(item.asItem(), ItemModelUtils.tintedModel(model, new ItemTintSource[]{new Constant(-1), new UniversalCellStateTintSource(), new PortableCellColorTintSource()}));
+        itemModels.itemModelOutput.accept(item.asItem(), ItemModelUtils.tintedModel(model, new ItemTintSource[]{new PortableCellColorTintSource(), new UniversalCellStateTintSource()}));
     }
 
     // 辅助方法---方块
