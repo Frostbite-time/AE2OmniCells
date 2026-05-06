@@ -17,6 +17,7 @@ import appeng.util.prioritylist.IPartitionList;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.config.MekRadialChemicalCheckConfig;
 import com.wintercogs.ae2omnicells.common.init.OCItems;
+import com.wintercogs.ae2omnicells.common.me.biginteger.IAEBigIntegerCell;
 import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
@@ -463,6 +464,10 @@ public class AEUniversalCellInventory implements StorageCell
         if (what instanceof AEItemKey itemKey)
         {
             ItemStack s = itemKey.toStack();
+            if (s.getItem() instanceof IAEUniversalCell || s.getItem() instanceof IAEBigIntegerCell)
+            {
+                return true;
+            }
             StorageCell nested = StorageCells.getCellInventory(s, null);
             return nested == null || nested.canFitInsideCell();
         }
