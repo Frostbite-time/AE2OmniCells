@@ -1,1 +1,1 @@
-* Fixed the issue where the render thread could access `AEUniversalCellInventory`.
+* port to 26.1.2
