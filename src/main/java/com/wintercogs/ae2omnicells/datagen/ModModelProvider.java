@@ -2,9 +2,9 @@ package com.wintercogs.ae2omnicells.datagen;
 
 import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.client.item.PortableCellColorTintSource;
-import appeng.client.item.StorageCellStateTintSource;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.client.render.OmniCraftingCubeModel;
+import com.wintercogs.ae2omnicells.client.tint.UniversalCellStateTintSource;
 import com.wintercogs.ae2omnicells.common.blocks.OmniCraftingMonitorBlock;
 import com.wintercogs.ae2omnicells.common.blocks.OmniCraftingUnitBlock;
 import com.wintercogs.ae2omnicells.common.init.OCBlocks;
@@ -195,7 +195,7 @@ public class ModModelProvider extends ModelProvider
         Identifier id = BuiltInRegistries.ITEM.getKey(item);
         Identifier base = modLocation("item/" + id.getPath());
         Identifier model = itemModels.generateLayeredItem(item.asItem(), new Material(base), new Material(modLocation("item/led/storage_cell_led")));
-        itemModels.itemModelOutput.accept(item.asItem(), ItemModelUtils.tintedModel(model, new ItemTintSource[]{new Constant(-1), new StorageCellStateTintSource()}));
+        itemModels.itemModelOutput.accept(item.asItem(), ItemModelUtils.tintedModel(model, new ItemTintSource[]{new Constant(-1), new UniversalCellStateTintSource()}));
     }
 
     private void portableCell(ItemModelGenerators itemModels, Item item, String housing, String side)
@@ -207,7 +207,7 @@ public class ModModelProvider extends ModelProvider
                 ).put(LAYER3, new Material(Identifier.parse(side))),
                 itemModels.modelOutput
         );
-        itemModels.itemModelOutput.accept(item.asItem(), ItemModelUtils.tintedModel(model, new ItemTintSource[]{new Constant(-1), new StorageCellStateTintSource(), new PortableCellColorTintSource()}));
+        itemModels.itemModelOutput.accept(item.asItem(), ItemModelUtils.tintedModel(model, new ItemTintSource[]{new PortableCellColorTintSource(), new UniversalCellStateTintSource()}));
     }
 
     // 辅助方法---方块

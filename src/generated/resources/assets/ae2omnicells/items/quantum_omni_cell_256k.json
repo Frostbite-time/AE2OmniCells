@@ -8,7 +8,7 @@
         "value": -1
       },
       {
-        "type": "ae2:storage_cell_state"
+        "type": "ae2omnicells:storage_cell_state"
       }
     ]
   }

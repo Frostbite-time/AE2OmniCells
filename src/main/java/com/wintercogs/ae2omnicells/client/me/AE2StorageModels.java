@@ -16,7 +16,7 @@ public class AE2StorageModels
     private static final String QUANTUM_MODEL_PREFIX = AE2OmniCells.makeId("drive/cells/quantum/cell_").toString();
 
     private static final Identifier MODEL_CELL_CREATIVE = Identifier.parse(
-            "ae2:block/drive/cells/creative_cell");
+            "ae2:block/drive_creative_cell");
 
     private static final Identifier MODEL_SPENT_NUCLEAR_WASTE_CELL = AE2OmniCells.makeId("drive/cells/spent_nuclear_waste_cell");
 
