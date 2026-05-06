@@ -2,9 +2,13 @@ package com.wintercogs.ae2omnicells.datagen.builder;
 
 import appeng.recipes.game.StorageCellDisassemblyRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
@@ -14,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * AE2 “存储盘拆解”配方 Builder（精简版）。
+ * AE2 “存储盘拆解”配方 Builder
  * 仅使用：
  * type: "ae2:storage_cell_disassembly"
  * keys: "cell", "cell_disassembly_items"
@@ -22,7 +26,7 @@ import java.util.Objects;
 public class CellDisassemblyRecipeBuilder
 {
     private final ItemLike cell;                 // 要被拆解的存储盘
-    private final List<ItemStack> outputs = new ArrayList<>();
+    private final List<ItemStackTemplate> outputs = new ArrayList<>();
     private final List<ICondition> conditions = new ArrayList<>();
 
     // 可选命名控制
@@ -55,7 +59,7 @@ public class CellDisassemblyRecipeBuilder
      */
     public CellDisassemblyRecipeBuilder add(ItemLike item, int count)
     {
-        outputs.add(new ItemStack(item.asItem(), count));
+        outputs.add(new ItemStackTemplate(item.asItem(), count));
         return this;
     }
 
@@ -64,7 +68,7 @@ public class CellDisassemblyRecipeBuilder
      */
     public CellDisassemblyRecipeBuilder add(ItemStack stack)
     {
-        outputs.add(stack.copy());
+        outputs.add(ItemStackTemplate.fromNonEmptyStack(stack));
         return this;
     }
 
@@ -116,6 +120,12 @@ public class CellDisassemblyRecipeBuilder
      */
     public void save(RecipeOutput out, String path)
     {
+        if (path.indexOf(':') >= 0)
+        {
+            save(out, Identifier.parse(path));
+            return;
+        }
+
         var base = BuiltInRegistries.ITEM.getKey(cell.asItem());
         String ns = overrideNamespace != null ? overrideNamespace : base.getNamespace();
         String fullPath = (folder == null || folder.isEmpty()) ? path : (folder + "/" + path);
@@ -140,13 +150,18 @@ public class CellDisassemblyRecipeBuilder
 
         if (conditions.isEmpty())
         {
-            out.accept(id, recipe, null); // 无条件：标准提交
+            out.accept(recipeKey(id), recipe, null); // 无条件：标准提交
         }
         else
         {
             out.withConditions(conditions.toArray(ICondition[]::new))
-                    .accept(id, recipe, null); // 有条件：写入 neoforge:conditions
+                    .accept(recipeKey(id), recipe, null); // 有条件：写入 neoforge:conditions
         }
+    }
+
+    private ResourceKey<Recipe<?>> recipeKey(Identifier id)
+    {
+        return ResourceKey.create(Registries.RECIPE, id);
     }
 
     private Identifier defaultId()
