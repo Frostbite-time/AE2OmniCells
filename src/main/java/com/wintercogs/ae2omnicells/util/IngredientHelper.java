@@ -9,7 +9,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 public class IngredientHelper
 {
     @SuppressWarnings("deprecation")
-    public static Ingredient ingredient(TagKey<Item> tagKey)
+    public static Ingredient of(TagKey<Item> tagKey)
     {
         return Ingredient.of(HolderSet.emptyNamed(BuiltInRegistries.ITEM, tagKey));
     }

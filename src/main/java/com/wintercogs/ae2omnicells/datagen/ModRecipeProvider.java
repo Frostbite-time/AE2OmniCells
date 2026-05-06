@@ -51,7 +51,7 @@ public class ModRecipeProvider extends RecipeProvider
     {
         // 末影钢锭
         InscriberRecipeBuilder.inscribe(Items.IRON_INGOT, OCItems.ENDER_INGOT.get(), 1)
-                .setTop(IngredientHelper.ingredient(OCTags.ENDER_PEARL_DUST))
+                .setTop(IngredientHelper.of(OCTags.ENDER_PEARL_DUST))
                 .setBottom(Ingredient.of(AEItems.CERTUS_QUARTZ_DUST))
                 .setMode(InscriberProcessType.PRESS)
                 .save(this.output, AE2OmniCells.makeId("ender_ingot"));
