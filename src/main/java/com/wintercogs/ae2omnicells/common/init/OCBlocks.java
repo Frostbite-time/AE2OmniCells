@@ -80,7 +80,7 @@ public class OCBlocks
     private static DeferredBlock<OmniCraftingMonitorBlock> registerCraftingMonitorBlock(String name, OmniCraftingUnitType type)
     {
         DeferredBlock<OmniCraftingMonitorBlock> toReturn = registerOnlyBlock(name, properties -> new OmniCraftingMonitorBlock(properties, type));
-        OCItems.ITEMS.registerItem(name, properties -> new OmniCraftingBlockItem(toReturn.get(), properties, type.family));
+        OCItems.ITEMS.registerItem(name, properties -> new OmniCraftingBlockItem(toReturn.get(), properties.useBlockDescriptionPrefix(), type.family));
 
         CRAFTING_MONITORS.add(toReturn);
         return toReturn;
@@ -89,7 +89,7 @@ public class OCBlocks
     private static DeferredBlock<OmniCraftingUnitBlock> registerCraftingStorageBlock(String name, OmniCraftingUnitType type)
     {
         DeferredBlock<OmniCraftingUnitBlock> toReturn = registerOnlyBlock(name, properties -> new OmniCraftingUnitBlock(AEBaseBlock.metalProps(properties), type));
-        OCItems.ITEMS.registerItem(name, properties -> new OmniCraftingBlockItem(toReturn.get(), properties, type.family));
+        OCItems.ITEMS.registerItem(name, properties -> new OmniCraftingBlockItem(toReturn.get(), properties.useBlockDescriptionPrefix(), type.family));
 
         CRAFTING_STORAGES.add(toReturn);
         return toReturn;
@@ -111,7 +111,7 @@ public class OCBlocks
 
     private static <T extends Block> void registerBlockItem(String name, DeferredBlock<T> block)
     {
-        OCItems.ITEMS.registerItem(name, properties -> new BlockItem(block.get(), properties));
+        OCItems.ITEMS.registerItem(name, properties -> new BlockItem(block.get(), properties.useBlockDescriptionPrefix()));
     }
 
     public static void register(IEventBus eventBus)
