@@ -15,8 +15,8 @@ import com.wintercogs.ae2omnicells.common.init.OCItems;
 import com.wintercogs.ae2omnicells.common.init.OCTags;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingUnitType;
 import com.wintercogs.ae2omnicells.datagen.builder.CellDisassemblyRecipeBuilder;
+import com.wintercogs.ae2omnicells.util.IngredientHelper;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -51,7 +51,7 @@ public class ModRecipeProvider extends RecipeProvider
     {
         // 末影钢锭
         InscriberRecipeBuilder.inscribe(Items.IRON_INGOT, OCItems.ENDER_INGOT.get(), 1)
-                .setTop(Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(OCTags.ENDER_PEARL_DUST)))
+                .setTop(IngredientHelper.ingredient(OCTags.ENDER_PEARL_DUST))
                 .setBottom(Ingredient.of(AEItems.CERTUS_QUARTZ_DUST))
                 .setMode(InscriberProcessType.PRESS)
                 .save(this.output, AE2OmniCells.makeId("ender_ingot"));

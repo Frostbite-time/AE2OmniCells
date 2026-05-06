@@ -3,15 +3,9 @@
   "category": "misc",
   "group": "ae2omnicells:cells/housing",
   "key": {
-    "A": {
-      "item": "ae2:quartz_glass"
-    },
-    "B": {
-      "tag": "c:dusts/ender_pearl"
-    },
-    "C": {
-      "item": "ae2omnicells:ender_ingot"
-    }
+    "A": "ae2:quartz_glass",
+    "B": "#c:dusts/ender_pearl",
+    "C": "ae2omnicells:ender_ingot"
   },
   "pattern": [
     "ABA",
@@ -19,7 +13,6 @@
     "CCC"
   ],
   "result": {
-    "count": 1,
     "id": "ae2omnicells:omni_cell_housing"
   }
 }

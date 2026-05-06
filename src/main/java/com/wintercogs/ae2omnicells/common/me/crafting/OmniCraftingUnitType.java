@@ -2,12 +2,17 @@ package com.wintercogs.ae2omnicells.common.me.crafting;
 
 import appeng.block.crafting.AbstractCraftingUnitBlock;
 import appeng.block.crafting.ICraftingUnitType;
+import com.mojang.serialization.Codec;
 import com.wintercogs.ae2omnicells.common.config.OmniCoProcessorConfig;
 import com.wintercogs.ae2omnicells.common.init.OCBlocks;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredBlock;
+import org.jetbrains.annotations.NotNull;
 
-public enum OmniCraftingUnitType implements ICraftingUnitType
+import java.util.Locale;
+
+public enum OmniCraftingUnitType implements ICraftingUnitType, StringRepresentable
 {
     /**
      * 三系存储均给予对应合成存储器
@@ -51,6 +56,8 @@ public enum OmniCraftingUnitType implements ICraftingUnitType
     QUANTUM_STORAGE_64M(65536, OmniCoProcessorConfig.quantum_64m, OmniCraftingFamily.QUANTUM, OmniCraftingStorageType.STORAGE_64M),
     QUANTUM_STORAGE_256M(262144, OmniCoProcessorConfig.quantum_256m, OmniCraftingFamily.QUANTUM, OmniCraftingStorageType.STORAGE_256M);
 
+    public static final Codec<OmniCraftingUnitType> CODEC = StringRepresentable.fromEnum(OmniCraftingUnitType::values);
+
     /**
      * 千字节
      */
@@ -89,6 +96,12 @@ public enum OmniCraftingUnitType implements ICraftingUnitType
     public int getAcceleratorThreads()
     {
         return this.processors;
+    }
+
+    @Override
+    public @NotNull String getSerializedName()
+    {
+        return this.name().toLowerCase(Locale.ROOT);
     }
 
     @Override

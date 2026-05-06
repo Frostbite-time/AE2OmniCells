@@ -3,18 +3,10 @@
   "category": "misc",
   "group": "ae2omnicells:components/complex",
   "key": {
-    "C": {
-      "item": "ae2:cell_component_1k"
-    },
-    "E": {
-      "item": "ae2omnicells:charged_ender_ingot"
-    },
-    "G": {
-      "item": "minecraft:glowstone_dust"
-    },
-    "P": {
-      "item": "ae2omnicells:complex_link_processor"
-    }
+    "C": "ae2:cell_component_1k",
+    "E": "ae2omnicells:charged_ender_ingot",
+    "G": "minecraft:glowstone_dust",
+    "P": "ae2omnicells:complex_link_processor"
   },
   "pattern": [
     "GPG",
@@ -22,7 +14,6 @@
     "GEG"
   ],
   "result": {
-    "count": 1,
     "id": "ae2omnicells:complex_omni_cell_component_1k"
   }
 }

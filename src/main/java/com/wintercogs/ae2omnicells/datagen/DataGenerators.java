@@ -36,8 +36,5 @@ public class DataGenerators
         event.createProvider(ModItemTagProvider::new);
         event.createProvider(ModFluidTagsProvider::new);
         event.createProvider(ModRecipeProvider.Runner::new);
-
-        // 生成物品和方块模型
-        generator.addProvider(event.includeClient(), new ModBlockStateProvider(packOutput, existingFileHelper));
     }
 }

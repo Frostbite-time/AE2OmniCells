@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "ae2omnicells:block/crafting/quantum_crafting_unit_block",
+    "east": "ae2omnicells:block/crafting/quantum_crafting_unit_block",
+    "north": "ae2omnicells:block/crafting/monitor/quantum_crafting_monitor_block",
+    "particle": "ae2omnicells:block/crafting/monitor/quantum_crafting_monitor_block",
+    "south": "ae2omnicells:block/crafting/quantum_crafting_unit_block",
+    "up": "ae2omnicells:block/crafting/quantum_crafting_unit_block",
+    "west": "ae2omnicells:block/crafting/quantum_crafting_unit_block"
+  }
+}

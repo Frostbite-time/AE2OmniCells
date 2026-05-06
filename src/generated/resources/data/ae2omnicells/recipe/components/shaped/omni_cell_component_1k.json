@@ -3,18 +3,10 @@
   "category": "misc",
   "group": "ae2omnicells:components/omni",
   "key": {
-    "C": {
-      "item": "ae2:cell_component_1k"
-    },
-    "E": {
-      "item": "ae2omnicells:ender_ingot"
-    },
-    "P": {
-      "item": "ae2omnicells:omni_link_processor"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    }
+    "C": "ae2:cell_component_1k",
+    "E": "ae2omnicells:ender_ingot",
+    "P": "ae2omnicells:omni_link_processor",
+    "R": "minecraft:redstone"
   },
   "pattern": [
     "RPR",
@@ -22,7 +14,6 @@
     "RER"
   ],
   "result": {
-    "count": 1,
     "id": "ae2omnicells:omni_cell_component_1k"
   }
 }

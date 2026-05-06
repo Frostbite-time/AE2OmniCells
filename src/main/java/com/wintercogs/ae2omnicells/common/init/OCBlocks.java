@@ -1,7 +1,6 @@
 package com.wintercogs.ae2omnicells.common.init;
 
 import appeng.block.AEBaseBlock;
-import appeng.block.crafting.CraftingMonitorBlock;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.blocks.OmniCraftingMonitorBlock;
 import com.wintercogs.ae2omnicells.common.blocks.OmniCraftingUnitBlock;
@@ -24,7 +23,7 @@ public class OCBlocks
 
     public static final List<DeferredBlock<? extends Block>> ALL = new ArrayList<>();
     public static final List<DeferredBlock<? extends OmniCraftingUnitBlock>> CRAFTING_STORAGES = new ArrayList<>();
-    public static final List<DeferredBlock<? extends CraftingMonitorBlock>> CRAFTING_MONITORS = new ArrayList<>();
+    public static final List<DeferredBlock<? extends OmniCraftingMonitorBlock>> CRAFTING_MONITORS = new ArrayList<>();
 
     // 末影钢块
     public static final DeferredBlock<Block> ENDER_INGOT_BLOCK = registerBlock("ender_ingot_block",

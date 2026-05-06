@@ -2,13 +2,9 @@ package com.wintercogs.ae2omnicells.client.me;
 
 import appeng.api.client.StorageCellModels;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
-import com.wintercogs.ae2omnicells.common.items.AEPortableUniversalCellItem;
-import com.wintercogs.ae2omnicells.common.items.AEUniversalCellItem;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.FastColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
-import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 import static com.wintercogs.ae2omnicells.common.init.OCItems.*;
@@ -64,84 +60,6 @@ public class AE2StorageModels
                         QUANTUM_OMNI_CELL_1M, QUANTUM_OMNI_CELL_4M, QUANTUM_OMNI_CELL_16M, QUANTUM_OMNI_CELL_64M, QUANTUM_OMNI_CELL_256M},
                 new DeferredItem[]{PORTABLE_QUANTUM_OMNI_CELL_1K, PORTABLE_QUANTUM_OMNI_CELL_4K, PORTABLE_QUANTUM_OMNI_CELL_16K, PORTABLE_QUANTUM_OMNI_CELL_64K, PORTABLE_QUANTUM_OMNI_CELL_256K,
                         PORTABLE_QUANTUM_OMNI_CELL_1M, PORTABLE_QUANTUM_OMNI_CELL_4M, PORTABLE_QUANTUM_OMNI_CELL_16M, PORTABLE_QUANTUM_OMNI_CELL_64M, PORTABLE_QUANTUM_OMNI_CELL_256M}
-        );
-    }
-
-    public static void registerItemColors(RegisterColorHandlersEvent.Item event)
-    {
-        event.register((itemStack, idx) -> FastColor.ARGB32.opaque(AEUniversalCellItem.getColor(itemStack, idx)),
-                // 普通
-                OMNI_CELL_1K.get(),
-                OMNI_CELL_4K.get(),
-                OMNI_CELL_16K.get(),
-                OMNI_CELL_64K.get(),
-                OMNI_CELL_256K.get(),
-                OMNI_CELL_1M.get(),
-                OMNI_CELL_4M.get(),
-                OMNI_CELL_16M.get(),
-                OMNI_CELL_64M.get(),
-                OMNI_CELL_256M.get(),
-                // 复杂
-                COMPLEX_OMNI_CELL_1K.get(),
-                COMPLEX_OMNI_CELL_4K.get(),
-                COMPLEX_OMNI_CELL_16K.get(),
-                COMPLEX_OMNI_CELL_64K.get(),
-                COMPLEX_OMNI_CELL_256K.get(),
-                COMPLEX_OMNI_CELL_1M.get(),
-                COMPLEX_OMNI_CELL_4M.get(),
-                COMPLEX_OMNI_CELL_16M.get(),
-                COMPLEX_OMNI_CELL_64M.get(),
-                COMPLEX_OMNI_CELL_256M.get(),
-                // 量子
-                QUANTUM_OMNI_CELL_1K.get(),
-                QUANTUM_OMNI_CELL_4K.get(),
-                QUANTUM_OMNI_CELL_16K.get(),
-                QUANTUM_OMNI_CELL_64K.get(),
-                QUANTUM_OMNI_CELL_256K.get(),
-                QUANTUM_OMNI_CELL_1M.get(),
-                QUANTUM_OMNI_CELL_4M.get(),
-                QUANTUM_OMNI_CELL_16M.get(),
-                QUANTUM_OMNI_CELL_64M.get(),
-                QUANTUM_OMNI_CELL_256M.get(),
-                // 创造
-                CREATIVE_AE_CELL_LONG.get(),
-                CREATIVE_AE_CELL_BIGINTEGER.get(),
-                // 废核
-                SPENT_NUCLEAR_WASTE_CELL.get()
-        );
-
-        event.register((itemStack, idx) -> FastColor.ARGB32.opaque(AEPortableUniversalCellItem.getColor(itemStack, idx)),
-                // 便携系列
-                PORTABLE_OMNI_CELL_1K.get(),
-                PORTABLE_OMNI_CELL_4K.get(),
-                PORTABLE_OMNI_CELL_16K.get(),
-                PORTABLE_OMNI_CELL_64K.get(),
-                PORTABLE_OMNI_CELL_256K.get(),
-                PORTABLE_OMNI_CELL_1M.get(),
-                PORTABLE_OMNI_CELL_4M.get(),
-                PORTABLE_OMNI_CELL_16M.get(),
-                PORTABLE_OMNI_CELL_64M.get(),
-                PORTABLE_OMNI_CELL_256M.get(),
-                PORTABLE_COMPLEX_OMNI_CELL_1K.get(),
-                PORTABLE_COMPLEX_OMNI_CELL_4K.get(),
-                PORTABLE_COMPLEX_OMNI_CELL_16K.get(),
-                PORTABLE_COMPLEX_OMNI_CELL_64K.get(),
-                PORTABLE_COMPLEX_OMNI_CELL_256K.get(),
-                PORTABLE_COMPLEX_OMNI_CELL_1M.get(),
-                PORTABLE_COMPLEX_OMNI_CELL_4M.get(),
-                PORTABLE_COMPLEX_OMNI_CELL_16M.get(),
-                PORTABLE_COMPLEX_OMNI_CELL_64M.get(),
-                PORTABLE_COMPLEX_OMNI_CELL_256M.get(),
-                PORTABLE_QUANTUM_OMNI_CELL_1K.get(),
-                PORTABLE_QUANTUM_OMNI_CELL_4K.get(),
-                PORTABLE_QUANTUM_OMNI_CELL_16K.get(),
-                PORTABLE_QUANTUM_OMNI_CELL_64K.get(),
-                PORTABLE_QUANTUM_OMNI_CELL_256K.get(),
-                PORTABLE_QUANTUM_OMNI_CELL_1M.get(),
-                PORTABLE_QUANTUM_OMNI_CELL_4M.get(),
-                PORTABLE_QUANTUM_OMNI_CELL_16M.get(),
-                PORTABLE_QUANTUM_OMNI_CELL_64M.get(),
-                PORTABLE_QUANTUM_OMNI_CELL_256M.get()
         );
     }
 

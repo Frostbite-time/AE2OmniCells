@@ -6,21 +6,15 @@ import appeng.client.render.crafting.MonitorBakedModel;
 import appeng.client.render.crafting.UnitBakedModel;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingUnitType;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.resources.model.ModelDebugName;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.client.resources.model.sprite.MaterialBaker;
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Function;
-
-public class OmniCraftingUnitModelProvider extends AbstractCraftingUnitModelProvider<OmniCraftingUnitType>
+public class OmniCraftingUnitModelProvider extends AbstractCraftingUnitModelProvider<OmniCraftingUnitType> implements ModelDebugName
 {
-    private static final List<Material> MATERIALS = new ArrayList<>();
-
     protected final static Material OMNI_RING_CORNER = texture("omni_ring_corner");
     protected final static Material OMNI_RING_SIDE_HOR = texture("omni_ring_side_hor");
     protected final static Material OMNI_RING_SIDE_VER = texture("omni_ring_side_ver");
@@ -63,13 +57,7 @@ public class OmniCraftingUnitModelProvider extends AbstractCraftingUnitModelProv
     }
 
     @Override
-    public List<Material> getMaterials()
-    {
-        return Collections.unmodifiableList(MATERIALS);
-    }
-
-    @Override
-    public BakedModel getBakedModel(Function<Material, TextureAtlasSprite> spriteGetter)
+    public BlockStateModel bake(MaterialBaker materials)
     {
         Material ringCornerMaterial = switch (type.family)
         {
@@ -101,19 +89,24 @@ public class OmniCraftingUnitModelProvider extends AbstractCraftingUnitModelProv
             case COMPLEX -> COMPLEX_MONITOR_BASE;
             case QUANTUM -> QUANTUM_MONITOR_BASE;
         };
-        TextureAtlasSprite ringCorner = spriteGetter.apply(ringCornerMaterial);
-        TextureAtlasSprite ringSideHor = spriteGetter.apply(ringSideHorMaterial);
-        TextureAtlasSprite ringSideVer = spriteGetter.apply(ringSideVerMaterial);
 
         return switch (type.storageType)
         {
-            case UNIT -> new UnitBakedModel(ringCorner, ringSideHor, ringSideVer, spriteGetter.apply(unitMaterial));
+            case UNIT -> new UnitBakedModel(
+                    materials.get(ringCornerMaterial, this),
+                    materials.get(ringSideHorMaterial, this),
+                    materials.get(ringSideVerMaterial, this),
+                    materials.get(unitMaterial, this));
 
-            case MONITOR -> new MonitorBakedModel(ringCorner, ringSideHor, ringSideVer,
-                    spriteGetter.apply(unitMaterial), spriteGetter.apply(monitorMaterial),
-                    spriteGetter.apply(MONITOR_LIGHT_DARK),
-                    spriteGetter.apply(MONITOR_LIGHT_MEDIUM),
-                    spriteGetter.apply(MONITOR_LIGHT_BRIGHT));
+            case MONITOR -> new MonitorBakedModel(
+                    materials.get(ringCornerMaterial, this),
+                    materials.get(ringSideHorMaterial, this),
+                    materials.get(ringSideVerMaterial, this),
+                    materials.get(unitMaterial, this),
+                    materials.get(monitorMaterial, this),
+                    materials.get(MONITOR_LIGHT_DARK, this),
+                    materials.get(MONITOR_LIGHT_MEDIUM, this),
+                    materials.get(MONITOR_LIGHT_BRIGHT, this));
 
             default ->
             {
@@ -139,26 +132,28 @@ public class OmniCraftingUnitModelProvider extends AbstractCraftingUnitModelProv
                 };
 
                 yield new LightBakedModel(
-                        ringCorner, ringSideHor, ringSideVer,
-                        spriteGetter.apply(lightBaseMaterial),
-                        spriteGetter.apply(lightMaterial));
+                        materials.get(ringCornerMaterial, this),
+                        materials.get(ringSideHorMaterial, this),
+                        materials.get(ringSideVerMaterial, this),
+                        materials.get(lightBaseMaterial, this),
+                        materials.get(lightMaterial, this));
             }
         };
     }
 
+    @Override
+    public @NotNull String debugName()
+    {
+        return this.getClass().getName() + "[" + this.type.getSerializedName() + "]";
+    }
+
     private static Material texture(String name)
     {
-        Material mat = new Material(TextureAtlas.LOCATION_BLOCKS,
-                AE2OmniCells.makeId("block/crafting/" + name));
-        MATERIALS.add(mat);
-        return mat;
+        return new Material(AE2OmniCells.makeId("block/crafting/" + name));
     }
 
     private static Material texture(String namespace, String name)
     {
-        Material mat = new Material(TextureAtlas.LOCATION_BLOCKS,
-                Identifier.fromNamespaceAndPath(namespace, "block/crafting/" + name));
-        MATERIALS.add(mat);
-        return mat;
+        return new Material(Identifier.fromNamespaceAndPath(namespace, "block/crafting/" + name));
     }
 }

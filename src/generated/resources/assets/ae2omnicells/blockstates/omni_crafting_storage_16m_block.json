@@ -4,7 +4,8 @@
       "model": "ae2omnicells:block/crafting/omni_crafting_storage_16m_block"
     },
     "formed=true": {
-      "model": "ae2:block/crafting/omni_crafting_storage_16m_block_formed"
+      "type": "ae2omnicells:crafting_cube",
+      "unit_type": "omni_storage_16m"
     }
   }
 }

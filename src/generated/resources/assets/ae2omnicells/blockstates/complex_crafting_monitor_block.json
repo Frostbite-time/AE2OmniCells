@@ -1,0 +1,51 @@
+{
+  "variants": {
+    "facing=down,formed=false": {
+      "model": "ae2omnicells:block/crafting/complex_crafting_monitor_block",
+      "x": 90
+    },
+    "facing=down,formed=true": {
+      "type": "ae2omnicells:crafting_cube",
+      "unit_type": "complex_monitor"
+    },
+    "facing=east,formed=false": {
+      "model": "ae2omnicells:block/crafting/complex_crafting_monitor_block",
+      "y": 90
+    },
+    "facing=east,formed=true": {
+      "type": "ae2omnicells:crafting_cube",
+      "unit_type": "complex_monitor"
+    },
+    "facing=north,formed=false": {
+      "model": "ae2omnicells:block/crafting/complex_crafting_monitor_block"
+    },
+    "facing=north,formed=true": {
+      "type": "ae2omnicells:crafting_cube",
+      "unit_type": "complex_monitor"
+    },
+    "facing=south,formed=false": {
+      "model": "ae2omnicells:block/crafting/complex_crafting_monitor_block",
+      "y": 180
+    },
+    "facing=south,formed=true": {
+      "type": "ae2omnicells:crafting_cube",
+      "unit_type": "complex_monitor"
+    },
+    "facing=up,formed=false": {
+      "model": "ae2omnicells:block/crafting/complex_crafting_monitor_block",
+      "x": 270
+    },
+    "facing=up,formed=true": {
+      "type": "ae2omnicells:crafting_cube",
+      "unit_type": "complex_monitor"
+    },
+    "facing=west,formed=false": {
+      "model": "ae2omnicells:block/crafting/complex_crafting_monitor_block",
+      "y": 270
+    },
+    "facing=west,formed=true": {
+      "type": "ae2omnicells:crafting_cube",
+      "unit_type": "complex_monitor"
+    }
+  }
+}

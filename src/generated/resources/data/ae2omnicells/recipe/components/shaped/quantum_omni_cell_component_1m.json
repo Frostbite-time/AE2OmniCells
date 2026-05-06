@@ -3,18 +3,10 @@
   "category": "misc",
   "group": "ae2omnicells:components/quantum",
   "key": {
-    "P": {
-      "item": "ae2omnicells:multidimensional_expansion_processor"
-    },
-    "Q": {
-      "item": "ae2:quartz_glass"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    },
-    "U": {
-      "item": "ae2omnicells:quantum_omni_cell_component_256k"
-    }
+    "P": "ae2omnicells:multidimensional_expansion_processor",
+    "Q": "ae2:quartz_glass",
+    "R": "minecraft:redstone",
+    "U": "ae2omnicells:quantum_omni_cell_component_256k"
   },
   "pattern": [
     "RPR",
@@ -22,7 +14,6 @@
     "RUR"
   ],
   "result": {
-    "count": 1,
     "id": "ae2omnicells:quantum_omni_cell_component_1m"
   }
 }

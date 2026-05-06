@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "A": {
-      "item": "ae2omnicells:ender_ingot"
-    },
-    "B": {
-      "item": "ae2omnicells:omni_link_processor"
-    },
-    "C": {
-      "item": "ae2:fluix_glass_cable"
-    },
-    "D": {
-      "item": "ae2:logic_processor"
-    }
+    "A": "ae2omnicells:ender_ingot",
+    "B": "ae2omnicells:omni_link_processor",
+    "C": "ae2:fluix_glass_cable",
+    "D": "ae2:logic_processor"
   },
   "pattern": [
     "ABA",
@@ -21,7 +13,6 @@
     "ABA"
   ],
   "result": {
-    "count": 1,
     "id": "ae2omnicells:omni_crafting_unit_block"
   }
 }

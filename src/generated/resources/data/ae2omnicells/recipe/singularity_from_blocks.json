@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "ae2omnicells:singularity_block"
-    }
+    "ae2omnicells:singularity_block"
   ],
   "result": {
     "count": 9,
