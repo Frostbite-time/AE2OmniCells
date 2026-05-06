@@ -9,96 +9,89 @@ import appeng.recipes.game.CraftingUnitTransformRecipe;
 import appeng.recipes.handlers.ChargerRecipeBuilder;
 import appeng.recipes.handlers.InscriberProcessType;
 import appeng.recipes.handlers.InscriberRecipeBuilder;
-import com.glodblock.github.extendedae.recipe.CircuitCutterRecipeBuilder;
-import com.glodblock.github.extendedae.recipe.CrystalAssemblerRecipeBuilder;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.init.OCBlocks;
 import com.wintercogs.ae2omnicells.common.init.OCItems;
 import com.wintercogs.ae2omnicells.common.init.OCTags;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingUnitType;
 import com.wintercogs.ae2omnicells.datagen.builder.CellDisassemblyRecipeBuilder;
-import mekanism.api.datagen.recipe.builder.PressurizedReactionRecipeBuilder;
-import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
-import mekanism.common.registries.MekanismBlocks;
-import mekanism.common.registries.MekanismChemicals;
-import mekanism.common.registries.MekanismFluids;
-import mekanism.common.registries.MekanismItems;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.common.conditions.IConditionBuilder;
-import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
-import net.pedroksl.advanced_ae.recipes.ReactionChamberRecipeBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class ModRecipeProvider extends RecipeProvider implements IConditionBuilder
+public class ModRecipeProvider extends RecipeProvider
 {
 
-    public ModRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries)
+    protected ModRecipeProvider(HolderLookup.Provider registries, RecipeOutput output)
     {
-        super(output, registries);
+        super(registries, output);
     }
 
     @Override
-    protected void buildRecipes(@NotNull RecipeOutput recipeOutput)
+    protected void buildRecipes()
     {
         // 末影钢锭
         InscriberRecipeBuilder.inscribe(Items.IRON_INGOT, OCItems.ENDER_INGOT.get(), 1)
-                .setTop(Ingredient.of(OCTags.ENDER_PEARL_DUST))
+                .setTop(Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(OCTags.ENDER_PEARL_DUST)))
                 .setBottom(Ingredient.of(AEItems.CERTUS_QUARTZ_DUST))
                 .setMode(InscriberProcessType.PRESS)
-                .save(recipeOutput, AE2OmniCells.makeId("ender_ingot"));
+                .save(this.output, AE2OmniCells.makeId("ender_ingot"));
 
         // 末影钢块 以及其拆解配方
-        nineBlockStorageRecipes(recipeOutput, RecipeCategory.MISC, OCItems.ENDER_INGOT.get(),
+        nineBlockStorageRecipes(RecipeCategory.MISC, OCItems.ENDER_INGOT.get(),
                 RecipeCategory.BUILDING_BLOCKS, OCBlocks.ENDER_INGOT_BLOCK.get(),
                 AE2OmniCells.makeId("ender_ingot_block_from_ingots").toString(), null,
                 AE2OmniCells.makeId("ender_ingot_from_blocks").toString(), null);
 
         // 末影钢粒与末影钢锭互转
-        nineBlockStorageRecipes(recipeOutput, RecipeCategory.MISC, OCItems.ENDER_NUGGET.get(),
+        nineBlockStorageRecipes(RecipeCategory.MISC, OCItems.ENDER_NUGGET.get(),
                 RecipeCategory.MISC, OCItems.ENDER_INGOT.get(),
                 AE2OmniCells.makeId("ender_ingot_from_nuggets").toString(), null,
                 AE2OmniCells.makeId("ender_nugget_from_ingot").toString(), null);
 
         // 下界合金碎片块以及其拆解配方
-        nineBlockStorageRecipes(recipeOutput, RecipeCategory.MISC, Items.NETHERITE_SCRAP,
+        nineBlockStorageRecipes(RecipeCategory.MISC, Items.NETHERITE_SCRAP,
                 RecipeCategory.BUILDING_BLOCKS, OCBlocks.NETHERITE_SCRAP_BLOCK.get(),
                 AE2OmniCells.makeId("netherite_scrap_block_from_ingots").toString(), null,
                 AE2OmniCells.makeId("netherite_scrap_from_blocks").toString(), null);
 
         // 奇点块以及其拆解配方
-        nineBlockStorageRecipes(recipeOutput, RecipeCategory.MISC, AEItems.SINGULARITY,
+        nineBlockStorageRecipes(RecipeCategory.MISC, AEItems.SINGULARITY,
                 RecipeCategory.BUILDING_BLOCKS, OCBlocks.SINGULARITY_BLOCK.get(),
                 AE2OmniCells.makeId("singularity_block_from_ingots").toString(), null,
                 AE2OmniCells.makeId("singularity_from_blocks").toString(), null);
 
         // 充能末影钢锭
-        ChargerRecipeBuilder.charge(recipeOutput, AE2OmniCells.makeId("charged_ender_ingot"), OCItems.ENDER_INGOT.get(), OCItems.CHARGED_ENDER_INGOT.get());
+        ChargerRecipeBuilder.charge(this.output, AE2OmniCells.makeId("charged_ender_ingot"), OCItems.ENDER_INGOT.get(), OCItems.CHARGED_ENDER_INGOT.get());
 
         // 类型模糊卡
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.TYPE_FUZZY_CARD.get())
+        shapeless(RecipeCategory.MISC, OCItems.TYPE_FUZZY_CARD.get())
                 .requires(AEItems.ADVANCED_CARD)
                 .requires(OCItems.ENDER_INGOT)
                 .unlockedBy("has_ender_ingot", has(OCItems.ENDER_INGOT.get()))
-                .save(recipeOutput);
+                .save(this.output);
 
         // 全能链路压印模板
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.OMNI_LINK_PRINT_PRESS.get())
+        shaped(RecipeCategory.MISC, OCItems.OMNI_LINK_PRINT_PRESS.get())
                 .pattern("EAE")
                 .pattern("DFB")
                 .pattern("ECE")
@@ -109,14 +102,14 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('E', OCItems.ENDER_INGOT.get())
                 .define('F', OCItems.CHARGED_ENDER_INGOT.get())
                 .unlockedBy("has_charged_ender_ingot", has(OCItems.CHARGED_ENDER_INGOT.get()))
-                .save(recipeOutput);
+                .save(this.output);
         InscriberRecipeBuilder.inscribe(OCBlocks.ENDER_INGOT_BLOCK.get(), OCItems.OMNI_LINK_PRINT_PRESS.get(), 1)
                 .setTop(Ingredient.of(OCItems.OMNI_LINK_PRINT_PRESS.get()))
                 .setMode(InscriberProcessType.INSCRIBE)
-                .save(recipeOutput, AE2OmniCells.makeId("inscriber/omni_link_print_press"));
+                .save(this.output, AE2OmniCells.makeId("inscriber/omni_link_print_press"));
 
         // 复杂链路压印模板
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.COMPLEX_LINK_PRINT_PRESS.get())
+        shaped(RecipeCategory.MISC, OCItems.COMPLEX_LINK_PRINT_PRESS.get())
                 .pattern("EAE")
                 .pattern("DFB")
                 .pattern("ECE")
@@ -127,14 +120,14 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('E', Items.NETHERITE_SCRAP)
                 .define('F', OCItems.CHARGED_ENDER_INGOT.get())
                 .unlockedBy("has_charged_ender_ingot", has(OCItems.CHARGED_ENDER_INGOT.get()))
-                .save(recipeOutput);
+                .save(this.output);
         InscriberRecipeBuilder.inscribe(OCBlocks.ENDER_INGOT_BLOCK.get(), OCItems.COMPLEX_LINK_PRINT_PRESS.get(), 1)
                 .setTop(Ingredient.of(OCItems.COMPLEX_LINK_PRINT_PRESS.get()))
                 .setMode(InscriberProcessType.INSCRIBE)
-                .save(recipeOutput, AE2OmniCells.makeId("inscriber/complex_link_print_press"));
+                .save(this.output, AE2OmniCells.makeId("inscriber/complex_link_print_press"));
 
         // 多维展开压印模板
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.MULTIDIMENSIONAL_EXPANSION_PRINT_PRESS.get())
+        shaped(RecipeCategory.MISC, OCItems.MULTIDIMENSIONAL_EXPANSION_PRINT_PRESS.get())
                 .pattern("EAE")
                 .pattern("DFB")
                 .pattern("ECE")
@@ -145,207 +138,206 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('E', AEItems.SINGULARITY.asItem())
                 .define('F', OCItems.CHARGED_ENDER_INGOT.get())
                 .unlockedBy("has_charged_ender_ingot", has(OCItems.CHARGED_ENDER_INGOT.get()))
-                .save(recipeOutput);
+                .save(this.output);
         InscriberRecipeBuilder.inscribe(OCBlocks.ENDER_INGOT_BLOCK.get(), OCItems.MULTIDIMENSIONAL_EXPANSION_PRINT_PRESS.get(), 1)
                 .setTop(Ingredient.of(OCItems.MULTIDIMENSIONAL_EXPANSION_PRINT_PRESS.get()))
                 .setMode(InscriberProcessType.INSCRIBE)
-                .save(recipeOutput, AE2OmniCells.makeId("inscriber/multidimensional_expansion_print_press"));
+                .save(this.output, AE2OmniCells.makeId("inscriber/multidimensional_expansion_print_press"));
 
         // 全能链路电路板
         InscriberRecipeBuilder.inscribe(OCItems.ENDER_INGOT.get(), OCItems.OMNI_LINK_CIRCUIT_PRINT.get(), 1)
                 .setTop(Ingredient.of(OCItems.OMNI_LINK_PRINT_PRESS.get()))
                 .setMode(InscriberProcessType.INSCRIBE)
-                .save(recipeOutput, AE2OmniCells.makeId("omni_link_circuit_print"));
+                .save(this.output, AE2OmniCells.makeId("omni_link_circuit_print"));
 
         // 复杂链路电路板
         InscriberRecipeBuilder.inscribe(Items.NETHERITE_SCRAP, OCItems.COMPLEX_LINK_CIRCUIT_PRINT.get(), 1)
                 .setTop(Ingredient.of(OCItems.COMPLEX_LINK_PRINT_PRESS.get()))
                 .setMode(InscriberProcessType.INSCRIBE)
-                .save(recipeOutput, AE2OmniCells.makeId("complex_link_circuit_print"));
+                .save(this.output, AE2OmniCells.makeId("complex_link_circuit_print"));
 
         // 多维展开电路板
         InscriberRecipeBuilder.inscribe(AEItems.SINGULARITY, OCItems.MULTIDIMENSIONAL_EXPANSION_CIRCUIT_PRINT.get(), 1)
                 .setTop(Ingredient.of(OCItems.MULTIDIMENSIONAL_EXPANSION_PRINT_PRESS.get()))
                 .setMode(InscriberProcessType.INSCRIBE)
-                .save(recipeOutput, AE2OmniCells.makeId("multidimensional_expansion_circuit_print"));
+                .save(this.output, AE2OmniCells.makeId("multidimensional_expansion_circuit_print"));
 
         // 全能链路处理器
         InscriberRecipeBuilder.inscribe(Items.REDSTONE, OCItems.OMNI_LINK_PROCESSOR.get(), 1)
                 .setTop(Ingredient.of(OCItems.OMNI_LINK_CIRCUIT_PRINT.get()))
                 .setBottom(Ingredient.of(AEItems.SILICON_PRINT.asItem()))
                 .setMode(InscriberProcessType.PRESS)
-                .save(recipeOutput, AE2OmniCells.makeId("omni_link_processor"));
+                .save(this.output, AE2OmniCells.makeId("omni_link_processor"));
 
         // 复杂链路处理器
         InscriberRecipeBuilder.inscribe(Items.REDSTONE, OCItems.COMPLEX_LINK_PROCESSOR.get(), 1)
                 .setTop(Ingredient.of(OCItems.COMPLEX_LINK_CIRCUIT_PRINT.get()))
                 .setBottom(Ingredient.of(AEItems.SILICON_PRINT.asItem()))
                 .setMode(InscriberProcessType.PRESS)
-                .save(recipeOutput, AE2OmniCells.makeId("complex_link_processor"));
+                .save(this.output, AE2OmniCells.makeId("complex_link_processor"));
 
         // 多维展开处理器
         InscriberRecipeBuilder.inscribe(Items.REDSTONE, OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR.get(), 1)
                 .setTop(Ingredient.of(OCItems.MULTIDIMENSIONAL_EXPANSION_CIRCUIT_PRINT.get()))
                 .setBottom(Ingredient.of(AEItems.SILICON_PRINT.asItem()))
                 .setMode(InscriberProcessType.PRESS)
-                .save(recipeOutput, AE2OmniCells.makeId("multidimensional_expansion_processor"));
+                .save(this.output, AE2OmniCells.makeId("multidimensional_expansion_processor"));
 
         // 统一生成所有外壳、组件、元件配方
-        buildAllByTiers(recipeOutput);
+        buildAllByTiers(this.output);
         // 统一生成所有合成存储器的升级配方
-        buildAllCraftingUnitTransforms(recipeOutput);
+        buildAllCraftingUnitTransforms(this.output);
 
         // EAE联动配方---------------------------------------------------------------------------------------------------------
 
-        // 电路切片
-        CircuitCutterRecipeBuilder.cut(OCItems.OMNI_LINK_CIRCUIT_PRINT.get(), 9)
-                .input(OCBlocks.ENDER_INGOT_BLOCK.get())
-                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
-                        AE2OmniCells.makeId("cutter/omni_link_circuit_print"));
-        CircuitCutterRecipeBuilder.cut(OCItems.COMPLEX_LINK_CIRCUIT_PRINT.get(), 9)
-                .input(OCBlocks.NETHERITE_SCRAP_BLOCK.get())
-                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
-                        AE2OmniCells.makeId("cutter/complex_link_circuit_print"));
-        CircuitCutterRecipeBuilder.cut(OCItems.MULTIDIMENSIONAL_EXPANSION_CIRCUIT_PRINT.get(), 9)
-                .input(OCBlocks.SINGULARITY_BLOCK.get())
-                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
-                        AE2OmniCells.makeId("cutter/multidimensional_expansion_circuit_print"));
-
-        // 水晶装配
-        CrystalAssemblerRecipeBuilder.assemble(OCItems.OMNI_LINK_PROCESSOR, 4)
-                .input(OCItems.OMNI_LINK_CIRCUIT_PRINT, 4)
-                .input(AEItems.SILICON_PRINT, 4)
-                .input(Items.REDSTONE, 4)
-                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
-                        AE2OmniCells.makeId("assembler/omni_link_processor"));
-        CrystalAssemblerRecipeBuilder.assemble(OCItems.COMPLEX_LINK_PROCESSOR, 4)
-                .input(OCItems.COMPLEX_LINK_CIRCUIT_PRINT, 4)
-                .input(AEItems.SILICON_PRINT, 4)
-                .input(Items.REDSTONE, 4)
-                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
-                        AE2OmniCells.makeId("assembler/complex_link_processor"));
-        CrystalAssemblerRecipeBuilder.assemble(OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR, 4)
-                .input(OCItems.MULTIDIMENSIONAL_EXPANSION_CIRCUIT_PRINT, 4)
-                .input(AEItems.SILICON_PRINT, 4)
-                .input(Items.REDSTONE, 4)
-                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
-                        AE2OmniCells.makeId("assembler/multidimensional_expansion_processor"));
-
-        // 水晶装配器 -> 末影钢
-        CrystalAssemblerRecipeBuilder.assemble(OCItems.ENDER_INGOT, 4)
-                .input(OCTags.ENDER_PEARL_DUST, 4)
-                .input(Items.IRON_INGOT, 4)
-                .input(AEItems.CERTUS_QUARTZ_DUST, 4)
-                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
-                        AE2OmniCells.makeId("assembler/ender_ingot"));
-
-        // AAE联动配方 -----------------------------------------------------------------------------------------------
-        // 反应仓 -> 末影钢 / 充能末影钢
-        ReactionChamberRecipeBuilder.react(OCItems.ENDER_INGOT, 64, 500000)
-                .input(OCTags.ENDER_PEARL_DUST, 32)
-                .input(Items.IRON_INGOT, 32)
-                .input(AEItems.CERTUS_QUARTZ_DUST, 32)
-                .fluid(Fluids.WATER, 500)
-                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.AAE_MODID)),
-                        AE2OmniCells.makeId("reaction_chamber/ender_ingot"));
-        ReactionChamberRecipeBuilder.react(OCItems.CHARGED_ENDER_INGOT, 64, 1300000)
-                .input(OCItems.ENDER_INGOT, 64)
-                .fluid(Fluids.WATER, 1000)
-                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.AAE_MODID)),
-                        AE2OmniCells.makeId("reaction_chamber/charged_ender_ingot"));
-
-        // MEK联动配方 ------------------------------------------------------------------------------------------------
-        // 元件
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.SPENT_NUCLEAR_WASTE_CELL)
-                .pattern("ABA")
-                .pattern("BCB")
-                .pattern("DED")
-                .define('A', AEBlocks.QUARTZ_GLASS.asItem())
-                .define('B', OCTags.ENDER_PEARL_DUST)
-                .define('C', OCItems.SPENT_NUCLEAR_WASTE_COMPONENT)
-                .define('D', OCItems.CHARGED_ENDER_INGOT)
-                .define('E', OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR)
-                .unlockedBy("has_spent_nuclear_waste_component", has(OCItems.SPENT_NUCLEAR_WASTE_COMPONENT))
-                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.AEMEK_MODID)),
-                        cellShapedId(OCItems.SPENT_NUCLEAR_WASTE_CELL));
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.SPENT_NUCLEAR_WASTE_CELL)
-                .requires(OCItems.SPENT_NUCLEAR_WASTE_COMPONENT)
-                .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING)
-                .unlockedBy("has_spent_nuclear_waste_component", has(OCItems.SPENT_NUCLEAR_WASTE_COMPONENT))
-                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.AEMEK_MODID)),
-                        cellShapelessId(OCItems.SPENT_NUCLEAR_WASTE_CELL));
-        CellDisassemblyRecipeBuilder.cell(OCItems.SPENT_NUCLEAR_WASTE_CELL)
-                .add(OCItems.SPENT_NUCLEAR_WASTE_COMPONENT)
-                .add(OCItems.QUANTUM_OMNI_CELL_HOUSING)
-                .whenModLoaded(AE2OmniCells.AEMEK_MODID)
-                .save(recipeOutput, disassemblyId("spent_nuclear_waste_cell", OCItems.SPENT_NUCLEAR_WASTE_CELL, false));
-
-        // 奇点
-        PressurizedReactionRecipeBuilder.reaction(
-                        IngredientCreatorAccess.item().from(AEItems.SINGULARITY),
-                        IngredientCreatorAccess.fluid().from(MekanismFluids.LITHIUM.asStack(1000)),
-                        IngredientCreatorAccess.chemicalStack().fromHolder(MekanismChemicals.POLONIUM, 1000),
-                        900,
-                        new ItemStack(OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY.get()))
-                .addCondition(new ModLoadedCondition(AE2OmniCells.AEMEK_MODID))
-                .build(recipeOutput, AE2OmniCells.makeId(OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY.getId().getPath()));
-
-        // 组件
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.SPENT_NUCLEAR_WASTE_COMPONENT)
-                .pattern("ABA")
-                .pattern("CDC")
-                .pattern("AEA")
-                .define('A', MekanismItems.HDPE_SHEET)
-                .define('B', MekanismItems.ANTIMATTER_PELLET)
-                .define('C', MekanismBlocks.RADIOACTIVE_WASTE_BARREL)
-                .define('D', OCItems.QUANTUM_OMNI_CELL_COMPONENT_256M)
-                .define('E', OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY)
-                .unlockedBy("has_spent_nuclear_waste_singularity", has(OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY))
-                .save(recipeOutput.withConditions(new ModLoadedCondition(AE2OmniCells.AEMEK_MODID)),
-                        componentShapedId(OCItems.SPENT_NUCLEAR_WASTE_COMPONENT));
-
+//        // 电路切片
+//        CircuitCutterRecipeBuilder.cut(OCItems.OMNI_LINK_CIRCUIT_PRINT.get(), 9)
+//                .input(OCBlocks.ENDER_INGOT_BLOCK.get())
+//                .save(this.output.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
+//                        AE2OmniCells.makeId("cutter/omni_link_circuit_print"));
+//        CircuitCutterRecipeBuilder.cut(OCItems.COMPLEX_LINK_CIRCUIT_PRINT.get(), 9)
+//                .input(OCBlocks.NETHERITE_SCRAP_BLOCK.get())
+//                .save(this.output.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
+//                        AE2OmniCells.makeId("cutter/complex_link_circuit_print"));
+//        CircuitCutterRecipeBuilder.cut(OCItems.MULTIDIMENSIONAL_EXPANSION_CIRCUIT_PRINT.get(), 9)
+//                .input(OCBlocks.SINGULARITY_BLOCK.get())
+//                .save(this.output.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
+//                        AE2OmniCells.makeId("cutter/multidimensional_expansion_circuit_print"));
+//
+//        // 水晶装配
+//        CrystalAssemblerRecipeBuilder.assemble(OCItems.OMNI_LINK_PROCESSOR, 4)
+//                .input(OCItems.OMNI_LINK_CIRCUIT_PRINT, 4)
+//                .input(AEItems.SILICON_PRINT, 4)
+//                .input(Items.REDSTONE, 4)
+//                .save(this.output.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
+//                        AE2OmniCells.makeId("assembler/omni_link_processor"));
+//        CrystalAssemblerRecipeBuilder.assemble(OCItems.COMPLEX_LINK_PROCESSOR, 4)
+//                .input(OCItems.COMPLEX_LINK_CIRCUIT_PRINT, 4)
+//                .input(AEItems.SILICON_PRINT, 4)
+//                .input(Items.REDSTONE, 4)
+//                .save(this.output.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
+//                        AE2OmniCells.makeId("assembler/complex_link_processor"));
+//        CrystalAssemblerRecipeBuilder.assemble(OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR, 4)
+//                .input(OCItems.MULTIDIMENSIONAL_EXPANSION_CIRCUIT_PRINT, 4)
+//                .input(AEItems.SILICON_PRINT, 4)
+//                .input(Items.REDSTONE, 4)
+//                .save(this.output.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
+//                        AE2OmniCells.makeId("assembler/multidimensional_expansion_processor"));
+//
+//        // 水晶装配器 -> 末影钢
+//        CrystalAssemblerRecipeBuilder.assemble(OCItems.ENDER_INGOT, 4)
+//                .input(OCTags.ENDER_PEARL_DUST, 4)
+//                .input(Items.IRON_INGOT, 4)
+//                .input(AEItems.CERTUS_QUARTZ_DUST, 4)
+//                .save(this.output.withConditions(new ModLoadedCondition(AE2OmniCells.EAE_MODID)),
+//                        AE2OmniCells.makeId("assembler/ender_ingot"));
+//
+//        // AAE联动配方 -----------------------------------------------------------------------------------------------
+//        // 反应仓 -> 末影钢 / 充能末影钢
+//        ReactionChamberRecipeBuilder.react(OCItems.ENDER_INGOT, 64, 500000)
+//                .input(OCTags.ENDER_PEARL_DUST, 32)
+//                .input(Items.IRON_INGOT, 32)
+//                .input(AEItems.CERTUS_QUARTZ_DUST, 32)
+//                .fluid(Fluids.WATER, 500)
+//                .save(this.output.withConditions(new ModLoadedCondition(AE2OmniCells.AAE_MODID)),
+//                        AE2OmniCells.makeId("reaction_chamber/ender_ingot"));
+//        ReactionChamberRecipeBuilder.react(OCItems.CHARGED_ENDER_INGOT, 64, 1300000)
+//                .input(OCItems.ENDER_INGOT, 64)
+//                .fluid(Fluids.WATER, 1000)
+//                .save(this.output.withConditions(new ModLoadedCondition(AE2OmniCells.AAE_MODID)),
+//                        AE2OmniCells.makeId("reaction_chamber/charged_ender_ingot"));
+//
+//        // MEK联动配方 ------------------------------------------------------------------------------------------------
+//        // 元件
+//        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.SPENT_NUCLEAR_WASTE_CELL)
+//                .pattern("ABA")
+//                .pattern("BCB")
+//                .pattern("DED")
+//                .define('A', AEBlocks.QUARTZ_GLASS.asItem())
+//                .define('B', OCTags.ENDER_PEARL_DUST)
+//                .define('C', OCItems.SPENT_NUCLEAR_WASTE_COMPONENT)
+//                .define('D', OCItems.CHARGED_ENDER_INGOT)
+//                .define('E', OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR)
+//                .unlockedBy("has_spent_nuclear_waste_component", has(OCItems.SPENT_NUCLEAR_WASTE_COMPONENT))
+//                .save(this.output.withConditions(new ModLoadedCondition(AE2OmniCells.AEMEK_MODID)),
+//                        cellShapedId(OCItems.SPENT_NUCLEAR_WASTE_CELL));
+//        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, OCItems.SPENT_NUCLEAR_WASTE_CELL)
+//                .requires(OCItems.SPENT_NUCLEAR_WASTE_COMPONENT)
+//                .requires(OCItems.QUANTUM_OMNI_CELL_HOUSING)
+//                .unlockedBy("has_spent_nuclear_waste_component", has(OCItems.SPENT_NUCLEAR_WASTE_COMPONENT))
+//                .save(this.output.withConditions(new ModLoadedCondition(AE2OmniCells.AEMEK_MODID)),
+//                        cellShapelessId(OCItems.SPENT_NUCLEAR_WASTE_CELL));
+//        CellDisassemblyRecipeBuilder.cell(OCItems.SPENT_NUCLEAR_WASTE_CELL)
+//                .add(OCItems.SPENT_NUCLEAR_WASTE_COMPONENT)
+//                .add(OCItems.QUANTUM_OMNI_CELL_HOUSING)
+//                .whenModLoaded(AE2OmniCells.AEMEK_MODID)
+//                .save(this.output, disassemblyId("spent_nuclear_waste_cell", OCItems.SPENT_NUCLEAR_WASTE_CELL, false));
+//
+//        // 奇点
+//        PressurizedReactionRecipeBuilder.reaction(
+//                        IngredientCreatorAccess.item().from(AEItems.SINGULARITY),
+//                        IngredientCreatorAccess.fluid().from(MekanismFluids.LITHIUM.asStack(1000)),
+//                        IngredientCreatorAccess.chemicalStack().fromHolder(MekanismChemicals.POLONIUM, 1000),
+//                        900,
+//                        new ItemStack(OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY.get()))
+//                .addCondition(new ModLoadedCondition(AE2OmniCells.AEMEK_MODID))
+//                .build(this.output, AE2OmniCells.makeId(OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY.getId().getPath()));
+//
+//        // 组件
+//        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCItems.SPENT_NUCLEAR_WASTE_COMPONENT)
+//                .pattern("ABA")
+//                .pattern("CDC")
+//                .pattern("AEA")
+//                .define('A', MekanismItems.HDPE_SHEET)
+//                .define('B', MekanismItems.ANTIMATTER_PELLET)
+//                .define('C', MekanismBlocks.RADIOACTIVE_WASTE_BARREL)
+//                .define('D', OCItems.QUANTUM_OMNI_CELL_COMPONENT_256M)
+//                .define('E', OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY)
+//                .unlockedBy("has_spent_nuclear_waste_singularity", has(OCItems.SPENT_NUCLEAR_WASTE_SINGULARITY))
+//                .save(this.output.withConditions(new ModLoadedCondition(AE2OmniCells.AEMEK_MODID)),
+//                        componentShapedId(OCItems.SPENT_NUCLEAR_WASTE_COMPONENT));
     }
 
     // ---------- 统一ID工具 ----------
-    private static ResourceLocation componentShapedId(DeferredItem<? extends Item> comp)
+    private static String componentShapedId(DeferredItem<? extends Item> comp)
     {
-        return AE2OmniCells.makeId("components/shaped/" + comp.getId().getPath());
+        return AE2OmniCells.MODID + ":" + "components/shaped/" + comp.getId().getPath();
     }
 
-    private static ResourceLocation housingShapedId(DeferredItem<? extends Item> housing)
+    private static String housingShapedId(DeferredItem<? extends Item> housing)
     {
-        return AE2OmniCells.makeId("cells/housing/" + housing.getId().getPath());
+        return AE2OmniCells.MODID + ":" + "cells/housing/" + housing.getId().getPath();
     }
 
-    private static ResourceLocation cellShapedId(DeferredItem<? extends Item> cell)
+    private static String cellShapedId(DeferredItem<? extends Item> cell)
     {
-        return AE2OmniCells.makeId("cells/shaped/" + cell.getId().getPath());
+        return AE2OmniCells.MODID + ":" + "cells/shaped/" + cell.getId().getPath();
     }
 
-    private static ResourceLocation cellShapelessId(DeferredItem<? extends Item> cell)
+    private static String cellShapelessId(DeferredItem<? extends Item> cell)
     {
-        return AE2OmniCells.makeId("cells/shapeless/" + cell.getId().getPath());
+        return AE2OmniCells.MODID + ":" + "cells/shapeless/" + cell.getId().getPath();
     }
 
-    private static ResourceLocation disassemblyId(String series, DeferredItem<? extends Item> idLike, boolean portable)
+    private static String disassemblyId(String series, DeferredItem<? extends Item> idLike, boolean portable)
     {
         String base = (portable ? "disassembly/portable/" : "disassembly/") + series + "/" + idLike.getId().getPath();
-        return AE2OmniCells.makeId(base);
+        return AE2OmniCells.MODID + ":" + base;
     }
 
-    private static ResourceLocation craftingUnitUpgradeId(DeferredBlock<?> craftingUnit)
+    private static String craftingUnitUpgradeId(DeferredBlock<?> craftingUnit)
     {
-        return AE2OmniCells.makeId("crafting_unit/upgrade/" + craftingUnit.getId().getPath());
+        return AE2OmniCells.MODID + ":" + "crafting_unit/upgrade/" + craftingUnit.getId().getPath();
     }
 
-    private static ResourceLocation craftingUnitShapelessId(DeferredBlock<?> craftingUnit)
+    private static String craftingUnitShapelessId(DeferredBlock<?> craftingUnit)
     {
-        return AE2OmniCells.makeId("crafting_unit/shapeless" + craftingUnit.getId().getPath());
+        return AE2OmniCells.MODID + ":" + "crafting_unit/shapeless" + craftingUnit.getId().getPath();
     }
 
-    private static ResourceLocation craftingUnitShapedId(DeferredBlock<?> craftingUnit)
+    private static String craftingUnitShapedId(DeferredBlock<?> craftingUnit)
     {
-        return AE2OmniCells.makeId("crafting_unit/shaped" + craftingUnit.getId().getPath());
+        return AE2OmniCells.MODID + ":" + "crafting_unit/shaped" + craftingUnit.getId().getPath();
     }
 
     // 这是什么系列的硬盘？
@@ -447,14 +439,14 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         };
 
         // --------- 外壳三条（ID 也统一到 cells/housing/...）---------
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OMNI_MATS.housing())
+        shaped(RecipeCategory.MISC, OMNI_MATS.housing())
                 .pattern("ABA").pattern("B B").pattern("CCC")
                 .define('A', A_GLASS).define('B', B_ENDER_DUST).define('C', OCItems.ENDER_INGOT.get())
                 .unlockedBy("has_ender_ingot", has(OCItems.ENDER_INGOT.get()))
                 .group("ae2omnicells:cells/housing")
                 .save(out, housingShapedId(OCItems.OMNI_CELL_HOUSING));
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, COMPLEX_MATS.housing())
+        shaped(RecipeCategory.MISC, COMPLEX_MATS.housing())
                 .pattern("ABA").pattern("B B").pattern("CDC")
                 .define('A', A_GLASS).define('B', B_ENDER_DUST)
                 .define('C', OCItems.CHARGED_ENDER_INGOT.get()).define('D', OCItems.COMPLEX_LINK_PROCESSOR.get())
@@ -462,7 +454,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .group("ae2omnicells:cells/housing")
                 .save(out, housingShapedId(OCItems.COMPLEX_OMNI_CELL_HOUSING));
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, QUANTUM_MATS.housing())
+        shaped(RecipeCategory.MISC, QUANTUM_MATS.housing())
                 .pattern("ABA").pattern("B B").pattern("CDC")
                 .define('A', A_GLASS).define('B', B_ENDER_DUST)
                 .define('C', OCItems.CHARGED_ENDER_INGOT.get()).define('D', OCItems.MULTIDIMENSIONAL_EXPANSION_PROCESSOR.get())
@@ -487,7 +479,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         {
             var comp = rows[i].component().get();
 
-            ShapedRecipeBuilder b = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, comp)
+            ShapedRecipeBuilder b = shaped(RecipeCategory.MISC, comp)
                     .group(mats.componentGroupKey());
 
             if (i == 0)
@@ -497,7 +489,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 {
                     case OMNI ->
                     {
-                        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, comp)
+                        shaped(RecipeCategory.MISC, comp)
                                 .pattern("RPR")
                                 .pattern("ECE")
                                 .pattern("RER")
@@ -512,7 +504,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                     }
                     case COMPLEX ->
                     {
-                        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, comp)
+                        shaped(RecipeCategory.MISC, comp)
                                 .pattern("GPG")
                                 .pattern("ECE")
                                 .pattern("GEG")
@@ -527,7 +519,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                     }
                     case QUANTUM ->
                     {
-                        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, comp)
+                        shaped(RecipeCategory.MISC, comp)
                                 .pattern("NPN")
                                 .pattern("ECE")
                                 .pattern("NEN")
@@ -545,7 +537,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             else
             {
                 // 套娃式：统一 U/Q 模板，材料依系列而不同只体现在 P（已经注入）
-                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, comp)
+                shaped(RecipeCategory.MISC, comp)
                         .pattern("RPR").pattern("UQU").pattern("RUR")
                         .define('R', Items.REDSTONE)
                         .define('P', mats.componentProcessorP())
@@ -566,7 +558,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             // shaped
             if (mats.series() == Series.OMNI)
             {
-                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cell)
+                shaped(RecipeCategory.MISC, cell)
                         .pattern("ABA").pattern("BMB").pattern("CCC")
                         .define('A', A_GLASS).define('B', B_ENDER_DUST)
                         .define('C', mats.materialC()).define('M', comp)
@@ -575,7 +567,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             }
             else
             {
-                ShapedRecipeBuilder.shaped(RecipeCategory.MISC, cell)
+                shaped(RecipeCategory.MISC, cell)
                         .pattern("ABA").pattern("BMB").pattern("CDC")
                         .define('A', A_GLASS).define('B', B_ENDER_DUST)
                         .define('C', mats.materialC()).define('D', mats.cellProcessorD())
@@ -585,7 +577,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             }
 
             // shapeless
-            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, cell)
+            shapeless(RecipeCategory.MISC, cell)
                     .requires(mats.housing())
                     .requires(comp)
                     .unlockedBy("has_component", has(comp))
@@ -598,7 +590,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             var pCell = row.portableCell().get();
             var comp = row.component().get();
 
-            ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, pCell)
+            shapeless(RecipeCategory.TOOLS, pCell)
                     .requires(mats.housing())
                     .requires(comp)
                     .requires(AEBlocks.ME_CHEST.asItem())
@@ -674,7 +666,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         for (UnitTransformTier tier : tiers)
         {
             output.accept(
-                    craftingUnitUpgradeId(tier.baseBlock),
+                    ResourceKey.create(Registries.RECIPE, Identifier.parse(craftingUnitUpgradeId(tier.baseBlock))),
                     new CraftingUnitTransformRecipe(
                             tier.baseBlock.get(),
                             tier.upgradeItem.asItem()),
@@ -697,7 +689,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 case COMPLEX -> OCBlocks.COMPLEX_CRAFTING_UNIT_BLOCK;
                 case QUANTUM -> OCBlocks.QUANTUM_CRAFTING_UNIT_BLOCK;
             };
-            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, tier.baseBlock)
+            shapeless(RecipeCategory.MISC, tier.baseBlock)
                     .requires(tier.upgradeItem.asItem())
                     .requires(inputUnit)
                     .unlockedBy("has_correct_unit", has(inputUnit))
@@ -705,7 +697,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         }
 
         // 三个基本空单元的配方
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCBlocks.OMNI_CRAFTING_UNIT_BLOCK)
+        shaped(RecipeCategory.MISC, OCBlocks.OMNI_CRAFTING_UNIT_BLOCK)
                 .pattern("ABA")
                 .pattern("CDC")
                 .pattern("ABA")
@@ -715,7 +707,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', AEItems.LOGIC_PROCESSOR)
                 .unlockedBy("has_ender_ingot", has(OCItems.ENDER_INGOT))
                 .save(output, craftingUnitShapedId(OCBlocks.OMNI_CRAFTING_UNIT_BLOCK));
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCBlocks.COMPLEX_CRAFTING_UNIT_BLOCK)
+        shaped(RecipeCategory.MISC, OCBlocks.COMPLEX_CRAFTING_UNIT_BLOCK)
                 .pattern("ABA")
                 .pattern("CDC")
                 .pattern("ABA")
@@ -725,7 +717,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('D', AEItems.LOGIC_PROCESSOR)
                 .unlockedBy("has_charged_ender_ingot", has(OCItems.CHARGED_ENDER_INGOT))
                 .save(output, craftingUnitShapedId(OCBlocks.COMPLEX_CRAFTING_UNIT_BLOCK));
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, OCBlocks.QUANTUM_CRAFTING_UNIT_BLOCK)
+        shaped(RecipeCategory.MISC, OCBlocks.QUANTUM_CRAFTING_UNIT_BLOCK)
                 .pattern("ABA")
                 .pattern("CDC")
                 .pattern("ABA")
@@ -738,4 +730,23 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
     }
 
+    public static class Runner extends RecipeProvider.Runner
+    {
+        public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider)
+        {
+            super(output, lookupProvider);
+        }
+
+        @Override
+        protected @NotNull RecipeProvider createRecipeProvider(HolderLookup.@NotNull Provider provider, @NotNull RecipeOutput output)
+        {
+            return new ModRecipeProvider(provider, output);
+        }
+
+        @Override
+        public @NotNull String getName()
+        {
+            return "AE2OmniCells Recipe Provider";
+        }
+    }
 }
