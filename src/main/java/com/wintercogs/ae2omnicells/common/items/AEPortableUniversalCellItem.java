@@ -46,7 +46,7 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
     /**
      * 默认染色（可被 display.color 覆盖）
      */
-    private static final int DEFAULT_COLOR = 0xFFFFFF;
+    private static final int DEFAULT_COLOR = 0x80caff;
 
     private final double idleDrain;
     private final int totalBytes;  // <=0 视为无限
@@ -84,7 +84,7 @@ public class AEPortableUniversalCellItem extends AbstractPortableCell implements
 
     public static int getColor(ItemStack stack, int tintIndex)
     {
-        if (tintIndex == 0) return 0x80caff; // 蓝色
+        if (tintIndex == 0) return DEFAULT_COLOR; // 蓝色
         else if (tintIndex == 1)
         {
             if (stack.getItem() instanceof PoweredContainerItem poweredContainer)
