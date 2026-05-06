@@ -124,7 +124,7 @@ public class AEUniversalCellData extends SavedData
 
         ensureSaveDirExists(server);
 
-        return server.overworld().getDataStorage().get(makeType(uuid));
+        return server.getDataStorage().get(makeType(uuid));
     }
 
     /**
@@ -138,7 +138,7 @@ public class AEUniversalCellData extends SavedData
 
         ensureSaveDirExists(server);
 
-        final var dataStorage = server.overworld().getDataStorage();
+        final var dataStorage = server.getDataStorage();
 
         // 1) 读取已有 UUID（从数据组件）
         UUID existing = itemStack.get(OCDataComponents.CELL_UUID.get());
