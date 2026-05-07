@@ -5,7 +5,7 @@
   "key": {
     "C": "ae2:cell_component_1k",
     "E": "ae2omnicells:charged_ender_ingot",
-    "N": "ae2:ender_dust",
+    "N": "#c:dusts/ender_pearl",
     "P": "ae2omnicells:multidimensional_expansion_processor"
   },
   "pattern": [

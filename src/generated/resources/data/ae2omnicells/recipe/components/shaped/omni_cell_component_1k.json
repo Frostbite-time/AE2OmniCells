@@ -6,7 +6,7 @@
     "C": "ae2:cell_component_1k",
     "E": "ae2omnicells:ender_ingot",
     "P": "ae2omnicells:omni_link_processor",
-    "R": "minecraft:redstone"
+    "R": "#c:dusts/redstone"
   },
   "pattern": [
     "RPR",

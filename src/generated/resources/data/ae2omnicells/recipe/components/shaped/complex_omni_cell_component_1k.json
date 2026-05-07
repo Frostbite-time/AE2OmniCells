@@ -5,7 +5,7 @@
   "key": {
     "C": "ae2:cell_component_1k",
     "E": "ae2omnicells:charged_ender_ingot",
-    "G": "minecraft:glowstone_dust",
+    "G": "#c:dusts/glowstone",
     "P": "ae2omnicells:complex_link_processor"
   },
   "pattern": [

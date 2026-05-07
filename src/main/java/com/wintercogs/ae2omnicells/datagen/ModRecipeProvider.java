@@ -30,6 +30,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.NotNull;
@@ -493,7 +494,7 @@ public class ModRecipeProvider extends RecipeProvider
                                 .pattern("RPR")
                                 .pattern("ECE")
                                 .pattern("RER")
-                                .define('R', Items.REDSTONE)
+                                .define('R', Tags.Items.DUSTS_REDSTONE)
                                 .define('P', mats.componentProcessorP())
                                 .define('E', OCItems.ENDER_INGOT.get())
                                 .define('C', AEItems.CELL_COMPONENT_1K.asItem())
@@ -508,7 +509,7 @@ public class ModRecipeProvider extends RecipeProvider
                                 .pattern("GPG")
                                 .pattern("ECE")
                                 .pattern("GEG")
-                                .define('G', Items.GLOWSTONE_DUST)
+                                .define('G', Tags.Items.DUSTS_GLOWSTONE)
                                 .define('P', mats.componentProcessorP())
                                 .define('E', OCItems.CHARGED_ENDER_INGOT.get())
                                 .define('C', AEItems.CELL_COMPONENT_1K.asItem())
@@ -523,7 +524,7 @@ public class ModRecipeProvider extends RecipeProvider
                                 .pattern("NPN")
                                 .pattern("ECE")
                                 .pattern("NEN")
-                                .define('N', AEItems.ENDER_DUST.asItem())
+                                .define('N', OCTags.ENDER_PEARL_DUST)
                                 .define('P', mats.componentProcessorP())
                                 .define('E', OCItems.CHARGED_ENDER_INGOT.get())
                                 .define('C', AEItems.CELL_COMPONENT_1K.asItem())
