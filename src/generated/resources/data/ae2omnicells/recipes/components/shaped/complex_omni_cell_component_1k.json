@@ -10,7 +10,7 @@
       "item": "ae2omnicells:charged_ender_ingot"
     },
     "G": {
-      "item": "minecraft:glowstone_dust"
+      "tag": "forge:dusts/glowstone"
     },
     "P": {
       "item": "ae2omnicells:complex_link_processor"
