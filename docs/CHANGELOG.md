@@ -1,1 +1,1 @@
-* add a guideme doc
+* Modify some recipes to use tag instead of specify item.
