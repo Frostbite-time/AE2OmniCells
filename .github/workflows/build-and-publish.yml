@@ -108,7 +108,7 @@ jobs:
 
           name: ${{ steps.props.outputs.display_name }}
           version: ${{ steps.props.outputs.display_version }}
-          version-type: release
+          version-type: beta
           changelog-file: docs/CHANGELOG.md
 
           files: |
