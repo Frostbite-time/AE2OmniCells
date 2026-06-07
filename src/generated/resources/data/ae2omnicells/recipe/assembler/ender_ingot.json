@@ -1,0 +1,28 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "extendedae"
+    }
+  ],
+  "type": "extendedae:crystal_assembler",
+  "energy": 2000,
+  "input_items": [
+    {
+      "amount": 4,
+      "ingredient": "#c:dusts/ender_pearl"
+    },
+    {
+      "amount": 4,
+      "ingredient": "minecraft:iron_ingot"
+    },
+    {
+      "amount": 4,
+      "ingredient": "ae2:certus_quartz_dust"
+    }
+  ],
+  "output": {
+    "count": 4,
+    "id": "ae2omnicells:ender_ingot"
+  }
+}

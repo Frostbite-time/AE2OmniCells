@@ -132,13 +132,14 @@ dependencies {
 
     // Mage存储元件
     // implementation "curse.maven:mega-cells-622112:6853076"
+
     // EAE联动
-    // implementation "curse.maven:ex-pattern-provider-892005:7356474"
-    // implementation "curse.maven:glodium-957920:5821676"
+    implementation "curse.maven:glodium-957920:8196173"
+    implementation "curse.maven:ex-pattern-provider-892005:8196267"
 
     // AAE
-    // implementation "curse.maven:geckolib-388172:7415496"
-    // implementation "curse.maven:advancedae-1084104:7374386"
+    implementation "curse.maven:advancedae-1084104:8139539"
+    implementation "curse.maven:geckolib-388172:7913641"
 
     // AE MEK
     // implementation "curse.maven:applied-mekanistics-574300:7096962"

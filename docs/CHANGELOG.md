@@ -1,1 +1,1 @@
-* Modify some recipes to use tag instead of specify item.
+* Restore recipe integration with AAE and EAE.
