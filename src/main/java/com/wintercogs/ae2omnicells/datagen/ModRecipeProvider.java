@@ -9,9 +9,6 @@ import appeng.recipes.game.CraftingUnitTransformRecipe;
 import appeng.recipes.handlers.ChargerRecipeBuilder;
 import appeng.recipes.handlers.InscriberProcessType;
 import appeng.recipes.handlers.InscriberRecipeBuilder;
-// TODO: Restore ExtendedAE imports when its Minecraft 26.3 port is available.
-// import com.glodblock.github.extendedae.recipe.CircuitCutterRecipeBuilder;
-// import com.glodblock.github.extendedae.recipe.CrystalAssemblerRecipeBuilder;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
 import com.wintercogs.ae2omnicells.common.init.OCBlocks;
 import com.wintercogs.ae2omnicells.common.init.OCItems;
@@ -19,14 +16,14 @@ import com.wintercogs.ae2omnicells.common.init.OCTags;
 import com.wintercogs.ae2omnicells.common.me.crafting.OmniCraftingUnitType;
 import com.wintercogs.ae2omnicells.datagen.builder.CellDisassemblyRecipeBuilder;
 import com.wintercogs.ae2omnicells.util.IngredientHelper;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
@@ -36,17 +33,19 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
-// TODO: Restore AdvancedAE imports when its Minecraft 26.3 port is available.
-// import net.pedroksl.advanced_ae.recipes.ReactionChamberRecipeBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+// TODO: Restore ExtendedAE imports when its Minecraft 26.3 port is available.
+// import com.glodblock.github.extendedae.recipe.CircuitCutterRecipeBuilder;
+// import com.glodblock.github.extendedae.recipe.CrystalAssemblerRecipeBuilder;
+// TODO: Restore AdvancedAE imports when its Minecraft 26.3 port is available.
+// import net.pedroksl.advanced_ae.recipes.ReactionChamberRecipeBuilder;
 
 public class ModRecipeProvider extends RecipeProvider
 {
