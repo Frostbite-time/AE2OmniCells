@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "ingredients": [
     "ae2omnicells:quantum_omni_cell_component_16k",
     "ae2omnicells:quantum_crafting_unit_block"

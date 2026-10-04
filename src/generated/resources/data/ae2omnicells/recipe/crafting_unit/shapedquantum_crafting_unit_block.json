@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "A": "ae2omnicells:charged_ender_ingot",
     "B": "ae2omnicells:multidimensional_expansion_processor",

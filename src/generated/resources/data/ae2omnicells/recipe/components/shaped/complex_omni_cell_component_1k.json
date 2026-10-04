@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "group": "ae2omnicells:components/complex",
   "key": {
     "C": "ae2:cell_component_1k",
