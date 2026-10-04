@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "ae2omnicells:ender_ingot_from_blocks"
+        "recipes": "ae2omnicells:ender_ingot_from_blocks"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

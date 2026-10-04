@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "ae2omnicells:crafting_unit/shapelessquantum_crafting_storage_64k_block"
+        "recipes": "ae2omnicells:crafting_unit/shapelessquantum_crafting_storage_64k_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

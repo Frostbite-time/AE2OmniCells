@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "ae2omnicells:ender_nugget_from_ingot"
+        "recipes": "ae2omnicells:ender_nugget_from_ingot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

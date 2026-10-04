@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "ae2omnicells:type_fuzzy_card"
+        "recipes": "ae2omnicells:type_fuzzy_card"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

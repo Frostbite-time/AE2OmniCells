@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "ae2omnicells:cells/shaped/complex_omni_cell_256m"
+        "recipes": "ae2omnicells:cells/shaped/complex_omni_cell_256m"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

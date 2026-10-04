@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "group": "ae2omnicells:components/quantum",
   "key": {
     "P": "ae2omnicells:multidimensional_expansion_processor",

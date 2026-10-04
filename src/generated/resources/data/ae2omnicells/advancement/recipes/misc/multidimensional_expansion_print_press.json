@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "ae2omnicells:multidimensional_expansion_print_press"
+        "recipes": "ae2omnicells:multidimensional_expansion_print_press"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

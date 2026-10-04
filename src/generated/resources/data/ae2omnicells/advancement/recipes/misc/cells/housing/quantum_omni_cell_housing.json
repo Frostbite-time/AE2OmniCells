@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "ae2omnicells:cells/housing/quantum_omni_cell_housing"
+        "recipes": "ae2omnicells:cells/housing/quantum_omni_cell_housing"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
