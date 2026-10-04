@@ -84,7 +84,7 @@ config="${mod_id}.mixins.json"
 [[dependencies.${mod_id}]]
     modId="ae2"
     type="required"
-    versionRange="[26.1.6-alpha,)"
+    versionRange="${ae2_version_range}"
     ordering="AFTER"
     side="BOTH"
 
