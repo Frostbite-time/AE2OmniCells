@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.141'
+    id 'net.neoforged.moddev' version '2.0.148'
     id 'idea'
 }
 
@@ -35,7 +35,7 @@ base {
     archivesName = "${mod_id}-${minecraft_version}-neoforge"
 }
 
-// Mojang ships Java 21 to end users in 1.21.1, so mods should target Java 21.
+// Minecraft 26.3 requires Java 25.
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
@@ -130,18 +130,18 @@ dependencies {
     implementation "org.appliedenergistics:appliedenergistics2:${ae2_version}"
 
 
-    // Mage存储元件
+    // TODO: Restore MEGA Cells when a Minecraft 26.3 port is available.
     // implementation "curse.maven:mega-cells-622112:6853076"
 
-    // EAE联动
-    implementation "curse.maven:glodium-957920:8196173"
-    implementation "curse.maven:ex-pattern-provider-892005:8196267"
+    // TODO: Restore ExtendedAE and Glodium when a Minecraft 26.3 port is available.
+    // implementation "curse.maven:glodium-957920:8196173"
+    // implementation "curse.maven:ex-pattern-provider-892005:8196267"
 
-    // AAE
-    implementation "curse.maven:advancedae-1084104:8139539"
-    implementation "curse.maven:geckolib-388172:7913641"
+    // TODO: Restore AdvancedAE and its GeckoLib dependency when a Minecraft 26.3 port is available.
+    // implementation "curse.maven:advancedae-1084104:8139539"
+    // implementation "curse.maven:geckolib-388172:7913641"
 
-    // AE MEK
+    // TODO: Restore Applied Mekanistics and Mekanism when Minecraft 26.3 ports are available.
     // implementation "curse.maven:applied-mekanistics-574300:7096962"
     // implementation "curse.maven:mekanism-268560:7132168"
 }
@@ -154,6 +154,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             minecraft_version_range: minecraft_version_range,
             neo_version            : neo_version,
             neo_version_range      : neo_version_range,
+            ae2_version_range      : ae2_version_range,
             mod_id                 : mod_id,
             mod_name               : mod_name,
             mod_license            : mod_license,
