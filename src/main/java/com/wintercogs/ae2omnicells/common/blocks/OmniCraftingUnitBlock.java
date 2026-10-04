@@ -18,6 +18,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -137,7 +138,7 @@ public class OmniCraftingUnitBlock extends AbstractCraftingUnitBlock<OmniCraftin
         if (!this.transform(serverLevel, pos, newState))
             return InteractionResult.FAIL;
 
-        player.getInventory().placeItemBackInInventory(removedUpgrade);
+        player.getInventory().placeItemBackInInventory(removedUpgrade, Prediction.SERVER_ONLY);
 
         return InteractionResult.SUCCESS;
     }

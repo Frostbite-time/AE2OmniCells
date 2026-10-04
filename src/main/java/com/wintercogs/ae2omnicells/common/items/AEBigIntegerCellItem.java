@@ -22,6 +22,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -179,10 +180,10 @@ public class AEBigIntegerCellItem extends Item implements IAEBigIntegerCell, ICe
 
         for (var disassembledStack : disassembledStacks)
         {
-            playerInventory.placeItemBackInInventory(disassembledStack.copy());
+            playerInventory.placeItemBackInInventory(disassembledStack.copy(), Prediction.SERVER_ONLY);
         }
 
-        getUpgrades(stack).forEach(playerInventory::placeItemBackInInventory);
+        getUpgrades(stack).forEach(upgrade -> playerInventory.placeItemBackInInventory(upgrade, Prediction.SERVER_ONLY));
 
         return true;
     }

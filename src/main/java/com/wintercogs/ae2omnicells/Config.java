@@ -17,7 +17,7 @@ public class Config
     private Config(ModContainer container)
     {
         container.registerConfig(ModConfig.Type.STARTUP, startUpConfig.spec);
-        container.registerConfig(ModConfig.Type.COMMON, commonConfig.spec);
+        container.registerConfig(ModConfig.Type.LOCAL, commonConfig.spec);
         container.getEventBus().addListener((ModConfigEvent.Loading evt) ->
         {
             if (evt.getConfig().getSpec() == commonConfig.spec)

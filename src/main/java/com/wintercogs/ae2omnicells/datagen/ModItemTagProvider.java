@@ -24,15 +24,15 @@ public class ModItemTagProvider extends ItemTagsProvider
     protected void addTags(HolderLookup.@NotNull Provider provider)
     {
         tag(Tags.Items.INGOTS)
-                .add(OCItems.ENDER_INGOT.get())
-                .add(OCItems.CHARGED_ENDER_INGOT.get());
+                .add(OCItems.ENDER_INGOT.key())
+                .add(OCItems.CHARGED_ENDER_INGOT.key());
 
         tag(Tags.Items.NUGGETS)
-                .add(OCItems.ENDER_NUGGET.get());
+                .add(OCItems.ENDER_NUGGET.key());
 
         tag(Tags.Items.STORAGE_BLOCKS)
-                .add(OCBlocks.ENDER_INGOT_BLOCK.asItem())
-                .add(OCBlocks.NETHERITE_SCRAP_BLOCK.asItem())
-                .add(OCBlocks.SINGULARITY_BLOCK.asItem());
+                .add(OCBlocks.ENDER_INGOT_BLOCK.asItem().builtInRegistryHolder().key())
+                .add(OCBlocks.NETHERITE_SCRAP_BLOCK.asItem().builtInRegistryHolder().key())
+                .add(OCBlocks.SINGULARITY_BLOCK.asItem().builtInRegistryHolder().key());
     }
 }

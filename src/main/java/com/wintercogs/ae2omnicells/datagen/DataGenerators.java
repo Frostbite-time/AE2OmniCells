@@ -3,7 +3,10 @@ package com.wintercogs.ae2omnicells.datagen;
 
 import com.mojang.logging.LogUtils;
 import com.wintercogs.ae2omnicells.AE2OmniCells;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -24,17 +27,16 @@ public class DataGenerators
         LOGGER.info("数据生成启动");
 
         // 生成方块战利品表
-        event.createProvider((output, lookupProvider) ->
-                new LootTableProvider(output,
+        event.createReloadableRegistryObjects(new RegistrySetBuilder()
+                .add(Registries.LOOT_TABLE, new LootTableProvider(
                         Collections.emptySet(),
-                        List.of(new LootTableProvider.SubProviderEntry(ModBlockLootTableProvider::new, LootContextParamSets.BLOCK)),
-                        lookupProvider));
+                        List.of(new LootTableProvider.SubProviderEntry(ModBlockLootTableProvider::new, LootContextParamSets.BLOCK))))
+                .add(RecipeProvider.asBootstrap(ModRecipeProvider::new)));
         // 生成物品和方块模型
         event.createProvider(ModModelProvider::new);
         // 生成标签
         event.createProvider(ModBlockTagProvider::new);
         event.createProvider(ModItemTagProvider::new);
         event.createProvider(ModFluidTagsProvider::new);
-        event.createProvider(ModRecipeProvider.Runner::new);
     }
 }

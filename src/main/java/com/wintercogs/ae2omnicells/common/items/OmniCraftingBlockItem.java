@@ -11,6 +11,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -50,11 +51,11 @@ public class OmniCraftingBlockItem extends CraftingBlockItem
             player.setItemInHand(hand, ItemStack.EMPTY);
 
             Inventory inv = player.getInventory();
-            inv.placeItemBackInInventory(removedUpgrade.copyWithCount(removedUpgrade.getCount() * itemCount));
+            inv.placeItemBackInInventory(removedUpgrade.copyWithCount(removedUpgrade.getCount() * itemCount), Prediction.SERVER_ONLY);
 
             // 这里，将我们自己的方块物品写进去
             ItemLike unitBlock = this.family.getUnitBaseBlock();
-            inv.placeItemBackInInventory(new ItemStack(unitBlock, itemCount));
+            inv.placeItemBackInInventory(new ItemStack(unitBlock, itemCount), Prediction.SERVER_ONLY);
 
             return InteractionResult.SUCCESS;
         }
