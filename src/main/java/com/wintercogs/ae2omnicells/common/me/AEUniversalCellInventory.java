@@ -714,7 +714,7 @@ public class AEUniversalCellInventory implements StorageCell
             final boolean isWasteCell = hostCell.getItem() == OCItems.SPENT_NUCLEAR_WASTE_CELL.get();
             return MekRadialChemicalCheckConfig.checkMode.allow(isWasteCell, false, false);
 
-            // TODO: Restore chemical checks when Applied Mekanistics and Mekanism have Minecraft 26.2 ports.
+            // TODO: 等待AEMek更新后再恢复
 //            // 非 Mek 化学：废核盘一律拒，普通盘不干预
 //            if (!(what instanceof MekanismKey mekanismKey))
 //            {
