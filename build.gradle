@@ -135,11 +135,11 @@ dependencies {
 
     // EAE联动
     implementation "curse.maven:glodium-957920:8196173"
-    implementation "curse.maven:ex-pattern-provider-892005:8196267"
+    implementation "curse.maven:ex-pattern-provider-892005:9129055"
 
     // AAE
-    implementation "curse.maven:advancedae-1084104:8139539"
-    implementation "curse.maven:geckolib-388172:7913641"
+    implementation "curse.maven:advancedae-1084104:8603081"
+    implementation "curse.maven:geckolib-388172:8327201"
 
     // AE MEK
     // implementation "curse.maven:applied-mekanistics-574300:7096962"
